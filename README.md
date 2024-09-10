@@ -37,5 +37,5 @@ coding!
 - Teammate name #1: Aakash Peshavaria [GitHub](https://github.com/aakash-webdev) / [LinkedIn](https://www.linkedin.com/in/aakash-peshavaria/)
 - Teammate name #2: Balaji Mahendra [GitHub](https://github.com/NameRectified)
 - Teammate name #3: Warren Bosse [GitHub](https://github.com/PsYk3s)
-  ...
-- Teammate name #5: Jelena Jovicic [GitHub](https://github.com/je-jo) / [LinkedIn](https://www.linkedin.com/in/jelena-jovicic/)
+- Teammate name #4: Jelena Jovicic [GitHub](https://github.com/je-jo) / [LinkedIn](https://www.linkedin.com/in/jelena-jovicic/)
+- Teammate name #5: Maryna Pastukhova [GitHub](https://github.com/maryurpast) / [LinkedIn](https://www.linkedin.com/in/maryna-pastukhova-front-end/)
