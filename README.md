@@ -36,6 +36,6 @@ coding!
 
 - Teammate name #1: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
 - Teammate name #2: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
-- Teammate name #3: [GitHub](https://github.com/PsYk3s)
+- Teammate name #3: Warren Bosse [GitHub](https://github.com/PsYk3s)
    ...
 - Teammate name #5: Jelena Jovicic [GitHub](https://github.com/je-jo) / [LinkedIn](https://www.linkedin.com/in/jelena-jovicic/)
