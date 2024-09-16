@@ -141,6 +141,12 @@ section {
     display: flex;
 }
 
+#group-error{
+    display: none;
+    color: red;
+    font-weight:bolder ;
+    font-size : 1.2rem
+}
 
 
 @media screen and (min-width: 48rem) {
@@ -152,5 +158,5 @@ section {
     header {
         grid-column: 1 / span 2;
     }
-    
+
 }
