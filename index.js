@@ -1,7 +1,15 @@
-let groupName = document.getElementById('group-name');
-let groupCreateBtn = document.getElementById('group-create-btn');
+const groupName = document.getElementById('group-name');
+const groupCreateBtn = document.getElementById('group-create-btn');
+const groupError = document.getElementById('group-error');
 let groupList = document.getElementById('group-list');
 groupCreateBtn.addEventListener('click',function(){
-    // console.log(groupName.value);
-    groupList.innerHTML+=`<li>${groupName.value}</li>`
+    let randomId = Date.now();
+    if (groupName.value==''){
+        groupError.style.display="block";
+    }else{
+        groupName.value = groupName.value[0].toUpperCase() + groupName.value.slice(1);
+        groupList.innerHTML+=`<li id=${randomId}>${groupName.value}</li>`
+        groupName.value='';
+        groupError.style.display = "none";
+    }
 });
