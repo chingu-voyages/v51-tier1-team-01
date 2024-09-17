@@ -123,22 +123,59 @@ input[type="radio"]:focus-visible+label {
     display: none;
 }
 
+ul {
+	list-style: none;
+}
+
+/* typography */
+
+h2 {
+	font-size: 1.25rem;
+	color: #006091;
+	text-transform: uppercase;
+}
+
+
 /* layout */
 
 body {
     display: grid;
 }
 
-aside {
-    background-color: lightblue;
+.section-aside, .section-main {
+	padding: 2rem;
 }
 
-section {
-    padding: 2rem;
+.section-aside-groups, .section-aside-friends, .logo {
+	padding: 1rem;
+}
+
+.section-aside {
+    background-color: #fff;
+}
+
+.section-main {
+    background-color: #f4f4f4;
 }
 
 .container-group-members {
     display: flex;
+}
+
+footer {
+	grid-column: 1/-1;
+	font-size: .75rem;
+}
+
+.add-btn {
+	border: none;
+	background-color: #fff;
+	font-size: 1rem;
+}
+
+.add-btn span {
+	padding: 0 5px;
+	color: #d3d3d3;
 }
 
 #group-error{
@@ -160,3 +197,5 @@ section {
     }
 
 }
+
+
