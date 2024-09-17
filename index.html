@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Splitter App Tier 1</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <header>
         <h1>Expense Splitter App Tier 1 Team 1</h1>
@@ -22,15 +24,28 @@
             </ul>
         </nav>
         <h3>Your Groups</h3>
-        <ul id="group-list" >
+        <ul id="group-list">
 
         </ul>
+        <!-- friends list -->
         <h3>Your Friends</h3>
-        <button>Add friend</button>
-        <ul>
-            <li>Jane Doe</li>
-            <li>Johnny B. Goode</li>
+        <ul id="list-friends">
         </ul>
+        <button id="btn-add-friend">+ Add new friend</button>
+        <form id="form-add-friend" action="" class="form-add">
+                <div class="form-control">
+                    <label for="friend-first-name">First name: </label>
+                    <input id="friend-first-name" type="text" placeholder="First Name" required>
+                </div>
+                <div class="form-control">
+                    <label for="friend-last-name">Last name: </label>
+                    <input id="friend-last-name" type="text" placeholder="Last Name">
+                </div>
+                <button>Submit</button>
+
+
+        </form>
+        <!-- end of friends list -->
     </aside>
     <main>
         <section>
@@ -46,7 +61,8 @@
             <h2>Selected group name</h2>
             <p>Selected group member 1, Selected group member 2...</p>
             <div>member images go here</div>
-            <img src="" alt="selected group image" width="200" height="200" style="display: block; border: 3px solid red;">
+            <img src="" alt="selected group image" width="200" height="200"
+                style="display: block; border: 3px solid red;">
         </section>
         <section>
             <h2>Balances</h2>
@@ -55,25 +71,29 @@
                     <h3>Name</h3>
                     <p>Current balance...</p>
                     <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
                 </div>
                 <div class="card-member">
                     <h3>Name</h3>
                     <p>Current balance...</p>
                     <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
                 </div>
                 <div class="card-member">
                     <h3>Name</h3>
                     <p>Current balance...</p>
                     <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
                 </div>
                 <div class="card-member">
                     <h3>Name</h3>
                     <p>Current balance...</p>
                     <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
                 </div>
             </div>
             <button>Show Debt Visualisation</button>
@@ -100,6 +120,7 @@
         <p>Made by Chingu Team 1</p>
     </footer>
 
-<script src="index.js"></script>
+    <script src="index.js"></script>
 </body>
+
 </html>

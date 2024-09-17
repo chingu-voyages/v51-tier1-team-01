@@ -160,3 +160,28 @@ section {
     }
 
 }
+
+/* ASIDE FRIENDS SECTION */
+
+.form-add {
+    display: none;
+    place-items: center;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.form-add-visible {
+    display: grid;
+}
+
+.list-item-friend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.avatar-small {
+    width: 30px;
+    border-radius: 50%;
+    border: 2px solid cadetblue;
+}
