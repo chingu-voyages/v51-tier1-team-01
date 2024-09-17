@@ -36,11 +36,13 @@
         <section>
             <input type="text" placeholder="Search...">
         </section>
-        <section>
+        <section id="new-group">
             <h2>Create New Group</h2>
             <input id="group-name" type="text" placeholder="Enter group name...">
+            <input type="text" id="member-one" class="group-member" placeholder="Enter member 1">
+            <input type="text" id="member-two" class="group-member" placeholder="Enter member 2">
             <button id="group-create-btn">Create Group</button>
-            <p id="group-error">Please enter a valid group name</p>
+            <p id="group-error">Please enter a valid group name with atleast two members</p>
         </section>
         <section>
             <h2>Selected group name</h2>
@@ -89,9 +91,11 @@
             <h2>Statistics</h2>
             <p>What goes here?</p>
         </section>
-        <section>
+        <section id="member-display">
             <h2>Friends/Members</h2>
-            <p>What goes here?</p>
+            <ul id="members-list">
+
+            </ul>
         </section>
 
 
