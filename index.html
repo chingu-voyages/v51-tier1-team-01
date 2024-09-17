@@ -7,36 +7,35 @@
     <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
-    <h1 class="logo">
-        <a href="#"><img src="src/logo.png" alt="Splitzy"></a>
-    </h1>
-    <aside>
-        <h2>logo - I can't split</h2>
-        <nav>
-            <ul>
-                <li>Home</li>
-                <li>Friends</li>
-                <li>Group</li>
-                <li>Expenses</li>
-                <li>Splitwise Imports</li>
-            </ul>
-        </nav>
-        <h3>Your Groups</h3>
-        <ul id="group-list" >
 
-        </ul>
-        <h3>Your Friends</h3>
-        <button>Add friend</button>
-        <ul>
-            <li>Jane Doe</li>
-            <li>Johnny B. Goode</li>
-        </ul>
-    </aside>
-    <main>
-        <section>
-            <input type="text" placeholder="Search...">
-        </section>
-        <section id="new-group">
+	<section class="section-aside">
+		<header>
+			<h1 class="logo">
+				<a href="#"><img src="src/logo.png" alt="Splitzy"></a>
+			</h1>
+		</header>
+		<section class="section-aside-groups">
+			<h2>Your Groups</h2>
+			<ul id="group-list">
+				<li><a class="group-link" href="#">Family</a></li>
+				<li><a class="group-link" href="#">Friends</a></li>
+				<li><a class="group-link" href="#">Team</a></li>
+			</ul>
+			<button class="add-btn"><span>+</span>Add new group</button>
+		</section>
+		<section class="section-aside-friends">
+			<h2>Your Friends</h2>
+			<ul>
+				<li>Jane Doe</li>
+				<li>John Doe</li>
+				<li>Jessy Doe</li>
+				<li>Jafar Doe</li>
+			</ul>
+			<button class="add-btn"><span>+</span>Add new friend</button>
+		</section>
+	</section>
+	<section class="section-main">
+		<section>
             <h2>Create New Group</h2>
             <input id="group-name" type="text" placeholder="Enter group name...">
             <div id="member-inputs">
@@ -104,11 +103,8 @@
         </section>
 
 
-    </main>
-    <footer>
-
+	<footer>
         <p>This project was coded by Chingu <a href="https://github.com/chingu-voyages/v51-tier1-team-01" class="footer-link">v51-tier1-team-01</a> team, and it is open-sourced</p>
-
     </footer>
 
 
