@@ -1,3 +1,17 @@
+@font-face {
+	font-family: "AcuminPro";
+	src: url("fonts/AcuminPro-Regular.ttf");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "AcuminPro";
+	src: url("fonts/AcuminPro-Bold.ttf");
+	font-weight: 700;
+	font-style: normal;
+}
+
 /* andy bell's reset */
 
 /* Box sizing rules */
@@ -123,23 +137,112 @@ input[type="radio"]:focus-visible+label {
     display: none;
 }
 
-/* layout */
+
+/* typography */
 
 body {
     display: grid;
+	font-family: "AcuminPro", sans-serif;
+	font-size: 16px;
+	font-weight: normal;
+	color: #232323;
 }
 
-aside {
-    background-color: lightblue;
+h2 {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: #006091;
+	text-transform: uppercase;
+	margin-bottom: 10px;
 }
 
-section {
-    padding: 2rem;
+
+/* layout */
+
+.section-aside, .section-main {
+	padding: 2rem;
 }
 
-.container-group-members {
-    display: flex;
+.logo {
+	padding: 1rem;
 }
+
+.section-aside-groups {
+	padding: 1rem 1rem 2rem 1rem;
+}
+
+.section-aside-friends {
+	padding: 2rem 1rem 1rem 1rem;
+}
+
+.section-aside {
+    background-color: #fff;
+}
+
+.section-aside-groups {
+	border-bottom: 3px solid #f4f4f4;
+}
+
+.section-main {
+    background-color: #f4f4f4;
+}
+
+
+/* list */
+
+ul {
+	list-style: none;
+    margin-bottom: 10px;
+}
+
+ li {
+	padding: 5px 0;
+ }
+
+ /* links, btns */
+
+ a, .add-btn {
+	text-decoration: none;
+	color:inherit;
+	display: inline-block;
+	transition: all 100ms ease-in-out;
+ }
+
+ .group-link:hover, .add-btn:hover, .add-btn span:hover {
+	color:#006091;
+	transform: scale(1.08);
+	cursor: pointer;
+ }
+
+ .add-btn {
+	border: none;
+	background-color: #fff;
+	font-size: 1rem;
+}
+
+.add-btn span {
+	padding: 0 10px 0 0;
+	vertical-align:text-top;
+	color: #d3d3d3;
+}
+
+ /* footer */
+
+footer {
+	grid-column: 1/-1;
+	font-size: .75rem;
+margin: 1rem 0 1rem 1rem;	
+}
+
+.footer-link {
+	color: #00A1C6;
+	text-decoration: underline;
+}
+
+.footer-link:hover {
+	color:#232323;
+}
+
 
 #group-error{
     display: none;
@@ -160,3 +263,5 @@ section {
     }
 
 }
+
+

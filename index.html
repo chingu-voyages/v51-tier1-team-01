@@ -4,102 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Splitter App Tier 1</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
-    <header>
-        <h1>Expense Splitter App Tier 1 Team 1</h1>
-    </header>
-    <aside>
-        <h2>logo - I can't split</h2>
-        <nav>
-            <ul>
-                <li>Home</li>
-                <li>Friends</li>
-                <li>Group</li>
-                <li>Expenses</li>
-                <li>Splitwise Imports</li>
-            </ul>
-        </nav>
-        <h3>Your Groups</h3>
-        <ul id="group-list" >
 
-        </ul>
-        <h3>Your Friends</h3>
-        <button>Add friend</button>
-        <ul>
-            <li>Jane Doe</li>
-            <li>Johnny B. Goode</li>
-        </ul>
-    </aside>
-    <main>
-        <section>
-            <input type="text" placeholder="Search...">
-        </section>
-        <section>
+	<section class="section-aside">
+		<header>
+			<h1 class="logo">
+				<a href="#"><img src="src/logo.png" alt="Splitzy"></a>
+			</h1>
+		</header>
+		<section class="section-aside-groups">
+			<h2>Your Groups</h2>
+			<ul id="group-list">
+				<li><a class="group-link" href="#">Family</a></li>
+				<li><a class="group-link" href="#">Friends</a></li>
+				<li><a class="group-link" href="#">Team</a></li>
+			</ul>
+			<button class="add-btn"><span>+</span>Add new group</button>
+		</section>
+		<section class="section-aside-friends">
+			<h2>Your Friends</h2>
+			<ul>
+				<li>Jane Doe</li>
+				<li>John Doe</li>
+				<li>Jessy Doe</li>
+				<li>Jafar Doe</li>
+			</ul>
+			<button class="add-btn"><span>+</span>Add new friend</button>
+		</section>
+	</section>
+	<section class="section-main">
+		<section>
             <h2>Create New Group</h2>
             <input id="group-name" type="text" placeholder="Enter group name...">
             <button id="group-create-btn">Create Group</button>
             <p id="group-error">Please enter a valid group name</p>
         </section>
-        <section>
-            <h2>Selected group name</h2>
-            <p>Selected group member 1, Selected group member 2...</p>
-            <div>member images go here</div>
-            <img src="" alt="selected group image" width="200" height="200" style="display: block; border: 3px solid red;">
-        </section>
-        <section>
-            <h2>Balances</h2>
-            <div class="container-group-members">
-                <div class="card-member">
-                    <h3>Name</h3>
-                    <p>Current balance...</p>
-                    <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
-                </div>
-                <div class="card-member">
-                    <h3>Name</h3>
-                    <p>Current balance...</p>
-                    <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
-                </div>
-                <div class="card-member">
-                    <h3>Name</h3>
-                    <p>Current balance...</p>
-                    <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
-                </div>
-                <div class="card-member">
-                    <h3>Name</h3>
-                    <p>Current balance...</p>
-                    <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
-                </div>
-            </div>
-            <button>Show Debt Visualisation</button>
-            <ul>Expenses
-                <li>Costco Groceries</li>
-                <li>Airbnb</li>
-                <li>Peloton</li>
-                <li>...</li>
-            </ul>
-
-        </section>
-        <section>
-            <h2>Statistics</h2>
-            <p>What goes here?</p>
-        </section>
-        <section>
-            <h2>Friends/Members</h2>
-            <p>What goes here?</p>
-        </section>
+	</section>
 
 
-    </main>
-    <footer>
-        <p>Made by Chingu Team 1</p>
+	<footer>
+        <p>This project was coded by Chingu <a href="https://github.com/chingu-voyages/v51-tier1-team-01" class="footer-link">v51-tier1-team-01</a> team, and it is open-sourced</p>
     </footer>
 
-<script src="index.js"></script>
+<script src="src/index.js"></script>
 </body>
 </html>
