@@ -39,9 +39,14 @@
         <section id="new-group">
             <h2>Create New Group</h2>
             <input id="group-name" type="text" placeholder="Enter group name...">
-            <input type="text" id="member-one" class="group-member" placeholder="Enter member 1">
-            <input type="text" id="member-two" class="group-member" placeholder="Enter member 2">
-            <button id="group-create-btn">Create Group</button>
+            <div id="member-inputs">
+                <input type="text" id="member-one" class="group-member" placeholder="Enter member 1">
+                <input type="text" id="member-two" class="group-member" placeholder="Enter member 2">
+            </div>
+            <div>
+                <button id="group-create-btn">Create Group</button>
+                <button id="add-another-member">Add member</button>
+            </div>
             <p id="group-error">Please enter a valid group name with atleast two members</p>
         </section>
         <section>

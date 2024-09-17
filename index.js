@@ -1,13 +1,23 @@
 const groupName = document.getElementById('group-name');
 const groupCreateBtn = document.getElementById('group-create-btn');
+const addAnotherMember = document.getElementById('add-another-member');
 const groupError = document.getElementById('group-error');
 const memberOne = document.getElementById('member-one');
 const memberTwo = document.getElementById('member-two');
 let groupList = document.getElementById('group-list');
 let membersList = document.getElementById('members-list');
+let memberInputs = document.getElementById('member-inputs');
+// console.log(allMembersInGroup)
 groupCreateBtn.addEventListener('click',function(){
+    let allMembersInput= document.querySelectorAll('.group-member');
     let randomId = Date.now();
-    if (groupName.value.trim() === ''||memberOne.value.trim()===''||memberTwo.value.trim()===''){
+    let allFilled = true;
+    allMembersInput.forEach(input=>{
+        if (input.value===''){
+            allFilled = false;
+        }
+    })
+    if (groupName.value.trim() === ''||allFilled===false){
         groupError.style.display="block";
     }else{
         groupName.value = groupName.value.trim()[0].toUpperCase() + groupName.value.trim().slice(1);
@@ -28,4 +38,11 @@ groupCreateBtn.addEventListener('click',function(){
         memberTwo.value = '';
         groupError.style.display = "none";
     }
+});
+
+addAnotherMember.addEventListener('click',function() {
+    const newMemberInput = document.createElement('input');
+    newMemberInput.className = 'group-member';
+    newMemberInput.placeholder = "Enter member";
+    memberInputs.appendChild(newMemberInput);
 });
