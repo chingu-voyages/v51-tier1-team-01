@@ -1,0 +1,267 @@
+@font-face {
+	font-family: "AcuminPro";
+	src: url("fonts/AcuminPro-Regular.ttf");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "AcuminPro";
+	src: url("fonts/AcuminPro-Bold.ttf");
+	font-weight: 700;
+	font-style: normal;
+}
+
+/* andy bell's reset */
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Prevent font size inflation */
+html {
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+}
+
+/* Remove default margin in favour of better control in authored CSS */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+    margin-block-end: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'],
+ol[role='list'] {
+    list-style: none;
+}
+
+/* Set core body defaults */
+body {
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+/* Set shorter line heights on headings and interactive elements */
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
+    line-height: 1.1;
+}
+
+/* Balance text wrapping on headings */
+h1,
+h2,
+h3,
+h4 {
+    text-wrap: balance;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+    text-decoration-skip-ink: auto;
+    color: currentColor;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+    max-width: 100%;
+    display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* Make sure textareas without a rows attribute are not tiny */
+textarea:not([rows]) {
+    min-height: 10em;
+}
+
+/* Anything that has been anchored to should have extra scroll margin */
+:target {
+    scroll-margin-block: 5ex;
+}
+
+/* end andy bell's reset */
+
+/* utilities */
+
+* {
+    margin: 0;
+    padding: 0;
+    /* outline: 1px solid tomato; */
+}
+
+*:focus-visible,
+input[type="radio"]:focus-visible+label {
+    outline: 3px dotted red;
+    outline-offset: 3px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* typography */
+
+body {
+    display: grid;
+	font-family: "AcuminPro", sans-serif;
+	font-size: 16px;
+	font-weight: normal;
+	color: #232323;
+}
+
+h2 {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: #006091;
+	text-transform: uppercase;
+	margin-bottom: 10px;
+}
+
+
+/* layout */
+
+.section-aside, .section-main {
+	padding: 2rem;
+}
+
+.logo {
+	padding: 1rem;
+}
+
+.section-aside-groups {
+	padding: 1rem 1rem 2rem 1rem;
+}
+
+.section-aside-friends {
+	padding: 2rem 1rem 1rem 1rem;
+}
+
+.section-aside {
+    background-color: #fff;
+}
+
+.section-aside-groups {
+	border-bottom: 3px solid #f4f4f4;
+}
+
+.section-main {
+    background-color: #f4f4f4;
+}
+
+
+/* list */
+
+ul {
+	list-style: none;
+    margin-bottom: 10px;
+}
+
+ li {
+	padding: 5px 0;
+ }
+
+ /* links, btns */
+
+ a, .add-btn {
+	text-decoration: none;
+	color:inherit;
+	display: inline-block;
+	transition: all 100ms ease-in-out;
+ }
+
+ .group-link:hover, .add-btn:hover, .add-btn span:hover {
+	color:#006091;
+	transform: scale(1.08);
+	cursor: pointer;
+ }
+
+ .add-btn {
+	border: none;
+	background-color: #fff;
+	font-size: 1rem;
+}
+
+.add-btn span {
+	padding: 0 10px 0 0;
+	vertical-align:text-top;
+	color: #d3d3d3;
+}
+
+ /* footer */
+
+footer {
+	grid-column: 1/-1;
+	font-size: .75rem;
+margin: 1rem 0 1rem 1rem;	
+}
+
+.footer-link {
+	color: #00A1C6;
+	text-decoration: underline;
+}
+
+.footer-link:hover {
+	color:#232323;
+}
+
+
+#group-error{
+    display: none;
+    color: red;
+    font-weight:bolder ;
+    font-size : 1.2rem
+}
+
+
+@media screen and (min-width: 48rem) {
+    body {
+        grid-template-rows: auto 1fr auto;
+        grid-template-columns: 20% auto;
+    }
+
+    header {
+        grid-column: 1 / span 2;
+    }
+
+}
+
+

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Splitter App Tier 1</title>
+    <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+	<section class="section-aside">
+		<header>
+			<h1 class="logo">
+				<a href="#"><img src="src/logo.png" alt="Splitzy"></a>
+			</h1>
+		</header>
+		<section class="section-aside-groups">
+			<h2>Your Groups</h2>
+			<ul id="group-list">
+				<li><a class="group-link" href="#">Family</a></li>
+				<li><a class="group-link" href="#">Friends</a></li>
+				<li><a class="group-link" href="#">Team</a></li>
+			</ul>
+			<button class="add-btn"><span>+</span>Add new group</button>
+		</section>
+		<section class="section-aside-friends">
+			<h2>Your Friends</h2>
+			<ul>
+				<li>Jane Doe</li>
+				<li>John Doe</li>
+				<li>Jessy Doe</li>
+				<li>Jafar Doe</li>
+			</ul>
+			<button class="add-btn"><span>+</span>Add new friend</button>
+		</section>
+	</section>
+	<section class="section-main">
+		<section>
+            <h2>Create New Group</h2>
+            <input id="group-name" type="text" placeholder="Enter group name...">
+            <button id="group-create-btn">Create Group</button>
+            <p id="group-error">Please enter a valid group name</p>
+        </section>
+	</section>
+
+
+	<footer>
+        <p>This project was coded by Chingu <a href="https://github.com/chingu-voyages/v51-tier1-team-01" class="footer-link">v51-tier1-team-01</a> team, and it is open-sourced</p>
+    </footer>
+
+<script src="src/index.js"></script>
+</body>
+</html>
