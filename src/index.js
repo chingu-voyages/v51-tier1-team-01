@@ -58,9 +58,9 @@ groupCreateBtn.addEventListener('click', function () {
             }
         });
 
-
-        const newGroup = document.createElement('li');
-        newGroup.textContent = titleCase(groupName.value);
+        const newGroup = createElement('li',groupName.value);
+        // const newGroup = document.createElement('li');
+        // newGroup.textContent = titleCase(groupName.value);
         // newGroup.textContent = groupName.value.trim()[0].toUpperCase() + groupName.value.trim().slice(1);
         newGroup.id = randomId;
         groupList.appendChild(newGroup);
@@ -68,8 +68,9 @@ groupCreateBtn.addEventListener('click', function () {
 
         membersList.innerHTML = '';
         membersArray.forEach(member => {
-            const memberElement = document.createElement('li');
-            memberElement.textContent = member;
+            const memberElement = createElement('li',member);
+            // const memberElement = document.createElement('li');
+            // memberElement.textContent = member;
             membersList.appendChild(memberElement);
         });
         console.log(groupName.value)
@@ -86,7 +87,11 @@ groupCreateBtn.addEventListener('click', function () {
     console.log(allgroupObject);
 });
 
-// function createElement(elementType,)
+function createElement(elementType,content){
+    const element = document.createElement(elementType);
+    element.textContent = titleCase(content);
+    return element;
+}
 
 function titleCase(word){
     word  = word.trim()[0].toUpperCase()+word.trim().slice(1).toLowerCase();
