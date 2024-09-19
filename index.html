@@ -35,19 +35,81 @@
 		</section>
 	</section>
 	<section class="section-main">
-		<section>
+		<section id="new-group">
             <h2>Create New Group</h2>
             <input id="group-name" type="text" placeholder="Enter group name...">
-            <button id="group-create-btn">Create Group</button>
-            <p id="group-error">Please enter a valid group name</p>
+            <div id="member-inputs">
+                <input type="text" id="member-one" class="default group-member" placeholder="Enter member 1">
+                <input type="text" id="member-two" class="default group-member" placeholder="Enter member 2">
+            </div>
+            <div>
+                <button id="group-create-btn">Create Group</button>
+                <button id="add-another-member">Add member</button>
+            </div>
+            <p id="group-error">Please enter a valid group name with atleast two members</p>
         </section>
-	</section>
+        <section>
+            <h2>Selected group name</h2>
+            <p>Selected group member 1, Selected group member 2...</p>
+            <div>member images go here</div>
+            <img src="" alt="selected group image" width="200" height="200" style="display: block; border: 3px solid red;">
+        </section>
+        <section>
+            <h2>Balances</h2>
+            <div class="container-group-members">
+                <div class="card-member">
+                    <h3>Name</h3>
+                    <p>Current balance...</p>
+                    <p>Number of payments</p>
+                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                </div>
+                <div class="card-member">
+                    <h3>Name</h3>
+                    <p>Current balance...</p>
+                    <p>Number of payments</p>
+                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                </div>
+                <div class="card-member">
+                    <h3>Name</h3>
+                    <p>Current balance...</p>
+                    <p>Number of payments</p>
+                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                </div>
+                <div class="card-member">
+                    <h3>Name</h3>
+                    <p>Current balance...</p>
+                    <p>Number of payments</p>
+                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                </div>
+            </div>
+            <button>Show Debt Visualisation</button>
+            <ul>Expenses
+                <li>Costco Groceries</li>
+                <li>Airbnb</li>
+                <li>Peloton</li>
+                <li>...</li>
+            </ul>
 
+        </section>
+        <section>
+            <h2>Statistics</h2>
+            <p>What goes here?</p>
+        </section>
+        <section id="member-display">
+            <h2>Friends/Members</h2>
+            <ul id="members-list">
+
+            </ul>
+        </section>
+    </section>
 
 	<footer>
         <p>This project was coded by Chingu <a href="https://github.com/chingu-voyages/v51-tier1-team-01" class="footer-link">v51-tier1-team-01</a> team, and it is open-sourced</p>
     </footer>
 
+
+
 <script src="src/index.js"></script>
+
 </body>
 </html>
