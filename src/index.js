@@ -1,23 +1,13 @@
-const groupName = document.getElementById('group-name');
 const groupCreateBtn = document.getElementById('group-create-btn');
+const groupName = document.getElementById('group-name');
 const addAnotherMember = document.getElementById('add-another-member');
 const groupError = document.getElementById('group-error');
+
 let groupList = document.getElementById('group-list');
 let membersList = document.getElementById('members-list');
 let memberInputs = document.getElementById('member-inputs');
-let allgroupObject = {};
-
 let membersArray = [];
-
-// demo structure
-/*
-groupObject = {
-    name: "Group Name"
-    id: "1"
-   members: ["Jessy Doe", "John Doe", "Jafar Doe", "Jane Doe"]
-
-    }
-*/
+let allgroupObject = {};
 
 groupCreateBtn.addEventListener('click', function () {
     let groupObject = {};
