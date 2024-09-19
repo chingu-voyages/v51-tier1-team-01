@@ -55,28 +55,28 @@ function clearInputField(field){
 
 function createGroupElement(groupName,membersArr,membersList,id){
     const newGroup = makeElement('li',groupName.value);
-        newGroup.id = id;
-        groupList.appendChild(newGroup);
+    newGroup.id = id;
+    groupList.appendChild(newGroup);
 
 
-        membersList.innerHTML = '';
-        membersArr.forEach(member => {
-            const memberElement = makeElement('li',member);
-            membersList.appendChild(memberElement);
-        });
+    membersList.innerHTML = '';
+    membersArr.forEach(member => {
+        const memberElement = makeElement('li',member);
+        membersList.appendChild(memberElement);
+    });
 }
 
-groupCreateBtn.addEventListener('click', function () {
+function handleGroupCreation(){
+
     let groupObject = {};
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
 
     if (!inputValidation(groupName,allMembersInput)) {
         groupError.style.display = "block";
+        return;
     } else {
         groupError.style.display = "none";
-
-
         membersArray = [];
         allMembersInput.forEach(input => {
             if (!isEmpty(input.value)) {
@@ -85,25 +85,13 @@ groupCreateBtn.addEventListener('click', function () {
             }
         });
         createGroupElement(groupName,membersArray,membersList,randomId);
-        // const newGroup = makeElement('li',groupName.value);
-        // newGroup.id = randomId;
-        // groupList.appendChild(newGroup);
-
-
-        // membersList.innerHTML = '';
-        // membersArray.forEach(member => {
-        //     const memberElement = makeElement('li',member);
-        //     membersList.appendChild(memberElement);
-        // });
-        console.log(groupName.value)
         groupObject.groupName = groupName.value;
         groupObject.members = membersArray;
         clearInputField(groupName);
     }
-    console.log(groupObject);
     allgroupObject[randomId] = groupObject;
     console.log(allgroupObject);
-});
+}
 
-
+groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
