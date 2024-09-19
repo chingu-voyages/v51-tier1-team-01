@@ -65,7 +65,10 @@ function createGroupElement(groupName,membersArr,membersList,id){
         membersList.appendChild(memberElement);
     });
 }
-
+function removeNewInputs(className){
+    let nonDefault = document.querySelectorAll('.group-member:not(.default)');
+    nonDefault.forEach(field=>field.remove());
+}
 function handleGroupCreation(){
 
     let groupObject = {};
@@ -91,6 +94,7 @@ function handleGroupCreation(){
     }
     allgroupObject[randomId] = groupObject;
     console.log(allgroupObject);
+    removeNewInputs();
 }
 
 groupCreateBtn.addEventListener('click', handleGroupCreation);
