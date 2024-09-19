@@ -21,23 +21,6 @@ function addMemberInputField(){
     newMemberInput.placeholder = "Enter member";
     memberInputs.appendChild(newMemberInput);
 }
-function titleCase(word){
-    word  = word.trim()[0].toUpperCase()+word.trim().slice(1).toLowerCase();
-    return word;
-}
-
-function isEmpty(value){
-    if (value.trim()===''){
-        return true;
-    }else{
-        return false;
-    }
-}
-
-
-function clearInputField(field){
-    return field.value="";
-}
 
 function inputValidation(groupName,groupMembers){
     let allFilled = true;
@@ -52,18 +35,41 @@ function inputValidation(groupName,groupMembers){
 
     return true;
 }
+
+function titleCase(word){
+    word  = word.trim()[0].toUpperCase()+word.trim().slice(1).toLowerCase();
+    return word;
+}
+
+function isEmpty(value){
+    if (value.trim()===''){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function clearInputField(field){
+    return field.value="";
+}
+
+function createGroupElement(groupName,membersArr,membersList,id){
+    const newGroup = makeElement('li',groupName.value);
+        newGroup.id = id;
+        groupList.appendChild(newGroup);
+
+
+        membersList.innerHTML = '';
+        membersArr.forEach(member => {
+            const memberElement = makeElement('li',member);
+            membersList.appendChild(memberElement);
+        });
+}
+
 groupCreateBtn.addEventListener('click', function () {
     let groupObject = {};
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
-    // let allFilled = true;
-    // inputValidation(groupName,allMembersInput);
-
-    // allMembersInput.forEach(input => {
-    //     if (isEmpty(input.value)) {
-    //         allFilled = false;
-    //     }
-    // });
 
     if (!inputValidation(groupName,allMembersInput)) {
         groupError.style.display = "block";
@@ -78,17 +84,17 @@ groupCreateBtn.addEventListener('click', function () {
                 clearInputField(input);
             }
         });
+        createGroupElement(groupName,membersArray,membersList,randomId);
+        // const newGroup = makeElement('li',groupName.value);
+        // newGroup.id = randomId;
+        // groupList.appendChild(newGroup);
 
-        const newGroup = makeElement('li',groupName.value);
-        newGroup.id = randomId;
-        groupList.appendChild(newGroup);
 
-
-        membersList.innerHTML = '';
-        membersArray.forEach(member => {
-            const memberElement = makeElement('li',member);
-            membersList.appendChild(memberElement);
-        });
+        // membersList.innerHTML = '';
+        // membersArray.forEach(member => {
+        //     const memberElement = makeElement('li',member);
+        //     membersList.appendChild(memberElement);
+        // });
         console.log(groupName.value)
         groupObject.groupName = groupName.value;
         groupObject.members = membersArray;
