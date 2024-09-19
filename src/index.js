@@ -46,14 +46,14 @@ groupCreateBtn.addEventListener('click', function () {
             }
         });
 
-        const newGroup = createElement('li',groupName.value);
+        const newGroup = makeElement('li',groupName.value);
         newGroup.id = randomId;
         groupList.appendChild(newGroup);
 
 
         membersList.innerHTML = '';
         membersArray.forEach(member => {
-            const memberElement = createElement('li',member);
+            const memberElement = makeElement('li',member);
             membersList.appendChild(memberElement);
         });
         console.log(groupName.value)
@@ -67,7 +67,7 @@ groupCreateBtn.addEventListener('click', function () {
     console.log(allgroupObject);
 });
 
-function createElement(elementType,content){
+function makeElement(elementType,content){
     const element = document.createElement(elementType);
     element.textContent = titleCase(content);
     return element;
