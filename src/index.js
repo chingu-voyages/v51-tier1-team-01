@@ -2,8 +2,6 @@ const groupName = document.getElementById('group-name');
 const groupCreateBtn = document.getElementById('group-create-btn');
 const addAnotherMember = document.getElementById('add-another-member');
 const groupError = document.getElementById('group-error');
-// const memberOne = document.getElementById('member-one');
-// const memberTwo = document.getElementById('member-two');
 let groupList = document.getElementById('group-list');
 let membersList = document.getElementById('members-list');
 let memberInputs = document.getElementById('member-inputs');
@@ -23,14 +21,10 @@ groupObject = {
 
 groupCreateBtn.addEventListener('click', function () {
     let groupObject = {};
-    // let allMembersInput = document.querySelectorAll('.group-member:not(#member-one):not(#member-two)');
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
     let allFilled = true;
 
-    // if (memberOne.value.trim() === '' || memberTwo.value.trim() === '') {
-    //     allFilled = false;
-    // }
 
     allMembersInput.forEach(input => {
         if (input.value.trim() === '') {
@@ -45,24 +39,14 @@ groupCreateBtn.addEventListener('click', function () {
 
 
         membersArray = [];
-        // membersArray.push(titleCase(memberOne.value));
-        // membersArray.push(titleCase(memberTwo.value));
-        // membersArray.push(memberOne.value.trim()[0].toUpperCase() + memberOne.value.trim().slice(1));
-        // membersArray.push(memberTwo.value.trim()[0].toUpperCase() + memberTwo.value.trim().slice(1));
-
-
         allMembersInput.forEach(input => {
             if (input.value.trim() !== '') {
                 membersArray.push(titleCase(input.value));
                 input.value = '';
-                // membersArray.push(input.value.trim()[0].toUpperCase() + input.value.trim().slice(1).toLowerCase());
             }
         });
 
         const newGroup = createElement('li',groupName.value);
-        // const newGroup = document.createElement('li');
-        // newGroup.textContent = titleCase(groupName.value);
-        // newGroup.textContent = groupName.value.trim()[0].toUpperCase() + groupName.value.trim().slice(1);
         newGroup.id = randomId;
         groupList.appendChild(newGroup);
 
@@ -70,8 +54,6 @@ groupCreateBtn.addEventListener('click', function () {
         membersList.innerHTML = '';
         membersArray.forEach(member => {
             const memberElement = createElement('li',member);
-            // const memberElement = document.createElement('li');
-            // memberElement.textContent = member;
             membersList.appendChild(memberElement);
         });
         console.log(groupName.value)
@@ -79,9 +61,6 @@ groupCreateBtn.addEventListener('click', function () {
         groupObject.members = membersArray;
 
         groupName.value = '';
-        // memberOne.value = '';
-        // memberTwo.value = '';
-        // allMembersInput.forEach(input => input.value = '');
     }
     console.log(groupObject);
     allgroupObject[randomId] = groupObject;
