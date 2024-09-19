@@ -54,6 +54,7 @@ groupCreateBtn.addEventListener('click', function () {
         allMembersInput.forEach(input => {
             if (input.value.trim() !== '') {
                 membersArray.push(titleCase(input.value));
+                input.value = '';
                 // membersArray.push(input.value.trim()[0].toUpperCase() + input.value.trim().slice(1).toLowerCase());
             }
         });
@@ -80,7 +81,7 @@ groupCreateBtn.addEventListener('click', function () {
         groupName.value = '';
         // memberOne.value = '';
         // memberTwo.value = '';
-        allMembersInput.forEach(input => input.value = '');
+        // allMembersInput.forEach(input => input.value = '');
     }
     console.log(groupObject);
     allgroupObject[randomId] = groupObject;
