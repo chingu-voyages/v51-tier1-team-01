@@ -9,8 +9,8 @@ let memberInputs = document.getElementById('member-inputs');
 let membersArray = [];
 let allgroupObject = {};
 
-function makeElement(elementType,content){
-    const element = document.createElement(elementType);
+function createListItem(content){
+    const element = document.createElement('li');
     element.textContent = titleCase(content);
     return element;
 }
@@ -29,11 +29,8 @@ function inputValidation(groupName,groupMembers){
             allFilled = false;
         }
     });
-    if (isEmpty(groupName.value) || allFilled === false) {
-        return false;
-    }
 
-    return true;
+    return (isEmpty(groupName.value)||!allFilled) ? false:true;
 }
 
 function titleCase(word){
@@ -42,11 +39,7 @@ function titleCase(word){
 }
 
 function isEmpty(value){
-    if (value.trim()===''){
-        return true;
-    }else{
-        return false;
-    }
+    return value.trim()==='';
 }
 
 function clearInputField(field){
@@ -54,14 +47,14 @@ function clearInputField(field){
 }
 
 function createGroupElement(groupName,membersArr,membersList,id){
-    const newGroup = makeElement('li',groupName.value);
+    const newGroup = createListItem(groupName.value);
     newGroup.id = id;
     groupList.appendChild(newGroup);
 
 
     membersList.innerHTML = '';
     membersArr.forEach(member => {
-        const memberElement = makeElement('li',member);
+        const memberElement = createListItem(member);
         membersList.appendChild(memberElement);
     });
 }
@@ -70,7 +63,6 @@ function removeNewInputs(className){
     nonDefault.forEach(field=>field.remove());
 }
 function handleGroupCreation(){
-
     let groupObject = {};
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
