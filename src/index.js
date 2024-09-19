@@ -20,11 +20,11 @@ function titleCase(word){
     return word;
 }
 
-function checkEmpty(value){
+function isEmpty(value){
     if (value.trim()===''){
-        return false;
-    }else{
         return true;
+    }else{
+        return false;
     }
 }
 
@@ -43,12 +43,12 @@ groupCreateBtn.addEventListener('click', function () {
 
 
     allMembersInput.forEach(input => {
-        if (!checkEmpty(input.value)) {
+        if (isEmpty(input.value)) {
             allFilled = false;
         }
     });
 
-    if (!checkEmpty(groupName.value) || allFilled === false) {
+    if (isEmpty(groupName.value) || allFilled === false) {
         groupError.style.display = "block";
     } else {
         groupError.style.display = "none";
@@ -56,7 +56,7 @@ groupCreateBtn.addEventListener('click', function () {
 
         membersArray = [];
         allMembersInput.forEach(input => {
-            if (checkEmpty(input.value)) {
+            if (!isEmpty(input.value)) {
                 membersArray.push(titleCase(input.value));
                 input.value = '';
             }
