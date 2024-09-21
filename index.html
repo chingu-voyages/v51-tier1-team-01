@@ -54,6 +54,22 @@
             <div>member images go here</div>
             <img src="" alt="selected group image" width="200" height="200" style="display: block; border: 3px solid red;">
         </section>
+
+        <!-- add expense form -->
+        <button id="btn-add-expense">Show the add expense form</button>
+        <form action="" id="form-add-expense" class="hidden">
+            <input type="text" id="input-expense" placeholder="Name of expense" required>
+            <input type="number" id="input-amount" placeholder="Amount" required>
+            <input type="text" id="input-participant" placeholder="Participant name" required>
+            <button>Submit expense</button>
+        </form>
+
+<!-- added expenses section -->
+ <section>
+    <h2>Expenses</h2>
+    <ul id="list-expenses"></ul>
+ </section>
+
         <section>
             <h2>Balances</h2>
             <div class="container-group-members">

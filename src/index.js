@@ -9,44 +9,44 @@ let memberInputs = document.getElementById('member-inputs');
 let membersArray = [];
 let allgroupObject = {};
 
-function createListItem(content){
+function createListItem(content) {
     const element = document.createElement('li');
     element.textContent = titleCase(content);
     return element;
 }
 
-function addMemberInputField(){
+function addMemberInputField() {
     const newMemberInput = document.createElement('input');
     newMemberInput.className = 'group-member';
     newMemberInput.placeholder = "Enter member";
     memberInputs.appendChild(newMemberInput);
 }
 
-function inputValidation(groupName,groupMembers){
+function inputValidation(groupName, groupMembers) {
     let allFilled = true;
-    groupMembers.forEach(member=>{
-        if(isEmpty(member.value)){
+    groupMembers.forEach(member => {
+        if (isEmpty(member.value)) {
             allFilled = false;
         }
     });
 
-    return (isEmpty(groupName.value)||!allFilled) ? false:true;
+    return (isEmpty(groupName.value) || !allFilled) ? false : true;
 }
 
-function titleCase(word){
-    word  = word.trim()[0].toUpperCase()+word.trim().slice(1).toLowerCase();
+function titleCase(word) {
+    word = word.trim()[0].toUpperCase() + word.trim().slice(1).toLowerCase();
     return word;
 }
 
-function isEmpty(value){
-    return value.trim()==='';
+function isEmpty(value) {
+    return value.trim() === '';
 }
 
-function clearInputField(field){
-    return field.value="";
+function clearInputField(field) {
+    return field.value = "";
 }
 
-function createGroupElement(groupName,membersArr,membersList,id){
+function createGroupElement(groupName, membersArr, membersList, id) {
     const newGroup = createListItem(groupName.value);
     newGroup.id = id;
     groupList.appendChild(newGroup);
@@ -58,16 +58,16 @@ function createGroupElement(groupName,membersArr,membersList,id){
         membersList.appendChild(memberElement);
     });
 }
-function removeNewInputs(className){
+function removeNewInputs(className) {
     let nonDefault = document.querySelectorAll('.group-member:not(.default)');
-    nonDefault.forEach(field=>field.remove());
+    nonDefault.forEach(field => field.remove());
 }
-function handleGroupCreation(){
+function handleGroupCreation() {
     let groupObject = {};
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
 
-    if (!inputValidation(groupName,allMembersInput)) {
+    if (!inputValidation(groupName, allMembersInput)) {
         groupError.style.display = "block";
         return;
     } else {
@@ -79,7 +79,7 @@ function handleGroupCreation(){
                 clearInputField(input);
             }
         });
-        createGroupElement(groupName,membersArray,membersList,randomId);
+        createGroupElement(groupName, membersArray, membersList, randomId);
         groupObject.groupName = groupName.value;
         groupObject.members = membersArray;
         clearInputField(groupName);
@@ -91,3 +91,68 @@ function handleGroupCreation(){
 
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
+
+
+// create new expense 
+
+function createExpense(name, amount, participant) {
+    const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    };
+    const nowDate = Date.now();
+    return { name, amount, participant, nowDate }
+}
+
+const btnAddExpense = document.getElementById("btn-add-expense");
+const formAddExpense = document.getElementById("form-add-expense");
+const listExpenses = document.getElementById("list-expenses");
+
+btnAddExpense.addEventListener("click", () => {
+    formAddExpense.classList.toggle("hidden");
+});
+
+const fakeArrayOfExpenses = [];
+
+formAddExpense.addEventListener("submit", (e) => {
+    const inputExpenseName = document.getElementById("input-expense");
+    const inputExpenseAmount = document.getElementById("input-amount");
+    const inputExpenseParticipant = document.getElementById("input-participant");
+    const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, inputExpenseParticipant.value);
+    fakeArrayOfExpenses.push(newExpense);
+    console.log("here", newExpense);
+    e.preventDefault();
+    console.log("submited..")
+    console.table(fakeArrayOfExpenses);
+    inputExpenseName.value = "";
+    inputExpenseAmount.value = "";
+    inputExpenseParticipant.value = "";
+    formAddExpense.classList.add("hidden");
+    renderExpenses();
+})
+
+function renderExpenses() {
+    listExpenses.textContent = "";
+    fakeArrayOfExpenses.forEach(expense => {
+        const listItemExpense = document.createElement("li");
+        const nameSpan = document.createElement("span");
+        const amountSpan = document.createElement("span");
+        const participantSpan = document.createElement("span");
+        const dateSpan = document.createElement("span");
+        nameSpan.textContent = expense.name;
+        amountSpan.textContent = expense.amount;
+        participantSpan.textContent = expense.participant;
+        dateSpan.textContent = expense.nowDate;
+        listItemExpense.appendChild(nameSpan);
+        listItemExpense.appendChild(amountSpan);
+        listItemExpense.appendChild(participantSpan);
+        listItemExpense.appendChild(dateSpan);
+        listExpenses.appendChild(listItemExpense);
+    })
+
+
+}
+
+
