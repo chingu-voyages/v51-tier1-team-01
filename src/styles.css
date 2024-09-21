@@ -226,11 +226,7 @@ ul {
 	color: #d3d3d3;
 }
 
-#from-user *{
-    /* border: 1px solid blue; */
-}
 #from-user{
-    /* width: 60%; */
     width: 30rem;
     display: flex;
     flex-direction:column ;
@@ -240,6 +236,8 @@ ul {
 }
 #from-user input{
     padding: 0.5rem;
+    border: 2px solid blue;
+    border-radius: 5px;
 }
 
 #from-user #buttons{
@@ -247,6 +245,9 @@ ul {
     justify-content: space-between;
 }
 #from-user button{
+    background-color:#5783db;
+    color:white;
+border:2px solid  #4681f4;
     padding:0.5rem 1rem;
     width: 49%;
     border-radius: 5px;
