@@ -6,8 +6,39 @@ const groupError = document.getElementById('group-error');
 let groupList = document.getElementById('group-list');
 let membersList = document.getElementById('members-list');
 let memberInputs = document.getElementById('member-inputs');
-let membersArray = [];
-let allgroupObject = {};
+
+// array with all friends
+const friendsList = [
+	{name: "Jane Doe"},
+	{name: "John Doe"},
+	{name: "Jessy Doe"},
+	{name: "Jafar Doe"}
+	];
+
+// array with all groups, don't forget to delete fake data
+const groupsArr = [{
+	groupName: "Fake Group 1",
+	id: Date.now(),
+	avatar: "src/img/group-icon.png",
+	friends: friendsList,
+	expenses:[{name:"Bali", cost:1000, friends:["Jane,Jessy,Jafar"], payer:"Jane"}, {name:"Shmali", cost:2000, friends:["John,Jessy,Jane"], payer:"John"}]
+},
+{
+	groupName: "Fake Group 2",
+	id: Date.now(),
+	avatar: "src/img/group-icon.png",
+	friends: friendsList,
+	expenses:[{name:"Movie Night", cost:200, friends:["John,Jessy"], payer:"John"}, {name:"Boat Tour", cost:2000, friends:["Jafar,Jessy,Jane,John"], payer:"John"}]
+}
+];
+
+//events
+
+groupCreateBtn.addEventListener('click', handleGroupCreation);
+addAnotherMember.addEventListener('click', addMemberInputField);
+
+
+//creating html list templates
 
 function createListItem(content){
     const element = document.createElement('li');
@@ -15,12 +46,37 @@ function createListItem(content){
     return element;
 }
 
+function titleCase(text){
+	const words = text.split(" ");
+	return words.map(word=>word[0].toUpperCase() + word.substring(1)).join(" ")
+}
+
+function addImg(avatar) {
+	const groupImg = document.createElement("img")
+	groupImg.setAttribute("src", avatar)
+	groupImg.classList.add("group-icon")
+	return groupImg
+}
+
+//manage fields
+
 function addMemberInputField(){
     const newMemberInput = document.createElement('input');
     newMemberInput.className = 'group-member';
     newMemberInput.placeholder = "Enter member";
     memberInputs.appendChild(newMemberInput);
 }
+
+function clearInputField(field){
+    return field.value="";
+}
+
+function removeNewInputs(className){
+    let nonDefault = document.querySelectorAll('.group-member:not(.default)');
+    nonDefault.forEach(field=>field.remove());
+}
+
+//validation
 
 function inputValidation(groupName,groupMembers){
     let allFilled = true;
@@ -33,61 +89,75 @@ function inputValidation(groupName,groupMembers){
     return (isEmpty(groupName.value)||!allFilled) ? false:true;
 }
 
-function titleCase(word){
-    word  = word.trim()[0].toUpperCase()+word.trim().slice(1).toLowerCase();
-    return word;
-}
-
 function isEmpty(value){
     return value.trim()==='';
 }
 
-function clearInputField(field){
-    return field.value="";
+//group object
+
+function createNewGroup(name) {
+	//create new group, push it in groupsArr
+	const newGroup ={
+		groupName: name,
+		id: Date.now(),
+		avatar: "src/img/group-icon.png",
+		friends: friendsList,
+		expenses:[{name:"Bali", cost:1000, friends:["Jane,Jessy,Jafar"], payer:"Jane"}, {name:"Shmali", cost:2000, friends:["John,Jessy,Jane"], payer:"John"}]
+	};
+	groupsArr.push(newGroup)
+	console.log(friendsList)
+	console.log(groupsArr)
+	renderGroups()
+  }
+
+function renderGroups() {
+	groupList.innerHTML = ""
+	groupsArr.map(group => {
+		groupElement = createListItem(group.groupName)
+		groupElement.id = group.id;
+		groupElement.append(addImg(group.avatar))
+		groupList.appendChild(groupElement)
+
+		//change to render not all but current group members (?)
+		membersList.innerHTML = "";
+	
+		group.friends.forEach(friend => {
+			const friendElement = createListItem(friend.name)
+			membersList.appendChild(friendElement)
+			return
+		})
+		return
+	})
 }
 
-function createGroupElement(groupName,membersArr,membersList,id){
-    const newGroup = createListItem(groupName.value);
-    newGroup.id = id;
-    groupList.appendChild(newGroup);
-
-
-    membersList.innerHTML = '';
-    membersArr.forEach(member => {
-        const memberElement = createListItem(member);
-        membersList.appendChild(memberElement);
-    });
-}
-function removeNewInputs(className){
-    let nonDefault = document.querySelectorAll('.group-member:not(.default)');
-    nonDefault.forEach(field=>field.remove());
-}
 function handleGroupCreation(){
-    let groupObject = {};
     let allMembersInput = document.querySelectorAll('.group-member');
-    let randomId = Date.now();
 
     if (!inputValidation(groupName,allMembersInput)) {
         groupError.style.display = "block";
         return;
     } else {
-        groupError.style.display = "none";
-        membersArray = [];
+		//add info from input into group obj
+		groupError.style.display = "none";
+
         allMembersInput.forEach(input => {
             if (!isEmpty(input.value)) {
-                membersArray.push(titleCase(input.value));
+				const newFriend = {name:titleCase(input.value)}
+                friendsList.push(newFriend);
                 clearInputField(input);
             }
         });
-        createGroupElement(groupName,membersArray,membersList,randomId);
-        groupObject.groupName = groupName.value;
-        groupObject.members = membersArray;
+        createNewGroup(groupName.value);
         clearInputField(groupName);
+		removeNewInputs();
     }
-    allgroupObject[randomId] = groupObject;
-    console.log(allgroupObject);
-    removeNewInputs();
+    
 }
 
-groupCreateBtn.addEventListener('click', handleGroupCreation);
-addAnotherMember.addEventListener('click', addMemberInputField);
+
+
+  
+
+
+
+
