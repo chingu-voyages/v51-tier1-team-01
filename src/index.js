@@ -15,10 +15,10 @@ function createListItem(content){
     return element;
 }
 
-function addMemberInputField(){
+function addMemberInputField(count){
     const newMemberInput = document.createElement('input');
     newMemberInput.className = 'group-member';
-    newMemberInput.placeholder = "Enter member";
+    newMemberInput.placeholder = "Member";
     memberInputs.appendChild(newMemberInput);
 }
 
