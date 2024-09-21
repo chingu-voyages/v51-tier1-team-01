@@ -48,7 +48,7 @@ function createListItem(content){
 
 function titleCase(text){
 	const words = text.split(" ");
-	return words.map(word=>word[0].toUpperCase() + word.substring(1)).join(" ")
+	return words.map(word=>word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
 }
 
 function addImg(avatar) {
@@ -142,8 +142,15 @@ function handleGroupCreation(){
 
         allMembersInput.forEach(input => {
             if (!isEmpty(input.value)) {
-				const newFriend = {name:titleCase(input.value)}
-                friendsList.push(newFriend);
+
+				let inList = false;
+
+				friendsList.forEach(friend=> {
+					friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
+				})
+				
+				!inList ? friendsList.push({name:titleCase(input.value)}) : ""
+
                 clearInputField(input);
             }
         });
