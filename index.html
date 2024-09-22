@@ -37,18 +37,20 @@
 	<section class="section-main">
 		<section id="new-group">
             <h2>Create New Group</h2>
-            <div id="from-user">
-                <input id="group-name" type="text" placeholder="Group Name">
-                <div id="member-inputs">
-                    <input type="text" id="member-one" class="default group-member" placeholder="Member 1">
-                    <input type="text" id="member-two" class="default group-member" placeholder="Member 2">
+            <form action="get">
+                <div id="from-user">
+                    <input id="group-name" type="text" placeholder="Group Name">
+                    <div id="member-inputs">
+                        <input type="text" id="member-one" class="default group-member" placeholder="Member 1">
+                        <input type="text" id="member-two" class="default group-member" placeholder="Member 2">
+                    </div>
+                    <div>
+                        <button id="group-create-btn" type="submit">Create Group</button>
+                        <button id="add-another-member">Add Member</button>
+                    </div>
                 </div>
-                <div>
-                    <button id="group-create-btn">Create Group</button>
-                    <button id="add-another-member">Add Member</button>
-                </div>
-            </div>
-            <p id="group-error">Please enter a valid group name with atleast two members</p>
+                <p id="group-error">Please enter a valid group name with atleast two members</p>
+            </form>
         </section>
         <section>
             <h2>Selected group name</h2>

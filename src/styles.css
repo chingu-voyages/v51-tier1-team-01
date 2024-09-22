@@ -236,7 +236,7 @@ ul {
 }
 #from-user input{
     padding: 0.5rem;
-    border: 2px solid blue;
+    border: 2px solid#006091;
     border-radius: 5px;
 }
 #from-user #member-inputs{
@@ -252,7 +252,7 @@ ul {
 #from-user button{
     background-color:#5783db;
     color:white;
-    border:2px solid  #4681f4;
+    border:2px solid #006091;
     padding:0.5rem 1rem;
     width: 49%;
     border-radius: 5px;
