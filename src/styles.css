@@ -231,12 +231,11 @@ ul {
     display: flex;
     flex-direction:column ;
     justify-content: center;
-    /* align-items: flex-start; */
     gap:1rem;
 }
 #from-user input{
     padding: 0.5rem;
-    border: 2px solid#006091;
+    border: 2px solid #006091;
     border-radius: 5px;
 }
 #from-user #member-inputs{
