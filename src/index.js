@@ -2,7 +2,6 @@ const groupCreateBtn = document.getElementById('group-create-btn');
 const groupName = document.getElementById('group-name');
 const addAnotherMember = document.getElementById('add-another-member');
 const groupError = document.getElementById('group-error');
-const fromUserInput = document.querySelector('#from-user input');
 const groupForm = document.querySelector('#group-form');
 let groupList = document.getElementById('group-list');
 let membersList = document.getElementById('members-list');
@@ -10,7 +9,6 @@ let memberInputs = document.getElementById('member-inputs');
 let membersArray = [];
 let allgroupObject = {};
 
-groupForm.addEventListener('submit',handleGroup);
 function handleGroup(e) {
     e.preventDefault();
 }
@@ -21,7 +19,7 @@ function createListItem(content){
     return element;
 }
 
-function addMemberInputField(count){
+function addMemberInputField(){
     const newMemberInput = document.createElement('input');
     newMemberInput.className = 'group-member';
     newMemberInput.placeholder = "Member";
@@ -33,16 +31,25 @@ function inputValidation(groupName,groupMembers){
     groupMembers.forEach(member=>{
         if(isEmpty(member.value)){
             allFilled = false;
-            errorInputStyle();
+            console.log(member.className);
+            // errorInputStyle(member.id);
+            errorInputStyle(member.id);
         }
     });
+    if(isEmpty(groupName.value)){
+        errorInputStyle(groupName.id);
+    }
 
     return (isEmpty(groupName.value)||!allFilled) ? false:true;
 }
 
-function errorInputStyle() {
-    fromUserInput.style.borderColor = "red";
+function errorInputStyle(element) {
+    const invalidName = document.getElementById(element);
+    // const invalidName = document.getElementByClassName(element['']);
+    // console.log(invalidName);
+    invalidName.style.borderColor = "red";
 }
+function defaultBorder(element){}
 
 function titleCase(word){
     word  = word.trim()[0].toUpperCase()+word.trim().slice(1).toLowerCase();
@@ -100,5 +107,6 @@ function handleGroupCreation(){
     removeNewInputs();
 }
 
+groupForm.addEventListener('submit',handleGroup);
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
