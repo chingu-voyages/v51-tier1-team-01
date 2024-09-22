@@ -3,6 +3,7 @@ const groupName = document.getElementById('group-name');
 const addAnotherMember = document.getElementById('add-another-member');
 const groupError = document.getElementById('group-error');
 const groupForm = document.querySelector('#group-form');
+const fromUserInput = document.querySelector("#from-user input");
 let groupList = document.getElementById('group-list');
 let membersList = document.getElementById('members-list');
 let memberInputs = document.getElementById('member-inputs');
@@ -34,22 +35,24 @@ function inputValidation(groupName,groupMembers){
             console.log(member.className);
             // errorInputStyle(member.id);
             errorInputStyle(member.id);
+        }else{
+            defaultBorder(member.id);
         }
     });
     if(isEmpty(groupName.value)){
         errorInputStyle(groupName.id);
     }
-
     return (isEmpty(groupName.value)||!allFilled) ? false:true;
 }
 
 function errorInputStyle(element) {
     const invalidName = document.getElementById(element);
-    // const invalidName = document.getElementByClassName(element['']);
-    // console.log(invalidName);
     invalidName.style.borderColor = "red";
 }
-function defaultBorder(element){}
+function defaultBorder(element){
+    const validName = document.getElementById(element);
+    validName.style.borderColor = "#006091";
+}
 
 function titleCase(word){
     word  = word.trim()[0].toUpperCase()+word.trim().slice(1).toLowerCase();
@@ -89,6 +92,7 @@ function handleGroupCreation(){
         groupError.style.display = "block";
         return;
     } else {
+        fromUserInput.style.borderColor = "#006091"
         groupError.style.display = "none";
         membersArray = [];
         allMembersInput.forEach(input => {
