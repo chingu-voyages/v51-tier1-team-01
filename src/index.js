@@ -4,11 +4,11 @@ const addAnotherMember = document.getElementById('add-another-member');
 const groupError = document.getElementById('group-error');
 
 let groupList = document.getElementById('group-list');
-let membersList = document.getElementById('members-list');
+let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
 
 // array with all friends
-const friendsList = [
+const friendsArr = [
 	{name: "Jane Doe"},
 	{name: "John Doe"},
 	{name: "Jessy Doe"},
@@ -20,17 +20,23 @@ const groupsArr = [{
 	groupName: "Fake Group 1",
 	id: Date.now(),
 	avatar: "src/img/group-icon.png",
-	friends: friendsList,
+	friends: friendsArr,
 	expenses:[{name:"Bali", cost:1000, friends:["Jane,Jessy,Jafar"], payer:"Jane"}, {name:"Shmali", cost:2000, friends:["John,Jessy,Jane"], payer:"John"}]
 },
 {
 	groupName: "Fake Group 2",
 	id: Date.now(),
 	avatar: "src/img/group-icon.png",
-	friends: friendsList,
+	friends: friendsArr,
 	expenses:[{name:"Movie Night", cost:200, friends:["John,Jessy"], payer:"John"}, {name:"Boat Tour", cost:2000, friends:["Jafar,Jessy,Jane,John"], payer:"John"}]
 }
 ];
+
+
+//rendering of existing data from localStorage on page load
+
+renderFriends();
+renderGroups();
 
 //events
 
@@ -101,14 +107,24 @@ function createNewGroup(name) {
 		groupName: name,
 		id: Date.now(),
 		avatar: "src/img/group-icon.png",
-		friends: friendsList,
+		friends: friendsArr,
 		expenses:[{name:"Bali", cost:1000, friends:["Jane,Jessy,Jafar"], payer:"Jane"}, {name:"Shmali", cost:2000, friends:["John,Jessy,Jane"], payer:"John"}]
 	};
 	groupsArr.push(newGroup)
-	console.log(friendsList)
+	console.log(friendsArr)
 	console.log(groupsArr)
 	renderGroups()
   }
+
+function renderFriends() {
+	friendsList.innerHTML = "";
+	
+		friendsArr.forEach(friend => {
+			const friendElement = createListItem(friend.name)
+			friendsList.appendChild(friendElement)
+			return
+		})
+}
 
 function renderGroups() {
 	groupList.innerHTML = ""
@@ -117,15 +133,6 @@ function renderGroups() {
 		groupElement.id = group.id;
 		groupElement.append(addImg(group.avatar))
 		groupList.appendChild(groupElement)
-
-		//change to render not all but current group members (?)
-		membersList.innerHTML = "";
-	
-		group.friends.forEach(friend => {
-			const friendElement = createListItem(friend.name)
-			membersList.appendChild(friendElement)
-			return
-		})
 		return
 	})
 }
@@ -145,13 +152,14 @@ function handleGroupCreation(){
 
 				let inList = false;
 
-				friendsList.forEach(friend=> {
+				friendsArr.forEach(friend=> {
 					friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
 				})
-				
-				!inList ? friendsList.push({name:titleCase(input.value)}) : ""
+
+				!inList ? friendsArr.push({name:titleCase(input.value)}) : ""
 
                 clearInputField(input);
+				renderFriends();
             }
         });
         createNewGroup(groupName.value);
