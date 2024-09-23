@@ -32,29 +32,39 @@ function addMemberInputField(){
     // memberCount++;
 }
 
-// function ()
-
-function inputValidation(groupName,groupMembers){
-    // let allFilled = true;
+function inputValidation (groupName,groupMembers){
     let membersFilled = 0;
     groupMembers.forEach(member=>{
         if(!isEmpty(member.value)){
-            // allFilled = false;
+            // console.log(member.className);
             membersFilled++;
-            console.log(member.className);
-            defaultBorder(member.id);
         }
-        // else{
-        //     errorInputStyle(member.id);
-        // }
-        if(isEmpty(groupName.value)){
-            errorInputStyle(groupName.id);
-        }else{
-            defaultBorder(groupName.id);
-        }
-    });
+    })
+
     return (isEmpty(groupName.value)||membersFilled<2) ? false:true;
 }
+
+// function inputValidation(groupName,groupMembers){
+//     // let allFilled = true;
+//     let membersFilled = 0;
+//     groupMembers.forEach(member=>{
+//         if(!isEmpty(member.value)){
+//             // allFilled = false;
+//             membersFilled++;
+//             console.log(member.className);
+//             defaultBorder(member.id);
+//         }
+//         // else{
+//         //     errorInputStyle(member.id);
+//         // }
+//         if(isEmpty(groupName.value)){
+//             errorInputStyle(groupName.id);
+//         }else{
+//             defaultBorder(groupName.id);
+//         }
+//     });
+//     return (isEmpty(groupName.value)||membersFilled<2) ? false:true;
+// }
 
 function defaultBorder(element){
     const validName = document.getElementById(element);
