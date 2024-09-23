@@ -9,10 +9,10 @@ let memberInputs = document.getElementById('member-inputs');
 
 // array with all friends
 const friendsArr = [
-	{name: "Jane Doe"},
-	{name: "John Doe"},
-	{name: "Jessy Doe"},
-	{name: "Jafar Doe"}
+	{name: "Jane Doe", id: Date.now()},
+	{name: "John Doe", id: Date.now()},
+	{name: "Jessy Doe", id: Date.now()},
+	{name: "Jafar Doe", id: Date.now()}
 	];
 
 // array with all groups, don't forget to delete fake data
@@ -156,7 +156,7 @@ function handleGroupCreation(){
 					friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
 				})
 
-				!inList ? friendsArr.push({name:titleCase(input.value)}) : ""
+				!inList ? friendsArr.push({name:titleCase(input.value), id: Date.now()}) : ""
 
                 clearInputField(input);
 				renderFriends();
