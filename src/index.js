@@ -32,15 +32,30 @@ function addMemberInputField(){
     // memberCount++;
 }
 
+function defaultBorder(element){
+    const validName = document.getElementById(element);
+    validName.style.borderColor = "#006091";
+}
+function errorInputStyle(element) {
+    const invalidName = document.getElementById(element);
+    invalidName.style.borderColor = "red";
+}
+
 function inputValidation (groupName,groupMembers){
     let membersFilled = 0;
     groupMembers.forEach(member=>{
         if(!isEmpty(member.value)){
             // console.log(member.className);
             membersFilled++;
+        }else{
+            if(member.className.includes('default')){
+                errorInputStyle(member.id);
+            }
         }
     })
-
+        if(isEmpty(groupName.value)){
+            errorInputStyle(groupName.id);
+        }
     return (isEmpty(groupName.value)||membersFilled<2) ? false:true;
 }
 
@@ -66,14 +81,7 @@ function inputValidation (groupName,groupMembers){
 //     return (isEmpty(groupName.value)||membersFilled<2) ? false:true;
 // }
 
-function defaultBorder(element){
-    const validName = document.getElementById(element);
-    validName.style.borderColor = "#006091";
-}
-function errorInputStyle(element) {
-    const invalidName = document.getElementById(element);
-    invalidName.style.borderColor = "red";
-}
+
 
 function titleCase(word){
     word  = word.trim()[0].toUpperCase()+word.trim().slice(1).toLowerCase();
@@ -114,9 +122,6 @@ function handleGroupCreation(e){
         groupError.style.display = "block";
         return;
     }
-    // if (!inputValidation(groupName,allMembersInput)) {
-    //     groupError.style.display = "block";
-    //     return;
     else {
         fromUserInput.style.borderColor = "#006091"
         groupError.style.display = "none";
