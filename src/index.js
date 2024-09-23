@@ -12,9 +12,9 @@ let membersArray = [];
 let allgroupObject = {};
 // let memberCount = 2; // used for the id
 
-function handleForm(e) {
-    e.preventDefault();
-}
+// function handleForm(e) {
+//     e.preventDefault();
+// }
 
 function createListItem(content){
     const element = document.createElement('li');
@@ -114,7 +114,7 @@ function removeNewInputs(className){
 }
 function handleGroupCreation(e){
 
-    // e.preventDefault();
+    e.preventDefault();
     let groupObject = {};
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
@@ -147,7 +147,7 @@ function showForm(){
 }
 
 sidebarAddGroup.addEventListener('click',showForm);
-groupForm.addEventListener('submit',handleForm);
+groupForm.addEventListener('submit',handleGroupCreation);
 // groupForm.addEventListener('submit',handleGroupCreation);
-groupCreateBtn.addEventListener('click', handleGroupCreation);
+// groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
