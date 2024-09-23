@@ -169,9 +169,35 @@ function handleGroupCreation(){
     
 }
 
+// friends management
+
+const showAddFriendForm = document.getElementById("add-btn");
+const formAddFriend = document.getElementById("form-add-friend");
+const inputFriendName = document.getElementById('friend-first-name');
+// const inputFriendLastName = document.getElementById('friend-last-name');
+
+showAddFriendForm.addEventListener("click", () => { // the add friend button just shows the form
+    formAddFriend.classList.add("form-add-visible");
+});
+
+formAddFriend.addEventListener("submit", (e) => { // function to create friend from input and add friend to overall friend array
+    e.preventDefault();
+    let name = inputFriendName.value;
+    // let lastName = inputFriendLastName.value;
+    const friend = createFriend(name);
+    friendsArr.push(friend);
+    console.table(friendsArr);
+    inputFriendName.value = '';
+    // inputFriendLastName.value = '';
+    renderFriends();
+});
 
 
-  
+function createFriend(name, id=Date.now(), imgSrc = 'src/img/group-icon.png') { // function to create friend object from input, can be reused in group creation process
+    return { name, id, imgSrc }
+}
+
+
 
 
 
