@@ -225,7 +225,9 @@ ul {
 	vertical-align:text-top;
 	color: #d3d3d3;
 }
-
+#group-form{
+    display: block;
+}
 #from-user{
     width: 30rem;
     display: flex;

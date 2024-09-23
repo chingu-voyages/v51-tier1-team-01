@@ -4,12 +4,14 @@ const addAnotherMember = document.getElementById('add-another-member');
 const groupError = document.getElementById('group-error');
 const groupForm = document.querySelector('#group-form');
 const fromUserInput = document.querySelector("#from-user input");
+const sidebarAddGroup = document.getElementById('sidebar-add-group');
 let groupList = document.getElementById('group-list');
 let membersList = document.getElementById('members-list');
 let memberInputs = document.getElementById('member-inputs');
 let membersArray = [];
 let allgroupObject = {};
 // let memberCount = 2; // used for the id
+
 function handleForm(e) {
     e.preventDefault();
 }
@@ -30,33 +32,37 @@ function addMemberInputField(){
     // memberCount++;
 }
 
+// function ()
+
 function inputValidation(groupName,groupMembers){
-    let allFilled = true;
+    // let allFilled = true;
+    let membersFilled = 0;
     groupMembers.forEach(member=>{
-        if(isEmpty(member.value)){
-            allFilled = false;
+        if(!isEmpty(member.value)){
+            // allFilled = false;
+            membersFilled++;
             console.log(member.className);
-            // errorInputStyle(member.id);
-            errorInputStyle(member.id);
-        }else{
             defaultBorder(member.id);
         }
+        // else{
+        //     errorInputStyle(member.id);
+        // }
+        if(isEmpty(groupName.value)){
+            errorInputStyle(groupName.id);
+        }else{
+            defaultBorder(groupName.id);
+        }
     });
-    if(isEmpty(groupName.value)){
-        errorInputStyle(groupName.id);
-    }else{
-        defaultBorder(groupName.id);
-    }
-    return (isEmpty(groupName.value)||!allFilled) ? false:true;
+    return (isEmpty(groupName.value)||membersFilled<2) ? false:true;
 }
 
-function errorInputStyle(element) {
-    const invalidName = document.getElementById(element);
-    invalidName.style.borderColor = "red";
-}
 function defaultBorder(element){
     const validName = document.getElementById(element);
     validName.style.borderColor = "#006091";
+}
+function errorInputStyle(element) {
+    const invalidName = document.getElementById(element);
+    invalidName.style.borderColor = "red";
 }
 
 function titleCase(word){
@@ -90,7 +96,7 @@ function removeNewInputs(className){
 }
 function handleGroupCreation(e){
 
-        // e.preventDefault();
+    // e.preventDefault();
     let groupObject = {};
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
@@ -115,12 +121,18 @@ function handleGroupCreation(e){
         groupObject.groupName = groupName.value;
         groupObject.members = membersArray;
         clearInputField(groupName);
+        groupForm.style.display = "none";
     }
     allgroupObject[randomId] = groupObject;
     console.log(allgroupObject);
     removeNewInputs();
 }
+function showForm(){
+    groupForm.style.display = "block";
+}
 
+sidebarAddGroup.addEventListener('click',showForm);
 groupForm.addEventListener('submit',handleForm);
+// groupForm.addEventListener('submit',handleGroupCreation);
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
