@@ -1,53 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Splitter App Tier 1</title>
     <link rel="stylesheet" href="src/styles.css">
 </head>
+
 <body>
 
-	<section class="section-aside">
-		<header>
-			<h1 class="logo">
-				<a href="#"><img src="src/logo.png" alt="Splitzy"></a>
-			</h1>
-		</header>
-		<section class="section-aside-groups">
-			<h2>Your Groups</h2>
-			<ul id="group-list">
-				<li><a class="group-link" href="#">Family</a></li>
-				<li><a class="group-link" href="#">Friends</a></li>
-				<li><a class="group-link" href="#">Team</a></li>
-			</ul>
-			<button class="add-btn"><span>+</span>Add new group</button>
-		</section>
-		<section class="section-aside-friends">
-			<h2>Your Friends</h2>
-			<ul>
-				<li>Jane Doe</li>
-				<li>John Doe</li>
-				<li>Jessy Doe</li>
-				<li>Jafar Doe</li>
-			</ul>
-			<button class="add-btn"><span>+</span>Add new friend</button>
-		</section>
-	</section>
-	<section class="section-main">
-		<section>
+    <section class="section-aside">
+        <header>
+            <h1 class="logo">
+                <a href="#"><img src="src/img/logo.png" alt="Splitzy"></a>
+            </h1>
+        </header>
+        <section class="section-aside-groups">
+            <h2>Your Groups</h2>
+            <ul id="group-list">
+                <li><img src="src/img/group-icon.png" alt="group icon" class="group-icon"><a class="group-link"
+                        href="#">Family</a></li>
+                <li><img src="src/img/group-icon.png" alt="group icon" class="group-icon"><a class="group-link"
+                        href="#">Friends</a></li>
+                <li><img src="src/img/group-icon.png" alt="group icon" class="group-icon"><a class="group-link"
+                        href="#">Team</a></li>
+            </ul>
+            <button class="add-btn"><span>+</span>Add new group</button>
+        </section>
+        <section class="section-aside-friends">
+            <h2>Your Friends</h2>
+            <ul id="friends-list">
+            </ul>
+            <button id="add-btn" class="add-btn"><span>+</span>Add new friend</button>
+            <form id="form-add-friend" action="" class="form-add">
+                <div class="form-control">
+                    <label for="friend-first-name">First name: </label>
+                    <input id="friend-first-name" type="text" placeholder="First Name" required>
+                </div>
+                <!-- <div class="form-control">
+                    <label for="friend-last-name">Last name: </label>
+                    <input id="friend-last-name" type="text" placeholder="Last Name">
+                </div> -->
+                <button>Submit</button>
+            </form>
+        </section>
+    </section>
+    <section class="section-main">
+        <section id="new-group">
             <h2>Create New Group</h2>
             <input id="group-name" type="text" placeholder="Enter group name...">
-            <button id="group-create-btn">Create Group</button>
-            <p id="group-error">Please enter a valid group name</p>
+            <div id="member-inputs">
+                <input type="text" id="member-one" class="default group-member" placeholder="Enter member 1">
+                <input type="text" id="member-two" class="default group-member" placeholder="Enter member 2">
+            </div>
+            <div>
+                <button id="group-create-btn">Create Group</button>
+                <button id="add-another-member">Add member</button>
+            </div>
+            <p id="group-error">Please enter a valid group name with atleast two members</p>
         </section>
-	</section>
+        <section>
+            <h2>Selected group name</h2>
+            <p>Selected group member 1, Selected group member 2...</p>
+            <div>member images go here</div>
+            <img src="" alt="selected group image" width="200" height="200"
+                style="display: block; border: 3px solid red;">
+        </section>
+        <section>
+            <h2>Balances</h2>
+            <div class="container-group-members">
+                <div class="card-member">
+                    <h3>Name</h3>
+                    <p>Current balance...</p>
+                    <p>Number of payments</p>
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
+                </div>
+                <div class="card-member">
+                    <h3>Name</h3>
+                    <p>Current balance...</p>
+                    <p>Number of payments</p>
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
+                </div>
+                <div class="card-member">
+                    <h3>Name</h3>
+                    <p>Current balance...</p>
+                    <p>Number of payments</p>
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
+                </div>
+                <div class="card-member">
+                    <h3>Name</h3>
+                    <p>Current balance...</p>
+                    <p>Number of payments</p>
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
+                </div>
+            </div>
+            <button>Show Debt Visualisation</button>
+            <ul>Expenses
+                <li>Costco Groceries</li>
+                <li>Airbnb</li>
+                <li>Peloton</li>
+                <li>...</li>
+            </ul>
 
+        </section>
+        <section>
+            <h2>Statistics</h2>
+            <p>What goes here?</p>
+        </section>
+        <section id="member-display">
+            <h2>Friends/Members</h2>
+            <ul id="members-list">
 
-	<footer>
-        <p>This project was coded by Chingu <a href="https://github.com/chingu-voyages/v51-tier1-team-01" class="footer-link">v51-tier1-team-01</a> team, and it is open-sourced</p>
+            </ul>
+        </section>
+    </section>
+
+    <footer>
+        <p>This project was coded by Chingu <a href="https://github.com/chingu-voyages/v51-tier1-team-01"
+                class="footer-link">v51-tier1-team-01</a> team, and it is open-sourced</p>
     </footer>
 
-<script src="src/index.js"></script>
+
+
+    <script src="src/index.js"></script>
+
 </body>
+
 </html>
