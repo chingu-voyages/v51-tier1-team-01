@@ -6,21 +6,67 @@ const groupForm = document.querySelector('#group-form');
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 let groupList = document.getElementById('group-list');
-let membersList = document.getElementById('members-list');
+let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
-let membersArray = [];
-let allgroupObject = {};
-// let memberCount = 2; // used for the id
 
-// function handleForm(e) {
-//     e.preventDefault();
-// }
+// array with all friends
+const friendsArr = [
+	{name: "Jane Doe", id: Date.now()},
+	{name: "John Doe", id: Date.now()},
+	{name: "Jessy Doe", id: Date.now()},
+	{name: "Jafar Doe", id: Date.now()}
+	];
+
+// array with all groups, don't forget to delete fake data
+const groupsArr = [{
+	groupName: "Fake Group 1",
+	id: Date.now(),
+	avatar: "src/img/group-icon.png",
+	friends: friendsArr,
+	expenses:[{name:"Bali", cost:1000, friends:["Jane,Jessy,Jafar"], payer:"Jane"}, {name:"Shmali", cost:2000, friends:["John,Jessy,Jane"], payer:"John"}]
+},
+{
+	groupName: "Fake Group 2",
+	id: Date.now(),
+	avatar: "src/img/group-icon.png",
+	friends: friendsArr,
+	expenses:[{name:"Movie Night", cost:200, friends:["John,Jessy"], payer:"John"}, {name:"Boat Tour", cost:2000, friends:["Jafar,Jessy,Jane,John"], payer:"John"}]
+}
+];
+
+
+//rendering of existing data from localStorage on page load
+
+renderFriends();
+renderGroups();
+
+//events
+
+groupCreateBtn.addEventListener('click', handleGroupCreation);
+addAnotherMember.addEventListener('click', addMemberInputField);
+
+
+//creating html list templates
 
 function createListItem(content){
     const element = document.createElement('li');
     element.textContent = titleCase(content);
     return element;
 }
+
+function titleCase(text){
+	const words = text.split(" ");
+	return words.map(word=>word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
+}
+
+function addImg(avatar) {
+	const groupImg = document.createElement("img")
+	groupImg.setAttribute("src", avatar)
+	groupImg.classList.add("group-icon")
+	return groupImg
+}
+
+//manage fields
 
 function addMemberInputField(){
     const newMemberInput = document.createElement('input');
@@ -40,6 +86,17 @@ function errorInputStyle(element) {
     const invalidName = document.getElementById(element);
     invalidName.style.borderColor = "red";
 }
+
+function clearInputField(field){
+    return field.value="";
+}
+
+function removeNewInputs(className){
+    let nonDefault = document.querySelectorAll('.group-member:not(.default)');
+    nonDefault.forEach(field=>field.remove());
+}
+
+//validation
 
 function inputValidation (groupName,groupMembers){
     let membersFilled = 0;
@@ -92,30 +149,46 @@ function isEmpty(value){
     return value.trim()==='';
 }
 
-function clearInputField(field){
-    return field.value="";
+//group object
+
+function createNewGroup(name) {
+	//create new group, push it in groupsArr
+	const newGroup ={
+		groupName: name,
+		id: Date.now(),
+		avatar: "src/img/group-icon.png",
+		friends: friendsArr,
+		expenses:[{name:"Bali", cost:1000, friends:["Jane,Jessy,Jafar"], payer:"Jane"}, {name:"Shmali", cost:2000, friends:["John,Jessy,Jane"], payer:"John"}]
+	};
+	groupsArr.push(newGroup)
+	console.log(friendsArr)
+	console.log(groupsArr)
+	renderGroups()
+  }
+
+function renderFriends() {
+	friendsList.innerHTML = "";
+
+		friendsArr.forEach(friend => {
+			const friendElement = createListItem(friend.name)
+			friendsList.appendChild(friendElement)
+			return
+		})
 }
 
-function createGroupElement(groupName,membersArr,membersList,id){
-    const newGroup = createListItem(groupName.value);
-    newGroup.id = id;
-    groupList.appendChild(newGroup);
-
-
-    membersList.innerHTML = '';
-    membersArr.forEach(member => {
-        const memberElement = createListItem(member);
-        membersList.appendChild(memberElement);
-    });
+function renderGroups() {
+	groupList.innerHTML = ""
+	groupsArr.map(group => {
+		groupElement = createListItem(group.groupName)
+		groupElement.id = group.id;
+		groupElement.append(addImg(group.avatar))
+		groupList.appendChild(groupElement)
+		return
+	})
 }
-function removeNewInputs(className){
-    let nonDefault = document.querySelectorAll('.group-member:not(.default)');
-    nonDefault.forEach(field=>field.remove());
-}
+
 function handleGroupCreation(e){
-
     e.preventDefault();
-    let groupObject = {};
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
     if (!inputValidation(groupName,allMembersInput)) {
@@ -128,18 +201,25 @@ function handleGroupCreation(e){
         membersArray = [];
         allMembersInput.forEach(input => {
             if (!isEmpty(input.value)) {
-                membersArray.push(titleCase(input.value));
+
+				let inList = false;
+
+				friendsArr.forEach(friend=> {
+					friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
+				})
+
+				!inList ? friendsArr.push({name:titleCase(input.value), id: Date.now()}) : ""
+
                 clearInputField(input);
+				renderFriends();
             }
         });
-        createGroupElement(groupName,membersArray,membersList,randomId);
-        groupObject.groupName = groupName.value;
-        groupObject.members = membersArray;
+        createNewGroup(groupName.value);
         clearInputField(groupName);
         groupForm.style.display = "none";
     }
-    allgroupObject[randomId] = groupObject;
-    console.log(allgroupObject);
+    // allgroupObject[randomId] = groupObject;
+    // console.log(allgroupObject);
     removeNewInputs();
 }
 function showForm(){
