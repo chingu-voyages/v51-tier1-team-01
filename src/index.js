@@ -9,8 +9,8 @@ let membersList = document.getElementById('members-list');
 let memberInputs = document.getElementById('member-inputs');
 let membersArray = [];
 let allgroupObject = {};
-
-function handleGroup(e) {
+let memberCount = 2; // used for the id
+function handleForm(e) {
     e.preventDefault();
 }
 
@@ -23,8 +23,10 @@ function createListItem(content){
 function addMemberInputField(){
     const newMemberInput = document.createElement('input');
     newMemberInput.className = 'group-member';
-    newMemberInput.placeholder = "Member";
+    newMemberInput.placeholder = `Member ${memberCount+1}`;
+    newMemberInput.id = `member-${memberCount+1}`;
     memberInputs.appendChild(newMemberInput);
+    count++;
 }
 
 function inputValidation(groupName,groupMembers){
@@ -41,6 +43,8 @@ function inputValidation(groupName,groupMembers){
     });
     if(isEmpty(groupName.value)){
         errorInputStyle(groupName.id);
+    }else{
+        defaultBorder(groupName.id);
     }
     return (isEmpty(groupName.value)||!allFilled) ? false:true;
 }
@@ -83,7 +87,9 @@ function removeNewInputs(className){
     let nonDefault = document.querySelectorAll('.group-member:not(.default)');
     nonDefault.forEach(field=>field.remove());
 }
-function handleGroupCreation(){
+function handleGroupCreation(e){
+
+        // e.preventDefault();
     let groupObject = {};
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
@@ -111,6 +117,6 @@ function handleGroupCreation(){
     removeNewInputs();
 }
 
-groupForm.addEventListener('submit',handleGroup);
+groupForm.addEventListener('submit',handleForm);
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
