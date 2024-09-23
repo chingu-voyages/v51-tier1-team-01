@@ -63,7 +63,7 @@ function addImg(avatar) {
 	const groupImg = document.createElement("img")
 	groupImg.setAttribute("src", avatar)
 	groupImg.classList.add("group-icon")
-	return groupImg
+	return groupImg;
 }
 
 //manage fields
@@ -104,7 +104,7 @@ function inputValidation (groupName,groupMembers){
         if(!isEmpty(member.value)){
             // console.log(member.className);
             membersFilled++;
-            // defaultBorder(member.id);
+            defaultBorder(member.id);
         }else{
             if(member.className.includes('default')){
                 errorInputStyle(member.id);
@@ -115,6 +115,8 @@ function inputValidation (groupName,groupMembers){
     })
         if(isEmpty(groupName.value)){
             errorInputStyle(groupName.id);
+        }else{
+            defaultBorder(groupName.id);
         }
     return (isEmpty(groupName.value)||membersFilled<2) ? false:true;
 }
