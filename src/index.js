@@ -9,7 +9,7 @@ let membersList = document.getElementById('members-list');
 let memberInputs = document.getElementById('member-inputs');
 let membersArray = [];
 let allgroupObject = {};
-let memberCount = 2; // used for the id
+// let memberCount = 2; // used for the id
 function handleForm(e) {
     e.preventDefault();
 }
@@ -23,10 +23,11 @@ function createListItem(content){
 function addMemberInputField(){
     const newMemberInput = document.createElement('input');
     newMemberInput.className = 'group-member';
-    newMemberInput.placeholder = `Member ${memberCount+1}`;
-    newMemberInput.id = `member-${memberCount+1}`;
+    newMemberInput.placeholder = 'Add Member';
+    // newMemberInput.placeholder = `Member ${memberCount+1}`;
+    // newMemberInput.id = `member-${memberCount+1}`;
     memberInputs.appendChild(newMemberInput);
-    count++;
+    // memberCount++;
 }
 
 function inputValidation(groupName,groupMembers){
@@ -93,11 +94,14 @@ function handleGroupCreation(e){
     let groupObject = {};
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
-
     if (!inputValidation(groupName,allMembersInput)) {
         groupError.style.display = "block";
         return;
-    } else {
+    }
+    // if (!inputValidation(groupName,allMembersInput)) {
+    //     groupError.style.display = "block";
+    //     return;
+    else {
         fromUserInput.style.borderColor = "#006091"
         groupError.style.display = "none";
         membersArray = [];
