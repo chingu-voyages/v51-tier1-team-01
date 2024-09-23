@@ -104,10 +104,13 @@ function inputValidation (groupName,groupMembers){
         if(!isEmpty(member.value)){
             // console.log(member.className);
             membersFilled++;
+            // defaultBorder(member.id);
         }else{
             if(member.className.includes('default')){
                 errorInputStyle(member.id);
             }
+
+
         }
     })
         if(isEmpty(groupName.value)){
@@ -116,27 +119,6 @@ function inputValidation (groupName,groupMembers){
     return (isEmpty(groupName.value)||membersFilled<2) ? false:true;
 }
 
-// function inputValidation(groupName,groupMembers){
-//     // let allFilled = true;
-//     let membersFilled = 0;
-//     groupMembers.forEach(member=>{
-//         if(!isEmpty(member.value)){
-//             // allFilled = false;
-//             membersFilled++;
-//             console.log(member.className);
-//             defaultBorder(member.id);
-//         }
-//         // else{
-//         //     errorInputStyle(member.id);
-//         // }
-//         if(isEmpty(groupName.value)){
-//             errorInputStyle(groupName.id);
-//         }else{
-//             defaultBorder(groupName.id);
-//         }
-//     });
-//     return (isEmpty(groupName.value)||membersFilled<2) ? false:true;
-// }
 
 
 
@@ -196,7 +178,7 @@ function handleGroupCreation(e){
         return;
     }
     else {
-        fromUserInput.style.borderColor = "#006091"
+        fromUserInput.style.borderColor = "#006091";
         groupError.style.display = "none";
         membersArray = [];
         allMembersInput.forEach(input => {
@@ -214,16 +196,18 @@ function handleGroupCreation(e){
 				renderFriends();
             }
         });
+        groupForm.style.display = "none";
+    // fromUserInput.style.borderColor = "#006091";
         createNewGroup(groupName.value);
         clearInputField(groupName);
-        groupForm.style.display = "none";
+		removeNewInputs();
     }
-    // allgroupObject[randomId] = groupObject;
-    // console.log(allgroupObject);
-    removeNewInputs();
+
 }
+
 function showForm(){
     groupForm.style.display = "block";
+    fromUserInput.style.borderColor = "#006091";
 }
 
 sidebarAddGroup.addEventListener('click',showForm);
@@ -231,3 +215,30 @@ groupForm.addEventListener('submit',handleGroupCreation);
 // groupForm.addEventListener('submit',handleGroupCreation);
 // groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
+// friends management
+
+const showAddFriendForm = document.getElementById("add-btn");
+const formAddFriend = document.getElementById("form-add-friend");
+const inputFriendName = document.getElementById('friend-first-name');
+// const inputFriendLastName = document.getElementById('friend-last-name');
+
+showAddFriendForm.addEventListener("click", () => { // the add friend button just shows the form
+    formAddFriend.classList.add("form-add-visible");
+});
+
+formAddFriend.addEventListener("submit", (e) => { // function to create friend from input and add friend to overall friend array
+    e.preventDefault();
+    let name = inputFriendName.value;
+    // let lastName = inputFriendLastName.value;
+    const friend = createFriend(name);
+    friendsArr.push(friend);
+    console.table(friendsArr);
+    inputFriendName.value = '';
+    // inputFriendLastName.value = '';
+    renderFriends();
+});
+
+
+function createFriend(name, id=Date.now(), imgSrc = 'src/img/group-icon.png') { // function to create friend object from input, can be reused in group creation process
+    return { name, id, imgSrc }
+}
