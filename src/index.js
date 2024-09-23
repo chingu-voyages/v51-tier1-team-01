@@ -2,7 +2,9 @@ const groupCreateBtn = document.getElementById('group-create-btn');
 const groupName = document.getElementById('group-name');
 const addAnotherMember = document.getElementById('add-another-member');
 const groupError = document.getElementById('group-error');
-
+const groupForm = document.querySelector('#group-form');
+const fromUserInput = document.querySelector("#from-user input");
+const sidebarAddGroup = document.getElementById('sidebar-add-group');
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
@@ -61,7 +63,7 @@ function addImg(avatar) {
 	const groupImg = document.createElement("img")
 	groupImg.setAttribute("src", avatar)
 	groupImg.classList.add("group-icon")
-	return groupImg
+	return groupImg;
 }
 
 //manage fields
@@ -69,8 +71,20 @@ function addImg(avatar) {
 function addMemberInputField(){
     const newMemberInput = document.createElement('input');
     newMemberInput.className = 'group-member';
-    newMemberInput.placeholder = "Enter member";
+    newMemberInput.placeholder = 'Add Member';
+    // newMemberInput.placeholder = `Member ${memberCount+1}`;
+    // newMemberInput.id = `member-${memberCount+1}`;
     memberInputs.appendChild(newMemberInput);
+    // memberCount++;
+}
+
+function defaultBorder(element){
+    const validName = document.getElementById(element);
+    validName.style.borderColor = "#006091";
+}
+function errorInputStyle(element) {
+    const invalidName = document.getElementById(element);
+    invalidName.style.borderColor = "red";
 }
 
 function clearInputField(field){
@@ -84,15 +98,35 @@ function removeNewInputs(className){
 
 //validation
 
-function inputValidation(groupName,groupMembers){
-    let allFilled = true;
+function inputValidation (groupName,groupMembers){
+    let membersFilled = 0;
     groupMembers.forEach(member=>{
-        if(isEmpty(member.value)){
-            allFilled = false;
-        }
-    });
+        if(!isEmpty(member.value)){
+            // console.log(member.className);
+            membersFilled++;
+            defaultBorder(member.id);
+        }else{
+            if(member.className.includes('default')){
+                errorInputStyle(member.id);
+            }
 
-    return (isEmpty(groupName.value)||!allFilled) ? false:true;
+
+        }
+    })
+        if(isEmpty(groupName.value)){
+            errorInputStyle(groupName.id);
+        }else{
+            defaultBorder(groupName.id);
+        }
+    return (isEmpty(groupName.value)||membersFilled<2) ? false:true;
+}
+
+
+
+
+function titleCase(word){
+    word  = word.trim()[0].toUpperCase()+word.trim().slice(1).toLowerCase();
+    return word;
 }
 
 function isEmpty(value){
@@ -118,7 +152,7 @@ function createNewGroup(name) {
 
 function renderFriends() {
 	friendsList.innerHTML = "";
-	
+
 		friendsArr.forEach(friend => {
 			const friendElement = createListItem(friend.name)
 			friendsList.appendChild(friendElement)
@@ -137,16 +171,18 @@ function renderGroups() {
 	})
 }
 
-function handleGroupCreation(){
+function handleGroupCreation(e){
+    e.preventDefault();
     let allMembersInput = document.querySelectorAll('.group-member');
-
+    let randomId = Date.now();
     if (!inputValidation(groupName,allMembersInput)) {
         groupError.style.display = "block";
         return;
-    } else {
-		//add info from input into group obj
-		groupError.style.display = "none";
-
+    }
+    else {
+        fromUserInput.style.borderColor = "#006091";
+        groupError.style.display = "none";
+        membersArray = [];
         allMembersInput.forEach(input => {
             if (!isEmpty(input.value)) {
 
@@ -162,13 +198,25 @@ function handleGroupCreation(){
 				renderFriends();
             }
         });
+        groupForm.style.display = "none";
+    // fromUserInput.style.borderColor = "#006091";
         createNewGroup(groupName.value);
         clearInputField(groupName);
 		removeNewInputs();
     }
-    
+
 }
 
+function showForm(){
+    groupForm.style.display = "block";
+    fromUserInput.style.borderColor = "#006091";
+}
+
+sidebarAddGroup.addEventListener('click',showForm);
+groupForm.addEventListener('submit',handleGroupCreation);
+// groupForm.addEventListener('submit',handleGroupCreation);
+// groupCreateBtn.addEventListener('click', handleGroupCreation);
+addAnotherMember.addEventListener('click', addMemberInputField);
 // friends management
 
 const showAddFriendForm = document.getElementById("add-btn");
@@ -196,9 +244,3 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
 function createFriend(name, id=Date.now(), imgSrc = 'src/img/group-icon.png') { // function to create friend object from input, can be reused in group creation process
     return { name, id, imgSrc }
 }
-
-
-
-
-
-

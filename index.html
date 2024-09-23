@@ -26,7 +26,7 @@
                 <li><img src="src/img/group-icon.png" alt="group icon" class="group-icon"><a class="group-link"
                         href="#">Team</a></li>
             </ul>
-            <button class="add-btn"><span>+</span>Add new group</button>
+            <button class="add-btn" id="sidebar-add-group"><span>+</span>Add new group</button>
         </section>
         <section class="section-aside-friends">
             <h2>Your Friends</h2>
@@ -49,16 +49,20 @@
     <section class="section-main">
         <section id="new-group">
             <h2>Create New Group</h2>
-            <input id="group-name" type="text" placeholder="Enter group name...">
-            <div id="member-inputs">
-                <input type="text" id="member-one" class="default group-member" placeholder="Enter member 1">
-                <input type="text" id="member-two" class="default group-member" placeholder="Enter member 2">
-            </div>
-            <div>
-                <button id="group-create-btn">Create Group</button>
-                <button id="add-another-member">Add member</button>
-            </div>
-            <p id="group-error">Please enter a valid group name with atleast two members</p>
+            <form id="group-form">
+                <div id="from-user">
+                    <input id="group-name" type="text" placeholder="Group Name">
+                    <div id="member-inputs">
+                        <input type="text" id="member-one" class="default group-member" placeholder="Member 1">
+                        <input type="text" id="member-two" class="default group-member" placeholder="Member 2">
+                    </div>
+                    <div>
+                        <button id="group-create-btn" type="submit">Create Group</button>
+                        <button id="add-another-member" type="button">Add Member</button>
+                    </div>
+                </div>
+                <p id="group-error">Please enter a valid group name with atleast two members</p>
+            </form>
         </section>
         <section>
             <h2>Selected group name</h2>
