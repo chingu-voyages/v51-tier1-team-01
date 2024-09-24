@@ -104,7 +104,10 @@ function inputValidation (groupName,groupMembers){
         if(!isEmpty(member.value)){
             // console.log(member.className);
             membersFilled++;
-            defaultBorder(member.id);
+            // defaultBorder(member.id);
+            if(member.className.includes('default')){
+                defaultBorder(member.id);
+            }
         }else{
             if(member.className.includes('default')){
                 errorInputStyle(member.id);
@@ -180,7 +183,7 @@ function handleGroupCreation(e){
         return;
     }
     else {
-        fromUserInput.style.borderColor = "#006091";
+        // fromUserInput.style.borderColor = "#006091";
         groupError.style.display = "none";
         membersArray = [];
         allMembersInput.forEach(input => {
@@ -210,6 +213,12 @@ function handleGroupCreation(e){
 function showForm(){
     groupForm.style.display = "block";
     fromUserInput.style.borderColor = "#006091";
+    // if(member.className.includes('default')){
+    // }
+document.querySelectorAll('.default').forEach(member=>{
+        defaultBorder(member.id);
+
+    })
 }
 
 sidebarAddGroup.addEventListener('click',showForm);
