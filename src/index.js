@@ -102,9 +102,7 @@ function inputValidation (groupName,groupMembers){
     let membersFilled = 0;
     groupMembers.forEach(member=>{
         if(!isEmpty(member.value)){
-            // console.log(member.className);
             membersFilled++;
-            // defaultBorder(member.id);
             if(member.className.includes('default')){
                 defaultBorder(member.id);
             }
@@ -183,7 +181,6 @@ function handleGroupCreation(e){
         return;
     }
     else {
-        // fromUserInput.style.borderColor = "#006091";
         groupError.style.display = "none";
         membersArray = [];
         allMembersInput.forEach(input => {
@@ -202,7 +199,6 @@ function handleGroupCreation(e){
             }
         });
         groupForm.style.display = "none";
-    // fromUserInput.style.borderColor = "#006091";
         createNewGroup(groupName.value);
         clearInputField(groupName);
 		removeNewInputs();
@@ -213,8 +209,6 @@ function handleGroupCreation(e){
 function showForm(){
     groupForm.style.display = "block";
     fromUserInput.style.borderColor = "#006091";
-    // if(member.className.includes('default')){
-    // }
 document.querySelectorAll('.default').forEach(member=>{
         defaultBorder(member.id);
 
@@ -223,8 +217,6 @@ document.querySelectorAll('.default').forEach(member=>{
 
 sidebarAddGroup.addEventListener('click',showForm);
 groupForm.addEventListener('submit',handleGroupCreation);
-// groupForm.addEventListener('submit',handleGroupCreation);
-// groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 // friends management
 
