@@ -8,3 +8,12 @@ export const totalCalc = (group) => {
 
     return total.toFixed(2)
 }
+
+export const memberTotal = (member, group) => {
+    let total = 0
+    group.expenses.forEach(expense => { 
+        let split = (expense.cost / (expense.friends.length - 1))
+        total = !expense.paid.contain(member) || !expense.payer.contain(member) ? total : total + split;
+    });
+    return total.toFixed(2)
+}
