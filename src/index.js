@@ -133,6 +133,13 @@ function isEmpty(value){
     return value.trim()==='';
 }
 
+// friend object
+
+function createFriend(name, id=Date.now(), imgSrc = 'src/img/group-icon.png') { // function to create friend object from input, can be reused in group creation process
+    console.log("Create friend called...") 
+    return { name, id, imgSrc }
+}
+
 //group object
 
 function createNewGroup(name) {
@@ -141,11 +148,12 @@ function createNewGroup(name) {
 		groupName: name,
 		id: Date.now(),
 		avatar: "src/img/group-icon.png",
-		friends: friendsArr,
+		membersArr: [],
 		expenses:[{name:"Bali", cost:1000, friends:["Jane,Jessy,Jafar"], payer:"Jane"}, {name:"Shmali", cost:2000, friends:["John,Jessy,Jane"], payer:"John"}]
 	};
 	groupsArr.push(newGroup)
-	console.log(friendsArr)
+    console.log("Friends array in group creation: ")
+	console.table(friendsArr)
 	console.log(groupsArr)
 	renderGroups()
   }
@@ -172,6 +180,7 @@ function renderGroups() {
 }
 
 function handleGroupCreation(e){
+    console.log("Handle group creation is called...")
     e.preventDefault();
     let allMembersInput = document.querySelectorAll('.group-member');
     let randomId = Date.now();
@@ -182,7 +191,7 @@ function handleGroupCreation(e){
     else {
         fromUserInput.style.borderColor = "#006091";
         groupError.style.display = "none";
-        membersArray = [];
+        // membersArray = [];
         allMembersInput.forEach(input => {
             if (!isEmpty(input.value)) {
 
@@ -192,8 +201,8 @@ function handleGroupCreation(e){
 					friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
 				})
 
-				!inList ? friendsArr.push({name:titleCase(input.value), id: Date.now()}) : ""
-
+				// !inList ? friendsArr.push({name:titleCase(input.value), id: Date.now()}) : ""
+                !inList ? friendsArr.push(createFriend(titleCase(input.value))) : ""
                 clearInputField(input);
 				renderFriends();
             }
@@ -234,6 +243,7 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     // let lastName = inputFriendLastName.value;
     const friend = createFriend(name);
     friendsArr.push(friend);
+    console.log("Friends array in friend creation: ")
     console.table(friendsArr);
     inputFriendName.value = '';
     // inputFriendLastName.value = '';
@@ -241,6 +251,4 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
 });
 
 
-function createFriend(name, id=Date.now(), imgSrc = 'src/img/group-icon.png') { // function to create friend object from input, can be reused in group creation process
-    return { name, id, imgSrc }
-}
+
