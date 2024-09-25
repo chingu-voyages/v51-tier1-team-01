@@ -100,14 +100,15 @@ function removeNewInputs(className) {
 
 function inputValidation(groupName, groupMembers) {
     let membersFilled = 0;
-    groupMembers.forEach(member=>{
-        if(!isEmpty(member.value)){
+    groupMembers.forEach(member => {
+        if (!isEmpty(member.value)) {
+            // console.log(member.className);
             membersFilled++;
             if(member.className.includes('default')){
                 defaultBorder(member.id);
             }
-        }else{
-            if(member.className.includes('default')){
+        } else {
+            if (member.className.includes('default')) {
                 errorInputStyle(member.id);
             }
 
@@ -187,6 +188,7 @@ function handleGroupCreation(e) {
         return;
     }
     else {
+        // fromUserInput.style.borderColor = "#006091";
         groupError.style.display = "none";
         const tempMemberArr = [];
         allMembersInput.forEach(input => {
@@ -220,7 +222,6 @@ function handleGroupCreation(e) {
         renderFriends();
         groupForm.style.display = "none";
         tempMemberArr.length = 0;
-        // fromUserInput.style.borderColor = "#006091";
         clearInputField(groupName);
         removeNewInputs();
     }
@@ -230,14 +231,13 @@ function handleGroupCreation(e) {
 function showForm() {
     groupForm.style.display = "block";
     fromUserInput.style.borderColor = "#006091";
-document.querySelectorAll('.default').forEach(member=>{
+    document.querySelectorAll('.default').forEach(member=>{
         defaultBorder(member.id);
-
     })
 }
 
-sidebarAddGroup.addEventListener('click',showForm);
-groupForm.addEventListener('submit',handleGroupCreation);
+sidebarAddGroup.addEventListener('click', showForm);
+groupForm.addEventListener('submit', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 
 
