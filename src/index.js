@@ -45,8 +45,10 @@ renderGroups();
 //events
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
-
-localStorage.setItem('groups',JSON.stringify(groupsArr));
+// for not overwriting groups present in local storage
+if(!localStorage.getItem('groups')){
+    localStorage.setItem('groups',JSON.stringify(groupsArr));
+}
 // groupDetails.forEach(group=>console.log("Hello"));
 
 //Live testing group calculations
@@ -154,6 +156,9 @@ function createNewGroup(name) {
     };
     groupsArr.push(newGroup)
     console.log(groupsArr)
+    groupDetails.push(newGroup);
+    localStorage.setItem('groups',JSON.stringify(groupDetails));
+    // localStorage.setItem('groups', JSON.stringify
     renderGroups();
     return newGroup; // Jelena added
 }
