@@ -171,10 +171,26 @@ h2 {
 
 .logo {
 	padding: 1rem;
+	animation-name: logo;
+	animation-duration: 2s;
+	position: relative;
+	animation-timing-function: ease-in-out;
+}
+
+.logo a {
+	transition: transform .7s ease-in-out;
 }
 
 .logo a:hover, .logo a:focus {
-	outline: none;
+	outline: none;	
+	transform: rotateX(1080deg);
+	transition: transform 1.5s ease-in-out;
+}
+
+@keyframes logo {
+	0% {left:-400px;}
+	75% {left:25px; transform:skewY(10deg);}
+	100% {left: 0px;}
 }
 
 .section-aside-groups {
@@ -271,7 +287,7 @@ ul {
 }
 
 .badge {
-	display: inline-block;
+	width:fit-content;
 	border-radius: 20px;
 	padding: 5px 10px;
 	font-size: 0.75rem;
@@ -290,7 +306,7 @@ ul {
 /* form */
 
 #group-form{
-    display: block;
+    display: none;
 	margin-bottom: 2rem;
 }
 
@@ -334,6 +350,7 @@ ul {
 }
 #from-user input{
     padding: 0.5rem;
+	line-height: 1.7;
     border: 1px solid #006091;
     border-radius: 5px;
 	letter-spacing: .5px;
@@ -369,7 +386,7 @@ ul {
     /* width: 49%; */
     border-radius: 5px;
     font-weight: bold;
-	transition: all 150ms ease-in-out;
+	transition: all 200ms ease-in-out;
 }
 
 #from-user button:hover, #from-user button:focus {
@@ -377,7 +394,7 @@ ul {
 	color:#5783db;
 	background-color: #ffffff;
 	outline: none;
-	box-shadow: 2px 2px 2px #8d8d8d;
+	box-shadow: 2px 1px 3px #8d8d8d;
 }
 
 #group-error{
@@ -412,6 +429,17 @@ ul {
 	font-size: 1.5rem;
 	text-transform: none;
 	margin-bottom: 5px;
+}
+
+.group-title-friends-img{
+	max-width: 30px;
+	display: inline-block;
+	border: 3px solid #fff;
+	border-radius: 50%;
+}
+
+.group-title-friends-img:not(:nth-of-type(1)){
+	margin-left: -15px;
 }
 
 /* main section, group info navigation*/
@@ -454,7 +482,7 @@ ul {
 	padding: 5px 10px 5px 40px;
 	font-size: 0.85rem;
 	position: relative;
-	transition: all 100ms ease-in-out;
+	transition: all 200ms ease-in-out;
 }
 
 #download-btn::before {
@@ -471,10 +499,9 @@ ul {
 
 #download-btn:hover, #download-btn:focus {
 	cursor:pointer;
-	transform: scale(1.08);
 	color:#44b4fe;
 	background-color: #fff;
-	box-shadow: 1px 1px 1px #8d8d8d;
+	box-shadow: 1px 1px 2px #8d8d8d;
 	outline: none;
 }
 

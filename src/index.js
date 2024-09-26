@@ -5,8 +5,11 @@ const groupName = document.getElementById('group-name');
 const addAnotherMember = document.getElementById('add-another-member');
 const groupError = document.getElementById('group-error');
 const groupForm = document.querySelector('#group-form');
+const closeGroupForm = document.getElementById("close-group-form");
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
+const selectedGroup = document.getElementById("selected-group");
+const selectedGroupInfoContainer = document.getElementById("group-info-container");
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
@@ -30,7 +33,7 @@ const groupsArr = [{
 },
 {
 	groupName: "Fake Group 2",
-	id: Date.now(),
+	id: Date.now() + 1,
 	avatar: "src/img/group-icon.png",
 	friends: friendsArr,
 	expenses:[{name:"Movie Night", cost:200, friends:["John","Jessy"], payer:"John", paid:[]}, {name:"Boat Tour", cost:2000, friends:["Jafar","Jessy","Jane","John"], payer:"John", paid:[]}]
@@ -38,12 +41,47 @@ const groupsArr = [{
 ];
 
 //rendering of existing data from localStorage on page load
+groupsArr.length ? hideForm() : showForm();
 renderFriends();
 renderGroups();
 
 //events
+groupForm.addEventListener('submit', handleGroupCreation);
+closeGroupForm.addEventListener("click", hideForm)
+sidebarAddGroup.addEventListener('click', showForm);
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
+
+// listen and render selected group on main section
+
+groupList.addEventListener("click", handleGroupClick)
+
+function handleGroupClick(e) {
+	console.log(e.target.id)
+	groupsArr.forEach(group => {
+		return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
+	})
+}
+
+function renderSelectedGroupInfo({groupName, id, avatar, friends, expenses}) {
+console.log("here")
+selectedGroup.innerHTML = "";
+	let friendsImages = friends.map(friend => {
+		return `<img src=${friend.imgSrc} alt="Friend icon" class="group-title-friends-img">`
+	})
+return selectedGroup.innerHTML = `
+	<div class="section-main-group-header">
+				<div>
+					<h2 class="section-main-group-title">${groupName} 🖋️</h2>
+					<p class="text-small">${friends.map(friend => friend.name).join(", ")}</p>
+					${friendsImages.join(" ")}
+					<p class="badge badge-unpaid">You are owed $3,456</p>
+			    </div>
+				<img src=${avatar} alt="Group icon">
+			</div>
+`
+}
+
 
 //Live testing group calculations
 groupsArr.forEach(group => console.log(`Total outstanding = $${totalCalc(group)}`))
@@ -67,6 +105,21 @@ function addImg(avatar) {
     groupImg.setAttribute("src", avatar)
     groupImg.classList.add("group-icon")
     return groupImg;
+}
+
+//manage group form
+
+function showForm() {
+    groupForm.style.display = "block";
+    fromUserInput.style.borderColor = "#006091";
+    document.querySelectorAll('.default').forEach(member=>{
+        defaultBorder(member.id);
+    })
+}
+
+function hideForm() {
+	groupForm.style.display = "none";
+	return;
 }
 
 //manage fields
@@ -169,19 +222,22 @@ function renderFriends() {
 function renderGroups() {
 	groupList.innerHTML = ""
 	groupsArr.map(group => {
-		let groupElement = createListItem(group.groupName)
-		groupElement.id = group.id;
-		groupElement.append(addImg(group.avatar))
-		groupList.appendChild(groupElement)
+
+		let groupListElement = `
+		<li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
+                        href="#">${group.groupName}</a></li>
+		`
+		groupList.innerHTML += groupListElement;
 		return
+
+		// let groupElement = createListItem(group.groupName)
+		// groupElement.id = group.id;
+		// groupElement.append(document.createElement("a"))
+		// groupElement.append(addImg(group.avatar))
+		// groupList.appendChild(groupElement)
+		// return
 	})
 }
-
-function handleFormDisplay() {
-	
-}
-
-
 
 function handleGroupCreation(e) {
     console.log("Handle group creation is called...")
@@ -225,25 +281,13 @@ function handleGroupCreation(e) {
             alert("The group does not have two members so it's not created.")
         }
         renderFriends();
-        groupForm.style.display = "none";
+        hideForm();
         tempMemberArr.length = 0;
         clearInputField(groupName);
         removeNewInputs();
     }
 
 }
-
-function showForm() {
-    groupForm.style.display = "block";
-    fromUserInput.style.borderColor = "#006091";
-    document.querySelectorAll('.default').forEach(member=>{
-        defaultBorder(member.id);
-    })
-}
-
-sidebarAddGroup.addEventListener('click', showForm);
-groupForm.addEventListener('submit', handleGroupCreation);
-addAnotherMember.addEventListener('click', addMemberInputField);
 
 
 // overall friends management
@@ -265,3 +309,4 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     inputFriendName.value = '';
     renderFriends();
 });
+
