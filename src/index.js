@@ -1,3 +1,5 @@
+import { totalCalc } from "./calcs.js";
+
 const groupCreateBtn = document.getElementById('group-create-btn');
 const groupName = document.getElementById('group-name');
 const addAnotherMember = document.getElementById('add-another-member');
@@ -19,36 +21,37 @@ friendsArr.push(createFriend("Jane Doe"), createFriend("John Doe"), createFriend
 
 // array with all groups, don't forget to delete fake data
 const groupsArr = [{
-    groupName: "Fake Group 1",
-    id: Date.now(),
-    avatar: "src/img/group-icon.png",
-    friends: friendsArr,
-    expenses: [{ name: "Bali", cost: 1000, friends: ["Jane,Jessy,Jafar"], payer: "Jane" }, { name: "Shmali", cost: 2000, friends: ["John,Jessy,Jane"], payer: "John" }]
+
+	groupName: "Fake Group 1",
+	id: Date.now(),
+	avatar: "src/img/group-icon.png",
+	friends: friendsArr,
+	expenses:[{name:"Bali", cost:1000, friends:["Jane","Jessy","Jafar"], payer:"Jane", paid:["Jessy"]}, {name:"Shmali", cost:2000, friends:["John","Jessy","Jane"], payer:"John", paid:[]}]
 },
 {
-    groupName: "Fake Group 2",
-    id: Date.now(),
-    avatar: "src/img/group-icon.png",
-    friends: friendsArr,
-    expenses: [{ name: "Movie Night", cost: 200, friends: ["John,Jessy"], payer: "John" }, { name: "Boat Tour", cost: 2000, friends: ["Jafar,Jessy,Jane,John"], payer: "John" }]
+	groupName: "Fake Group 2",
+	id: Date.now(),
+	avatar: "src/img/group-icon.png",
+	friends: friendsArr,
+	expenses:[{name:"Movie Night", cost:200, friends:["John","Jessy"], payer:"John", paid:[]}, {name:"Boat Tour", cost:2000, friends:["Jafar","Jessy","Jane","John"], payer:"John", paid:[]}]
 }
 ];
 
-
 //rendering of existing data from localStorage on page load
-
 renderFriends();
 renderGroups();
 
 //events
-
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 
+//Live testing group calculations
+groupsArr.forEach(group => console.log(`Total outstanding = $${totalCalc(group)}`))
 
 //creating html list templates
 
 function createListItem(content) {
+
     const element = document.createElement('li');
     element.textContent = titleCase(content);
     return element;
@@ -67,7 +70,6 @@ function addImg(avatar) {
 }
 
 //manage fields
-
 function addMemberInputField() {
     const newMemberInput = document.createElement('input');
     newMemberInput.className = 'group-member';
@@ -97,7 +99,6 @@ function removeNewInputs(className) {
 }
 
 //validation
-
 function inputValidation(groupName, groupMembers) {
     let membersFilled = 0;
     groupMembers.forEach(member => {
@@ -121,9 +122,6 @@ function inputValidation(groupName, groupMembers) {
     return (isEmpty(groupName.value) || membersFilled < 2) ? false : true;
 }
 
-
-
-
 function titleCase(word) {
     word = word.trim()[0].toUpperCase() + word.trim().slice(1).toLowerCase();
     return word;
@@ -137,11 +135,12 @@ function isEmpty(value) {
 
 function createFriend(name, id = Date.now(), imgSrc = 'src/img/person-icon.png') { // function to create friend object from input
     return { name, id, imgSrc }
+
 }
 
 //group object
-
 function createNewGroup(name) {
+
     //create new group, push it in groupsArr
     const newGroup = {
         groupName: name,
@@ -166,14 +165,14 @@ function renderFriends() {
 }
 
 function renderGroups() {
-    groupList.innerHTML = ""
-    groupsArr.map(group => {
-        groupElement = createListItem(group.groupName)
-        groupElement.id = group.id;
-        groupElement.append(addImg(group.avatar))
-        groupList.appendChild(groupElement)
-        return
-    })
+	groupList.innerHTML = ""
+	groupsArr.map(group => {
+		let groupElement = createListItem(group.groupName)
+		groupElement.id = group.id;
+		groupElement.append(addImg(group.avatar))
+		groupList.appendChild(groupElement)
+		return
+	})
 }
 
 function handleGroupCreation(e) {
@@ -241,6 +240,7 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 
 // overall friends management
 
+// friends management
 const showAddFriendForm = document.getElementById("add-btn");
 const formAddFriend = document.getElementById("form-add-friend");
 const inputFriendName = document.getElementById('friend-first-name');
@@ -257,6 +257,3 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     inputFriendName.value = '';
     renderFriends();
 });
-
-
-
