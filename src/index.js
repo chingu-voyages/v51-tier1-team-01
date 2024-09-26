@@ -7,6 +7,7 @@ const groupError = document.getElementById('group-error');
 const groupForm = document.querySelector('#group-form');
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
+const groupDetails = JSON.parse(localStorage.getItem('groups'))||{};
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
@@ -45,8 +46,12 @@ renderGroups();
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 
+localStorage.setItem('groups',JSON.stringify(groupsArr));
+// groupDetails.forEach(group=>console.log("Hello"));
+
 //Live testing group calculations
-groupsArr.forEach(group => console.log(`Total outstanding = $${totalCalc(group)}`))
+groupDetails.forEach(group=>console.log(`Total outstanding = $${totalCalc(group)}`));
+// groupsArr.forEach(group => console.log(`Total outstanding = $${totalCalc(group)}`))
 
 //creating html list templates
 
@@ -124,10 +129,6 @@ function inputValidation(groupName, groupMembers) {
     return (isEmpty(groupName.value) || membersFilled < 2) ? false : true;
 }
 
-// function titleCase(word) {
-//     word = word.trim()[0].toUpperCase() + word.trim().slice(1).toLowerCase();
-//     return word;
-// }
 
 function isEmpty(value) {
     return value.trim() === '';
@@ -187,7 +188,6 @@ function handleGroupCreation(e) {
         return;
     }
     else {
-        // fromUserInput.style.borderColor = "#006091";
         groupError.style.display = "none";
         const tempMemberArr = [];
         allMembersInput.forEach(input => {
@@ -259,3 +259,7 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     inputFriendName.value = '';
     renderFriends();
 });
+
+// local storage
+// localStorage.setItem(groupsArr,JSON.stringify(groupsArr));
+// console.log(groupsArr[1]);
