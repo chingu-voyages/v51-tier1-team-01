@@ -137,6 +137,10 @@ function renderGroups() {
 	})
 }
 
+function handleFormDisplay() {
+	
+}
+
 function handleGroupCreation(){
     let allMembersInput = document.querySelectorAll('.group-member');
 
@@ -162,6 +166,7 @@ function handleGroupCreation(){
 				renderFriends();
             }
         });
+		handleFormDisplay();
         createNewGroup(groupName.value);
         clearInputField(groupName);
 		removeNewInputs();

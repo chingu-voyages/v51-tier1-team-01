@@ -388,7 +388,7 @@ ul {
 footer {
 	grid-column: 1/-1;
 	font-size: .75rem;
-margin: 1rem 0 1rem 1rem;
+    margin: 1rem 0 1rem 1rem;
 }
 
 .footer-link {
