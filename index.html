@@ -48,13 +48,38 @@
             </div>
             <p id="group-error">Please enter a valid group name with atleast two members</p>
         </section>
-        <section>
-            <h2>Selected group name</h2>
-            <p>Selected group member 1, Selected group member 2...</p>
-            <div>member images go here</div>
-            <img src="" alt="selected group image" width="200" height="200" style="display: block; border: 3px solid red;">
+        <section class="section-main-group">
+			<div class="section-main-group-header">
+				<div>
+					<h2 class="section-main-group-title">Bali Trip 🖋️</h2>
+					<p class="text-small">Jane Doe, John Doe, Jessy Doe, Jafar Doe</p>
+					<p class="badge badge-unpaid">You are owed $3,456</p>
+			    </div>
+				<img src="src/img/group-icon.png" alt="Group icon">
+			</div>
+
+			<div class="section-main-group-info">
+				<ul class="section-main-group-info-nav">
+					<li class="text-small">Balances</li>
+					<li class="text-small">Members</li>
+					<li class="text-small">Edit Group</li>
+				</ul>
+				<button id="download-btn">Download PDF</button>
+
+				<div id="group-info-container">
+				<!-- This info will change -->
+				 <div class="section-main-group-info-balances"></div>
+
+				 <div class="section-main-group-info-statistics"></div>
+
+				 <div class="section-main-group-info-members"></div>
+				</div>
+			</div>
         </section>
-        <section>
+
+
+
+        <!-- <section>
             <h2>Balances</h2>
             <div class="container-group-members">
                 <div class="card-member">
@@ -100,7 +125,7 @@
             <ul id="members-list">
 
             </ul>
-        </section>
+        </section> -->
     </section>
 
 	<footer>
