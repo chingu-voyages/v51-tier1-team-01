@@ -105,7 +105,9 @@ function inputValidation(groupName, groupMembers) {
         if (!isEmpty(member.value)) {
             // console.log(member.className);
             membersFilled++;
-            defaultBorder(member.id);
+            if(member.className.includes('default')){
+                defaultBorder(member.id);
+            }
         } else {
             if (member.className.includes('default')) {
                 errorInputStyle(member.id);
@@ -122,10 +124,10 @@ function inputValidation(groupName, groupMembers) {
     return (isEmpty(groupName.value) || membersFilled < 2) ? false : true;
 }
 
-function titleCase(word) {
-    word = word.trim()[0].toUpperCase() + word.trim().slice(1).toLowerCase();
-    return word;
-}
+// function titleCase(word) {
+//     word = word.trim()[0].toUpperCase() + word.trim().slice(1).toLowerCase();
+//     return word;
+// }
 
 function isEmpty(value) {
     return value.trim() === '';
@@ -146,7 +148,7 @@ function createNewGroup(name) {
         groupName: name,
         id: Date.now(),
         avatar: "src/img/group-icon.png",
-        membersArr: [], 
+        membersArr: [],
         expenses: [{ name: "Bali", cost: 1000, friends: ["Jane,Jessy,Jafar"], payer: "Jane" }, { name: "Shmali", cost: 2000, friends: ["John,Jessy,Jane"], payer: "John" }]
     };
     groupsArr.push(newGroup)
@@ -185,7 +187,7 @@ function handleGroupCreation(e) {
         return;
     }
     else {
-        fromUserInput.style.borderColor = "#006091";
+        // fromUserInput.style.borderColor = "#006091";
         groupError.style.display = "none";
         const tempMemberArr = [];
         allMembersInput.forEach(input => {
@@ -219,7 +221,6 @@ function handleGroupCreation(e) {
         renderFriends();
         groupForm.style.display = "none";
         tempMemberArr.length = 0;
-        // fromUserInput.style.borderColor = "#006091";
         clearInputField(groupName);
         removeNewInputs();
     }
@@ -229,12 +230,13 @@ function handleGroupCreation(e) {
 function showForm() {
     groupForm.style.display = "block";
     fromUserInput.style.borderColor = "#006091";
+    document.querySelectorAll('.default').forEach(member=>{
+        defaultBorder(member.id);
+    })
 }
 
 sidebarAddGroup.addEventListener('click', showForm);
 groupForm.addEventListener('submit', handleGroupCreation);
-// groupForm.addEventListener('submit',handleGroupCreation);
-// groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 
 
