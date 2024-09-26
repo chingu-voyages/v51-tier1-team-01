@@ -48,7 +48,11 @@
     </section>
     <section class="section-main">
         <section id="new-group">
-            <h2>Create New Group</h2>
+			<div class="new-group-header">
+				<h2>Create New Group</h2>
+				<button id="close-group-form" title="Close form" aria-label="Close group creation form">x</button>
+			</div>
+		
             <form id="group-form">
                 <div id="from-user">
                     <input id="group-name" type="text" placeholder="Group Name">
@@ -56,7 +60,7 @@
                         <input type="text" id="member-one" class="default group-member" placeholder="Member 1">
                         <input type="text" id="member-two" class="default group-member" placeholder="Member 2">
                     </div>
-                    <div>
+                    <div class="group-form-buttons">
                         <button id="group-create-btn" type="submit">Create Group</button>
                         <button id="add-another-member" type="button">Add Member</button>
                     </div>
