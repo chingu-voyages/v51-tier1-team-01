@@ -429,3 +429,16 @@ footer {
     }
 
 }
+
+/* add friends temporary */
+
+.form-add {
+    display: none;
+    place-items: center;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.form-add-visible {
+    display: grid;
+}
