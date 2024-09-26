@@ -159,7 +159,7 @@ h2 {
 .text-small {
 	color: #8d8d8d;
 	font-size: 0.85rem;
-	margin-bottom: 5px;
+
 }
 
 
@@ -213,10 +213,16 @@ h2 {
 
 ul {
 	list-style: none;
-    margin-bottom: 10px;
+}
+    
+
+.group-list ul,
+.friends-list ul {
+	margin-bottom: 10px;
 }
 
- li {
+.group-list li,
+.friends-list li {
 	padding: 5px 0;
 	display: flex;
 	align-items: center;
@@ -272,10 +278,10 @@ ul {
 	background-color: #ad1719;
 }
 
-/* group info */
+/* main section, group info*/
 
 .section-main-group {
-	/* padding: 10px; */
+	
 }
 
 .section-main-group-header {
@@ -298,6 +304,84 @@ ul {
 	text-transform: none;
 	margin-bottom: 5px;
 }
+
+/* main section, group info navigation*/
+
+.section-main-group-info-nav-container {
+	display: flex;
+	justify-content: space-between;
+	align-content: center;
+	align-items: center;
+	padding: 20px;
+}
+
+.section-main-group-info-nav {
+	display: flex;
+	justify-content: space-around;
+	width: 70%;
+}
+
+.section-main-group-info-nav>li {
+	position: relative;
+
+}
+
+.section-main-group-info-nav>li:before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: -30px;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background-color: #8d8d8d;
+}
+
+#download-btn {
+	border-radius: 20px;
+	color:#fff;
+	background-color: #44b4fe;
+	border:none;
+	padding: 5px 10px 5px 40px;
+	font-size: 0.85rem;
+	position: relative;
+	transition: all 100ms ease-in-out;
+}
+
+#download-btn::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 10px;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background-color: #fff;
+}
+
+#download-btn:hover {
+	cursor:pointer;
+	transform: scale(1.08);
+	color:#44b4fe;
+	background-color: #fff;
+	box-shadow: 1px 1px 1px #8d8d8d;
+}
+
+#download-btn:hover::before {
+	background-color: #00A1C6;
+}
+
+#group-balances:hover, #group-members:hover, #group-edit:hover {
+	cursor:pointer;
+	color:#00A1C6;
+}
+
+.section-main-group-info-nav>li:hover::before {
+	background-color: #00A1C6;
+}
+
 
  /* footer */
 
