@@ -124,10 +124,10 @@ function inputValidation(groupName, groupMembers) {
     return (isEmpty(groupName.value) || membersFilled < 2) ? false : true;
 }
 
-function titleCase(word) {
-    word = word.trim()[0].toUpperCase() + word.trim().slice(1).toLowerCase();
-    return word;
-}
+// function titleCase(word) {
+//     word = word.trim()[0].toUpperCase() + word.trim().slice(1).toLowerCase();
+//     return word;
+// }
 
 function isEmpty(value) {
     return value.trim() === '';
