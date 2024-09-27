@@ -15,6 +15,12 @@ let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
 
+const btnAddExpense = document.getElementById("btn-add-expense");
+const formAddExpense = document.getElementById("form-add-expense");
+const listExpenses = document.getElementById("list-expenses");
+
+
+
 // array with all friends
 
 const friendsArr = [];
@@ -29,22 +35,24 @@ const groupsArr = [{
 	groupName: "Fake Group 1",
 	id: Date.now(),
 	avatar: "src/img/group-icon.png",
-	membersArr: friendsArr,
-	expenses:[{name:"Bali", cost:1000, friends:["Jane","Jessy","Jafar"], payer:"Jane", paid:["Jessy"]}, {name:"Shmali", cost:2000, friends:["John","Jessy","Jane"], payer:"John", paid:[]}]
+	membersArr: [friendsArr[0], friendsArr[1]],
+	expenses:[createExpense("Bali", 1000, "Jane"), createExpense("Shmali", 2000, "John")]
 },
 {
 	groupName: "Fake Group 2",
 	id: Date.now() + 1,
 	avatar: "src/img/group-icon.png",
-	membersArr: friendsArr,
-	expenses:[{name:"Movie Night", cost:200, friends:["John","Jessy"], payer:"John", paid:[]}, {name:"Boat Tour", cost:2000, friends:["Jafar","Jessy","Jane","John"], payer:"John", paid:[]}]
+	membersArr: [friendsArr[2], friendsArr[3]],
+	expenses:[createExpense("Movie Night", 200, "John"), createExpense("Boat Tour", 2000, "John")]
 }
 ];
+
+let selectedGroupIndex = 0;
 
 //render first existing group by default or show form
 if(groupsArr.length) {
 	hideForm()
-	renderSelectedGroupInfo(groupsArr[0])
+	renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
 } else {
 	showForm();
 }
@@ -65,12 +73,15 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 
-
-
 function handleGroupClick(e) {
 	console.log(e.target.id)
 	groupsArr.forEach(group => {
-		return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
+        console.log(Number(group.id))
+        if (e.target.id == Number(group.id)) {
+            selectedGroupIndex = groupsArr.indexOf(group);
+            renderSelectedGroupInfo(group)
+        }
+		// return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
 	})
 }
 
@@ -78,6 +89,7 @@ function renderSelectedGroupInfo(group) {
 console.log("Inside renderSelectedGroup function")
 const {groupName, id, avatar, membersArr, expenses} = group;
 selectedGroup.innerHTML = "";
+renderExpenses(groupsArr[selectedGroupIndex]); // Jelena added probably temporary
 	let friendsImages = membersArr.map(member => {
 		return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
 	})
@@ -92,6 +104,7 @@ return selectedGroup.innerHTML += `
 				<img src=${avatar} alt="Group icon">
 	</div>
 `
+
 }
 
 //Live testing group calculations
@@ -213,7 +226,7 @@ function createNewGroup(name) {
         id: Date.now(),
         avatar: "src/img/group-icon.png",
         membersArr: [],
-        expenses: [{ name: "Bali", cost: 1000, friends: ["Jane,Jessy,Jafar"], payer: "Jane" }, { name: "Shmali", cost: 2000, friends: ["John,Jessy,Jane"], payer: "John" }]
+        expenses: []
     };
     groupsArr.push(newGroup)
     console.log(groupsArr)
@@ -284,6 +297,7 @@ function handleGroupCreation(e) {
 
         if (tempMemberArr.length >= 2) {
             const newGroup = createNewGroup(groupName.value); // this also renders groups
+            selectedGroupIndex = groupsArr.length-1 // just added group
             tempMemberArr.forEach(member => {
                 newGroup.membersArr.push(member);
                 friendsArr.push(member);
@@ -293,7 +307,7 @@ function handleGroupCreation(e) {
         }
         renderFriends();
         hideForm();
-		renderSelectedGroupInfo(groupsArr[groupsArr.length-1]); //render just added group
+		renderSelectedGroupInfo(groupsArr[selectedGroupIndex]); //render just added group
         tempMemberArr.length = 0;
         clearInputField(groupName);
         removeNewInputs();
@@ -321,4 +335,57 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     inputFriendName.value = '';
     renderFriends();
 });
+
+// expense management
+
+// create new expense 
+
+function createExpense(name, cost, payer) {
+    const date = new Date();
+    cost = Number(cost);
+    const paid = [];
+    return { name, cost, payer, date, paid }
+}
+
+btnAddExpense.addEventListener("click", () => {
+    formAddExpense.classList.toggle("hidden");
+});
+
+formAddExpense.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const inputExpenseName = document.getElementById("input-expense");
+    const inputExpenseAmount = document.getElementById("input-amount");
+    const inputExpenseParticipant = document.getElementById("input-participant");
+    const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, inputExpenseParticipant.value);
+    groupsArr[selectedGroupIndex].expenses.push(newExpense);
+    console.table(groupsArr[selectedGroupIndex].expenses);
+    inputExpenseName.value = "";
+    inputExpenseAmount.value = "";
+    inputExpenseParticipant.value = "";
+    formAddExpense.classList.add("hidden");
+    renderExpenses(groupsArr[selectedGroupIndex]);
+})
+
+function renderExpenses(group) {
+    listExpenses.textContent = "";
+    group.expenses.forEach(expense => {
+        const listItemExpense = document.createElement("li");
+        listItemExpense.classList.add("expense-item");
+        const nameSpan = document.createElement("span");
+        const amountSpan = document.createElement("span");
+        const participantSpan = document.createElement("span");
+        const dateSpan = document.createElement("span");
+        nameSpan.textContent = expense.name;
+        amountSpan.textContent = expense.cost;
+        participantSpan.textContent = expense.payer;
+        dateSpan.textContent = expense.date.toLocaleString();
+        listItemExpense.appendChild(nameSpan);
+        listItemExpense.appendChild(amountSpan);
+        listItemExpense.appendChild(participantSpan);
+        listItemExpense.appendChild(dateSpan);
+        listExpenses.appendChild(listItemExpense);
+    })
+}
+
+console.log(selectedGroupIndex)
 
