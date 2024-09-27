@@ -81,7 +81,7 @@ selectedGroup.innerHTML = "";
 	let friendsImages = membersArr.map(member => {
 		return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
 	})
-return selectedGroup.innerHTML = `
+return selectedGroup.innerHTML += `
 	<div class="section-main-group-header">
 				<div>
 					<h2 class="section-main-group-title">${groupName} 🖋️</h2>
@@ -90,7 +90,7 @@ return selectedGroup.innerHTML = `
 					<p class="badge badge-unpaid">You are owed $3,456</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
-			</div>
+	</div>
 `
 }
 
@@ -293,6 +293,7 @@ function handleGroupCreation(e) {
         }
         renderFriends();
         hideForm();
+		renderSelectedGroupInfo(groupsArr[groupsArr.length-1]); //render just added group
         tempMemberArr.length = 0;
         clearInputField(groupName);
         removeNewInputs();
