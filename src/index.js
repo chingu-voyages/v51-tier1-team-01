@@ -318,6 +318,7 @@ function handleGroupCreation(e) {
                 } else {
                     alert(`Friend ${input.value} already exists, please enter another one, or choose ${input.value} from existing friends.`)
                 }
+                console.log(`This is tempmember array ${tempMemberArr}`);
                 clearInputField(input);
             }
         });
@@ -330,6 +331,7 @@ function handleGroupCreation(e) {
                 friendsListStored.push(member);
             })
             localStorage.setItem('friends', JSON.stringify(friendsListStored));
+            localStorage.setItem('groups',JSON.stringify(groupDetails));
         } else {
             alert("The group does not have two members so it's not created.")
         }
