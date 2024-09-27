@@ -9,6 +9,7 @@ const closeGroupForm = document.getElementById("close-group-form");
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
+const groupInfoNav = document.getElementById("group-info-nav");
 const selectedGroupInfoContainer = document.getElementById("group-info-container");
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
@@ -28,33 +29,43 @@ const groupsArr = [{
 	groupName: "Fake Group 1",
 	id: Date.now(),
 	avatar: "src/img/group-icon.png",
-	friends: friendsArr,
+	membersArr: friendsArr,
 	expenses:[{name:"Bali", cost:1000, friends:["Jane","Jessy","Jafar"], payer:"Jane", paid:["Jessy"]}, {name:"Shmali", cost:2000, friends:["John","Jessy","Jane"], payer:"John", paid:[]}]
 },
 {
 	groupName: "Fake Group 2",
 	id: Date.now() + 1,
 	avatar: "src/img/group-icon.png",
-	friends: friendsArr,
+	membersArr: friendsArr,
 	expenses:[{name:"Movie Night", cost:200, friends:["John","Jessy"], payer:"John", paid:[]}, {name:"Boat Tour", cost:2000, friends:["Jafar","Jessy","Jane","John"], payer:"John", paid:[]}]
 }
 ];
 
+//render first existing group by default or show form
+if(groupsArr.length) {
+	hideForm()
+	renderSelectedGroupInfo(groupsArr[0])
+} else {
+	showForm();
+}
 //rendering of existing data from localStorage on page load
-groupsArr.length ? hideForm() : showForm();
 renderFriends();
 renderGroups();
 
+
 //events
+//form events
 groupForm.addEventListener('submit', handleGroupCreation);
 closeGroupForm.addEventListener("click", hideForm)
 sidebarAddGroup.addEventListener('click', showForm);
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 
-// listen and render selected group on main section
-
+//rendered group events: listen and render selected group on main section
 groupList.addEventListener("click", handleGroupClick)
+
+
+
 
 function handleGroupClick(e) {
 	console.log(e.target.id)
@@ -63,17 +74,18 @@ function handleGroupClick(e) {
 	})
 }
 
-function renderSelectedGroupInfo({groupName, id, avatar, friends, expenses}) {
-console.log("here")
+function renderSelectedGroupInfo(group) {
+console.log("Inside renderSelectedGroup function")
+const {groupName, id, avatar, membersArr, expenses} = group;
 selectedGroup.innerHTML = "";
-	let friendsImages = friends.map(friend => {
-		return `<img src=${friend.imgSrc} alt="Friend icon" class="group-title-friends-img">`
+	let friendsImages = membersArr.map(member => {
+		return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
 	})
 return selectedGroup.innerHTML = `
 	<div class="section-main-group-header">
 				<div>
 					<h2 class="section-main-group-title">${groupName} 🖋️</h2>
-					<p class="text-small">${friends.map(friend => friend.name).join(", ")}</p>
+					<p class="text-small">${membersArr.map(member => member.name).join(", ")}</p>
 					${friendsImages.join(" ")}
 					<p class="badge badge-unpaid">You are owed $3,456</p>
 			    </div>
@@ -81,7 +93,6 @@ return selectedGroup.innerHTML = `
 			</div>
 `
 }
-
 
 //Live testing group calculations
 groupsArr.forEach(group => console.log(`Total outstanding = $${totalCalc(group)}`))
