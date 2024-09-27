@@ -11,7 +11,7 @@ const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
 const groupInfoNav = document.getElementById("group-info-nav");
 const selectedGroupInfoContainer = document.getElementById("group-info-container");
-const groupDetails = JSON.parse(localStorage.getItem('groups'))||{};
+const groupDetails = JSON.parse(localStorage.getItem('groups'))||[];
 const friendsListStored = JSON.parse(localStorage.getItem('friends'))||{};
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
@@ -27,29 +27,35 @@ friendsArr.push(createFriend("Jane Doe"), createFriend("John Doe"), createFriend
 if(!localStorage.getItem('friends')){
     localStorage.setItem('friends',JSON.stringify(friendsArr));
 }
-console.log(groupDetails)
-console.log(friendsListStored);
+console.log((Object.values(groupDetails)))
+// for (const [key,value] of Object.entries(groupDetails)){
+//     console.log((`${key}:${value}`))
+// }
+// console.log(friendsListStored);
 // array with all groups, don't forget to delete fake data
-const groupsArr = [{
-	groupName: "Fake Group 1",
-	id: Date.now(),
-	avatar: "src/img/group-icon.png",
-	membersArr: friendsArr,
-	expenses:[{name:"Bali", cost:1000, friends:["Jane","Jessy","Jafar"], payer:"Jane", paid:["Jessy"]}, {name:"Shmali", cost:2000, friends:["John","Jessy","Jane"], payer:"John", paid:[]}]
-},
-{
-	groupName: "Fake Group 2",
-	id: Date.now() + 1,
-	avatar: "src/img/group-icon.png",
-	membersArr: friendsArr,
-	expenses:[{name:"Movie Night", cost:200, friends:["John","Jessy"], payer:"John", paid:[]}, {name:"Boat Tour", cost:2000, friends:["Jafar","Jessy","Jane","John"], payer:"John", paid:[]}]
-}
-];
+// const groupsArr = [{
+// 	groupName: "Fake Group 1",
+// 	id: Date.now(),
+// 	avatar: "src/img/group-icon.png",
+// 	membersArr: friendsArr,
+// 	expenses:[{name:"Bali", cost:1000, friends:["Jane","Jessy","Jafar"], payer:"Jane", paid:["Jessy"]}, {name:"Shmali", cost:2000, friends:["John","Jessy","Jane"], payer:"John", paid:[]}]
+// },
+// {
+// 	groupName: "Fake Group 2",
+// 	id: Date.now() + 1,
+// 	avatar: "src/img/group-icon.png",
+// 	membersArr: friendsArr,
+// 	expenses:[{name:"Movie Night", cost:200, friends:["John","Jessy"], payer:"John", paid:[]}, {name:"Boat Tour", cost:2000, friends:["Jafar","Jessy","Jane","John"], payer:"John", paid:[]}]
+// }
+// ];
+const groupsArr= [];
 
 //render first existing group by default or show form
-if(groupsArr.length) {
+console.log(Object.keys(groupDetails).length);
+if(Object.keys(groupDetails).length!=0) {
 	hideForm()
-	renderSelectedGroupInfo(groupsArr[0])
+	renderSelectedGroupInfo(groupDetails[0])
+	// renderSelectedGroupInfo(groupsArr[0])
 } else {
 	showForm();
 }
@@ -80,13 +86,14 @@ groupList.addEventListener("click", handleGroupClick)
 
 function handleGroupClick(e) {
 	console.log(e.target.id)
-	groupsArr.forEach(group => {
+	groupDetails.forEach(group => {
 		return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
 	})
 }
 
 function renderSelectedGroupInfo(group) {
 console.log("Inside renderSelectedGroup function")
+console.log(group);
 const {groupName, id, avatar, membersArr, expenses} = group;
 selectedGroup.innerHTML = "";
 	let friendsImages = membersArr.map(member => {
@@ -95,7 +102,7 @@ selectedGroup.innerHTML = "";
 return selectedGroup.innerHTML += `
 	<div class="section-main-group-header">
 				<div>
-					<h2 class="section-main-group-title">${groupName} 🖋️</h2>
+					<h2 class="section-main-group-title">${titleCase(groupName)} 🖋️</h2>
 					<p class="text-small">${membersArr.map(member => member.name).join(", ")}</p>
 					${friendsImages.join(" ")}
 					<p class="badge badge-unpaid">You are owed $3,456</p>
@@ -106,7 +113,7 @@ return selectedGroup.innerHTML += `
 }
 
 //Live testing group calculations
-groupDetails.forEach(group=>console.log(`Total outstanding = $${totalCalc(group)}`));
+// groupDetails.forEach(group=>console.log(`Total outstanding = $${totalCalc(group)}`));
 // groupsArr.forEach(group => console.log(`Total outstanding = $${totalCalc(group)}`))
 
 //creating html list templates
@@ -134,6 +141,7 @@ function addImg(avatar) {
 
 function showForm() {
     groupForm.style.display = "block";
+    console.log("showing form")
     fromUserInput.style.borderColor = "#006091";
     document.querySelectorAll('.default').forEach(member=>{
         defaultBorder(member.id);
@@ -142,6 +150,7 @@ function showForm() {
 
 function hideForm() {
 	groupForm.style.display = "none";
+    console.log("Hiding form");
 	return;
 }
 
@@ -174,6 +183,7 @@ function removeNewInputs(className) {
 //validation
 function inputValidation(groupName, groupMembers) {
     let membersFilled = 0;
+
     groupMembers.forEach(member => {
         if (!isEmpty(member.value)) {
             // console.log(member.className);
@@ -220,8 +230,8 @@ function createNewGroup(name) {
         membersArr: [],
         expenses: [{ name: "Bali", cost: 1000, friends: ["Jane,Jessy,Jafar"], payer: "Jane" }, { name: "Shmali", cost: 2000, friends: ["John,Jessy,Jane"], payer: "John" }]
     };
-    groupsArr.push(newGroup)
-    console.log(groupsArr)
+    // groupsArr.push(newGroup);
+    // console.log(groupsArr)
     groupDetails.push(newGroup);
     localStorage.setItem('groups',JSON.stringify(groupDetails));
     // localStorage.setItem('groups', JSON.stringify
@@ -264,11 +274,19 @@ function renderGroups() {
     groupDetails.map(group=>{
         let groupListElement = `
 		<li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
-                        href="#">${group.groupName}</a></li>
+                        href="#">${titleCase(group.groupName)}</a></li>
 		`
 		groupList.innerHTML += groupListElement;
 		return
     })
+    // Object.values(groupDetails).map(group=>{
+    //     let groupListElement = `
+	// 	<li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
+    //                     href="#">${group.groupName}</a></li>
+	// 	`
+	// 	groupList.innerHTML += groupListElement;
+	// 	return
+    // })
 }
 
 function handleGroupCreation(e) {
@@ -316,7 +334,10 @@ function handleGroupCreation(e) {
         }
         renderFriends();
         hideForm();
-		renderSelectedGroupInfo(groupsArr[groupsArr.length-1]); //render just added group
+        // console.log(`This is group length-1 ${groupDetails.length-1}`);
+        // console.log(groupDetails[groupDetails.length-1]);
+        // console.log(`THis is the index of the above ${groupDetails[groupDetails.length-1]}`)
+		renderSelectedGroupInfo(groupDetails[groupDetails.length-1]); //render just added group
         tempMemberArr.length = 0;
         clearInputField(groupName);
         removeNewInputs();
