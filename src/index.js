@@ -12,22 +12,25 @@ const selectedGroup = document.getElementById("selected-group");
 const groupInfoNav = document.getElementById("group-info-nav");
 const selectedGroupInfoContainer = document.getElementById("group-info-container");
 const groupDetails = JSON.parse(localStorage.getItem('groups'))||[];
-const friendsListStored = JSON.parse(localStorage.getItem('friends'))||{};
+const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
 
 // array with all friends
 
-const friendsArr = [];
+// const friendsArr = [];
 
 // fake data
-friendsArr.push(createFriend("Jane Doe"), createFriend("John Doe"), createFriend("Jessy Doe"), createFriend("Jafar Doe"));
+// friendsArr.push(createFriend("Jane Doe"), createFriend("John Doe"), createFriend("Jessy Doe"), createFriend("Jafar Doe"));
+// friendsListStored.push(createFriend("Jane Doe"), createFriend("John Doe"), createFriend("Jessy Doe"), createFriend("Jafar Doe"));
 
 if(!localStorage.getItem('friends')){
-    localStorage.setItem('friends',JSON.stringify(friendsArr));
+    localStorage.setItem('friends',JSON.stringify(friendsListStored));
 }
-console.log((Object.values(groupDetails)))
+// console.log((Object.values(groupDetails)));
+console.log(groupDetails);
+console.log(friendsListStored);
 // for (const [key,value] of Object.entries(groupDetails)){
 //     console.log((`${key}:${value}`))
 // }
@@ -80,9 +83,6 @@ if(!localStorage.getItem('groups')){
 
 //rendered group events: listen and render selected group on main section
 groupList.addEventListener("click", handleGroupClick)
-
-
-
 
 function handleGroupClick(e) {
 	console.log(e.target.id)
@@ -326,17 +326,15 @@ function handleGroupCreation(e) {
             const newGroup = createNewGroup(groupName.value); // this also renders groups
             tempMemberArr.forEach(member => {
                 newGroup.membersArr.push(member);
-                friendsArr.push(member);
+                // friendsArr.push(member);
                 friendsListStored.push(member);
             })
+            localStorage.setItem('friends', JSON.stringify(friendsListStored));
         } else {
             alert("The group does not have two members so it's not created.")
         }
         renderFriends();
         hideForm();
-        // console.log(`This is group length-1 ${groupDetails.length-1}`);
-        // console.log(groupDetails[groupDetails.length-1]);
-        // console.log(`THis is the index of the above ${groupDetails[groupDetails.length-1]}`)
 		renderSelectedGroupInfo(groupDetails[groupDetails.length-1]); //render just added group
         tempMemberArr.length = 0;
         clearInputField(groupName);
@@ -361,7 +359,8 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     e.preventDefault();
     let name = inputFriendName.value;
     const friend = createFriend(name);
-    friendsArr.push(friend);
+    // friendsArr.push(friend);
+    friendsListStored.push(friend);
     inputFriendName.value = '';
     renderFriends();
 });
