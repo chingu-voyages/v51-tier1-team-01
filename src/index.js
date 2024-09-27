@@ -8,6 +8,7 @@ const groupForm = document.querySelector('#group-form');
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const groupDetails = JSON.parse(localStorage.getItem('groups'))||{};
+const friendsListStored = JSON.parse(localStorage.getItem('friends'))||{};
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
@@ -19,10 +20,12 @@ const friendsArr = [];
 // fake data
 friendsArr.push(createFriend("Jane Doe"), createFriend("John Doe"), createFriend("Jessy Doe"), createFriend("Jafar Doe"));
 
-
+if(!localStorage.getItem('friends')){
+    localStorage.setItem('friends',JSON.stringify(friendsArr));
+}
+console.log(friendsListStored);
 // array with all groups, don't forget to delete fake data
 const groupsArr = [{
-
 	groupName: "Fake Group 1",
 	id: Date.now(),
 	avatar: "src/img/group-icon.png",
@@ -49,6 +52,7 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 if(!localStorage.getItem('groups')){
     localStorage.setItem('groups',JSON.stringify(groupsArr));
 }
+// console.log(groupDetails['friends']);
 // groupDetails.forEach(group=>console.log("Hello"));
 
 //Live testing group calculations
@@ -81,10 +85,7 @@ function addMemberInputField() {
     const newMemberInput = document.createElement('input');
     newMemberInput.className = 'group-member';
     newMemberInput.placeholder = 'Add Member';
-    // newMemberInput.placeholder = `Member ${memberCount+1}`;
-    // newMemberInput.id = `member-${memberCount+1}`;
     memberInputs.appendChild(newMemberInput);
-    // memberCount++;
 }
 
 function defaultBorder(element) {
@@ -165,11 +166,16 @@ function createNewGroup(name) {
 
 function renderFriends() {
     friendsList.innerHTML = "";
-    friendsArr.forEach(friend => {
-        const friendElement = createListItem(friend.name)
-        friendsList.appendChild(friendElement)
+    friendsListStored.forEach(friend=>{
+        const friendElement = createListItem(friend.name);
+        friendsList.appendChild(friendElement);
         return
     })
+    // friendsArr.forEach(friend => {
+    //     const friendElement = createListItem(friend.name)
+    //     friendsList.appendChild(friendElement)
+    //     return
+    // })
 }
 
 function renderGroups() {
@@ -199,10 +205,12 @@ function handleGroupCreation(e) {
             if (!isEmpty(input.value)) {
 
                 let inList = false;
-
-                friendsArr.forEach(friend => {
+                friendsListStored.forEach(friend => {
                     friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
                 })
+                // friendsArr.forEach(friend => {
+                //     friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
+                // })
                 if (!inList) {
                     const newFriend = createFriend(titleCase(input.value));
                     // friendsArr.push(newFriend);
@@ -219,6 +227,7 @@ function handleGroupCreation(e) {
             tempMemberArr.forEach(member => {
                 newGroup.membersArr.push(member);
                 friendsArr.push(member);
+                friendsListStored.push(member);
             })
         } else {
             alert("The group does not have two members so it's not created.")
