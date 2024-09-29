@@ -32,29 +32,29 @@ friendsArr.push(createFriend("Jane Doe"), createFriend("John Doe"), createFriend
 // array with all groups, don't forget to delete fake data
 const groupsArr = [{
 
-	groupName: "Fake Group 1",
-	id: Date.now(),
-	avatar: "src/img/group-icon.png",
-	membersArr: [friendsArr[0], friendsArr[1]],
-	expenses:[createExpense("Bali", 1000, "Jane"), createExpense("Shmali", 2000, "John")]
+    groupName: "Fake Group 1",
+    id: Date.now(),
+    avatar: "src/img/group-icon.png",
+    membersArr: [friendsArr[0], friendsArr[1]],
+    expenses: [createExpense("Bali", 1000, friendsArr[0]), createExpense("Shmali", 2000, friendsArr[1])]
 },
 {
-	groupName: "Fake Group 2",
-	id: Date.now() + 1,
-	avatar: "src/img/group-icon.png",
-	membersArr: [friendsArr[2], friendsArr[3]],
-	expenses:[createExpense("Movie Night", 200, "John"), createExpense("Boat Tour", 2000, "John")]
+    groupName: "Fake Group 2",
+    id: Date.now() + 1,
+    avatar: "src/img/group-icon.png",
+    membersArr: [friendsArr[2], friendsArr[3]],
+    expenses: [createExpense("Movie Night", 200, friendsArr[2]), createExpense("Boat Tour", 2000, friendsArr[3])]
 }
 ];
 
 let selectedGroupIndex = 0;
 
 //render first existing group by default or show form
-if(groupsArr.length) {
-	hideForm()
-	renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+if (groupsArr.length) {
+    hideForm()
+    renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
 } else {
-	showForm();
+    showForm();
 }
 //rendering of existing data from localStorage on page load
 renderFriends();
@@ -74,26 +74,27 @@ groupList.addEventListener("click", handleGroupClick)
 
 
 function handleGroupClick(e) {
-	console.log(e.target.id)
-	groupsArr.forEach(group => {
+    console.log(e.target.id)
+    groupsArr.forEach(group => {
         console.log(Number(group.id))
         if (e.target.id == Number(group.id)) {
             selectedGroupIndex = groupsArr.indexOf(group);
             renderSelectedGroupInfo(group)
         }
-		// return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
-	})
+        // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
+    })
 }
 
 function renderSelectedGroupInfo(group) {
-console.log("Inside renderSelectedGroup function")
-const {groupName, id, avatar, membersArr, expenses} = group;
-selectedGroup.innerHTML = "";
-renderExpenses(groupsArr[selectedGroupIndex]); // Jelena added probably temporary
-	let friendsImages = membersArr.map(member => {
-		return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
-	})
-return selectedGroup.innerHTML += `
+    console.log("Inside renderSelectedGroup function")
+    const { groupName, id, avatar, membersArr, expenses } = group;
+    selectedGroup.innerHTML = "";
+    renderExpenses(groupsArr[selectedGroupIndex]); // Jelena added probably temporary
+    renderSelectPayerOptions();
+    let friendsImages = membersArr.map(member => {
+        return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
+    })
+    return selectedGroup.innerHTML += `
 	<div class="section-main-group-header">
 				<div>
 					<h2 class="section-main-group-title">${groupName} 🖋️</h2>
@@ -136,14 +137,14 @@ function addImg(avatar) {
 function showForm() {
     groupForm.style.display = "block";
     fromUserInput.style.borderColor = "#006091";
-    document.querySelectorAll('.default').forEach(member=>{
+    document.querySelectorAll('.default').forEach(member => {
         defaultBorder(member.id);
     })
 }
 
 function hideForm() {
-	groupForm.style.display = "none";
-	return;
+    groupForm.style.display = "none";
+    return;
 }
 
 //manage fields
@@ -182,7 +183,7 @@ function inputValidation(groupName, groupMembers) {
         if (!isEmpty(member.value)) {
             // console.log(member.className);
             membersFilled++;
-            if(member.className.includes('default')){
+            if (member.className.includes('default')) {
                 defaultBorder(member.id);
             }
         } else {
@@ -244,23 +245,23 @@ function renderFriends() {
 }
 
 function renderGroups() {
-	groupList.innerHTML = ""
-	groupsArr.map(group => {
+    groupList.innerHTML = ""
+    groupsArr.map(group => {
 
-		let groupListElement = `
+        let groupListElement = `
 		<li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
                         href="#">${group.groupName}</a></li>
 		`
-		groupList.innerHTML += groupListElement;
-		return
+        groupList.innerHTML += groupListElement;
+        return
 
-		// let groupElement = createListItem(group.groupName)
-		// groupElement.id = group.id;
-		// groupElement.append(document.createElement("a"))
-		// groupElement.append(addImg(group.avatar))
-		// groupList.appendChild(groupElement)
-		// return
-	})
+        // let groupElement = createListItem(group.groupName)
+        // groupElement.id = group.id;
+        // groupElement.append(document.createElement("a"))
+        // groupElement.append(addImg(group.avatar))
+        // groupList.appendChild(groupElement)
+        // return
+    })
 }
 
 function handleGroupCreation(e) {
@@ -297,7 +298,7 @@ function handleGroupCreation(e) {
 
         if (tempMemberArr.length >= 2) {
             const newGroup = createNewGroup(groupName.value); // this also renders groups
-            selectedGroupIndex = groupsArr.length-1 // just added group
+            selectedGroupIndex = groupsArr.length - 1 // just added group
             tempMemberArr.forEach(member => {
                 newGroup.membersArr.push(member);
                 friendsArr.push(member);
@@ -307,7 +308,7 @@ function handleGroupCreation(e) {
         }
         renderFriends();
         hideForm();
-		renderSelectedGroupInfo(groupsArr[selectedGroupIndex]); //render just added group
+        renderSelectedGroupInfo(groupsArr[selectedGroupIndex]); //render just added group
         tempMemberArr.length = 0;
         clearInputField(groupName);
         removeNewInputs();
@@ -347,7 +348,19 @@ function createExpense(name, cost, payer) {
     return { name, cost, payer, date, paid }
 }
 
+function renderSelectPayerOptions() {
+    const selectPayer = document.getElementById("select-payer");
+    selectPayer.textContent = "";
+    groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+        const option = document.createElement("option");
+        option.textContent = member.name;
+        option.setAttribute.value = member.name;
+        selectPayer.appendChild(option);
+    })
+}
+
 btnAddExpense.addEventListener("click", () => {
+    renderSelectPayerOptions;
     formAddExpense.classList.toggle("hidden");
 });
 
@@ -355,13 +368,26 @@ formAddExpense.addEventListener("submit", (e) => {
     e.preventDefault();
     const inputExpenseName = document.getElementById("input-expense");
     const inputExpenseAmount = document.getElementById("input-amount");
-    const inputExpenseParticipant = document.getElementById("input-participant");
-    const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, inputExpenseParticipant.value);
+    const selectOptions = [...document.querySelectorAll("option")];
+    let selectedPayer = null;
+    selectOptions.forEach(option => {
+        if (option.selected) {
+            console.log(option.value)
+            groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+                if (member.name === option.value) {
+                    selectedPayer = member;
+                }
+            })
+        }
+
+
+    })
+    const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, selectedPayer);
     groupsArr[selectedGroupIndex].expenses.push(newExpense);
     console.table(groupsArr[selectedGroupIndex].expenses);
     inputExpenseName.value = "";
     inputExpenseAmount.value = "";
-    inputExpenseParticipant.value = "";
+    // inputExpenseParticipant.value = "";
     formAddExpense.classList.add("hidden");
     renderExpenses(groupsArr[selectedGroupIndex]);
 })
@@ -377,7 +403,7 @@ function renderExpenses(group) {
         const dateSpan = document.createElement("span");
         nameSpan.textContent = expense.name;
         amountSpan.textContent = expense.cost;
-        participantSpan.textContent = expense.payer;
+        participantSpan.textContent = expense.payer.name;
         dateSpan.textContent = expense.date.toLocaleString();
         listItemExpense.appendChild(nameSpan);
         listItemExpense.appendChild(amountSpan);
