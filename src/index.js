@@ -330,6 +330,7 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     const friend = createFriend(name);
     // friendsArr.push(friend);
     friendsListStored.push(friend);
+    localStorage.setItem('friends',JSON.stringify(friendsListStored))
     inputFriendName.value = '';
     renderFriends();
 });
