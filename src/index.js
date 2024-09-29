@@ -91,9 +91,9 @@ function getGroupStatisticsHTML(id) {
 	<p class="total-group-unpaid">Unpaid: <span>$300</span></p>
 	<table>
 		<tr>
-			<th>Member</th>
+			<th>Debtor (owes)</th>
 			<th>Amount</th>
-			<th>Payer</th>
+			<th>Payer (gets)</th>
 		</tr>
 		<tr>
 			<td>Jessy Doe</td>
