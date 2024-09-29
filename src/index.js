@@ -9,8 +9,6 @@ const closeGroupForm = document.getElementById("close-group-form");
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
-const groupInfoNav = document.getElementById("group-info-nav");
-const selectedGroupInfoContainer = document.getElementById("group-info-container");
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
@@ -64,7 +62,62 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 //rendered group events: listen and render selected group on main section
 groupList.addEventListener("click", handleGroupClick)
 
+document.querySelector("body")?.addEventListener("click", (event)=> {
+	document.querySelector(".active")?.classList.remove("active")
+	const selectedGroupId = event.target.closest(".section-main-group-info-nav-container")?.id;
+	event.target.closest("li")?.classList.add("active");
+	// console.log(event.target)
+	// console.log(selectedGroupId)
+	const selectedGroupInfo = document.getElementById("group-info-container")
+	selectedGroupInfo.style.display="block"
+	if(event.target.matches(".group-members")) {
+		selectedGroupInfo.innerHTML = getGroupMembersHTML(selectedGroupId)
+	} else if(event.target.matches(".group-statistics")) {
+		selectedGroupInfo.innerHTML = getGroupStatisticsHTML(selectedGroupId)
+	} else if(event.target.matches(".group-edit")) {
+		selectedGroupInfo.innerHTML = getGroupEditHTML(selectedGroupId)
+	}
+	return
+})
 
+function getGroupMembersHTML(id) {
+	return `<div class="section-main-group-info-members">Members: ${groupsArr.map(group => group.id == id ? group.membersArr.map(member=>member.name).join(", "): "")}</div>`
+}
+
+function getGroupStatisticsHTML(id) {
+	return `<div class="section-main-group-info-statistics">
+	<p class="total-group-expenses">Total expenses: <span>$1000</span></p>
+	<p class="total-group-paid">Paid: <span>$700</span></p>
+	<p class="total-group-unpaid">Unpaid: <span>$300</span></p>
+	<table>
+		<tr>
+			<th>Member</th>
+			<th>Amount</th>
+			<th>Payer</th>
+		</tr>
+		<tr>
+			<td>Jessy Doe</td>
+			<td>$100</td>
+			<td>Jack</td>
+		</tr>
+		<tr>
+			<td>Ben</td>
+			<td>$150</td>
+			<td>John</td>
+		</tr>
+		<tr>
+			<td>Jack</td>
+			<td>$50</td>
+			<td>Jane Doe</td>
+		</tr>
+	</table>
+	</div>`
+}
+
+function getGroupEditHTML(id) {
+	const groupObj = groupsArr.find(({id})=> id === id)
+	return `<div class="section-main-group-info-edit">Edit group ${groupObj.groupName}</div>`
+}
 
 
 function handleGroupClick(e) {
@@ -91,6 +144,21 @@ return selectedGroup.innerHTML += `
 			    </div>
 				<img src=${avatar} alt="Group icon">
 	</div>
+
+	<div class="section-main-group-info" >
+				<div class="section-main-group-info-nav-container" id=${id}>
+					<ul class="section-main-group-info-nav">
+					<li class="text-small group-members active">Members</li>
+					<li class="text-small group-statistics" >Statistics</li>
+					<li class="text-small group-edit" >Edit Group</li>
+				</ul>
+				<button id="download-btn"> Download PDF</button>
+				</div>
+				
+				<div id="group-info-container">
+					${getGroupMembersHTML(id)}
+				</div>
+			</div>
 `
 }
 
@@ -107,7 +175,8 @@ function createListItem(content) {
 }
 
 function titleCase(text) {
-    const words = text.split(" ");
+	console.log(text)
+    const words = text?.split(" ");
     return words.map(word => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
 }
 
