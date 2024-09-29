@@ -17,47 +17,22 @@ let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
 
-// array with all friends
-
-// const friendsArr = [];
-
-// fake data
-// friendsArr.push(createFriend("Jane Doe"), createFriend("John Doe"), createFriend("Jessy Doe"), createFriend("Jafar Doe"));
-// friendsListStored.push(createFriend("Jane Doe"), createFriend("John Doe"), createFriend("Jessy Doe"), createFriend("Jafar Doe"));
-
-if(!localStorage.getItem('friends')){
-    localStorage.setItem('friends',JSON.stringify(friendsListStored));
-}
-// console.log((Object.values(groupDetails)));
-console.log(groupDetails);
-console.log(friendsListStored);
-// for (const [key,value] of Object.entries(groupDetails)){
-//     console.log((`${key}:${value}`))
+console.log(`Before: ${groupDetails}`);
+console.log(`Before: ${friendsListStored}`);
+// if(!localStorage.getItem('friends')){
+//     localStorage.setItem('friends',JSON.stringify(friendsListStored));
 // }
-// console.log(friendsListStored);
-// array with all groups, don't forget to delete fake data
-// const groupsArr = [{
-// 	groupName: "Fake Group 1",
-// 	id: Date.now(),
-// 	avatar: "src/img/group-icon.png",
-// 	membersArr: friendsArr,
-// 	expenses:[{name:"Bali", cost:1000, friends:["Jane","Jessy","Jafar"], payer:"Jane", paid:["Jessy"]}, {name:"Shmali", cost:2000, friends:["John","Jessy","Jane"], payer:"John", paid:[]}]
-// },
-// {
-// 	groupName: "Fake Group 2",
-// 	id: Date.now() + 1,
-// 	avatar: "src/img/group-icon.png",
-// 	membersArr: friendsArr,
-// 	expenses:[{name:"Movie Night", cost:200, friends:["John","Jessy"], payer:"John", paid:[]}, {name:"Boat Tour", cost:2000, friends:["Jafar","Jessy","Jane","John"], payer:"John", paid:[]}]
+// if(!localStorage.getItem('groups')){
+//     localStorage.setItem('groups',JSON.stringify(groupsArr));
 // }
-// ];
-const groupsArr= [];
+console.log(`After: ${groupDetails}`);
+console.log(`After: ${friendsListStored}`);
 
 //render first existing group by default or show form
-console.log(Object.keys(groupDetails).length);
-if(Object.keys(groupDetails).length!=0) {
+// if(Object.keys(groupDetails).length!=0) {
+if(groupDetails.length!=0) {
 	hideForm()
-	renderSelectedGroupInfo(groupDetails[0])
+	renderSelectedGroupInfo(groupDetails[0]);
 	// renderSelectedGroupInfo(groupsArr[0])
 } else {
 	showForm();
@@ -75,11 +50,6 @@ sidebarAddGroup.addEventListener('click', showForm);
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 // for not overwriting groups present in local storage
-if(!localStorage.getItem('groups')){
-    localStorage.setItem('groups',JSON.stringify(groupsArr));
-}
-// console.log(groupDetails['friends']);
-// groupDetails.forEach(group=>console.log("Hello"));
 
 //rendered group events: listen and render selected group on main section
 groupList.addEventListener("click", handleGroupClick)
@@ -230,11 +200,8 @@ function createNewGroup(name) {
         membersArr: [],
         expenses: [{ name: "Bali", cost: 1000, friends: ["Jane,Jessy,Jafar"], payer: "Jane" }, { name: "Shmali", cost: 2000, friends: ["John,Jessy,Jane"], payer: "John" }]
     };
-    // groupsArr.push(newGroup);
-    // console.log(groupsArr)
     groupDetails.push(newGroup);
     localStorage.setItem('groups',JSON.stringify(groupDetails));
-    // localStorage.setItem('groups', JSON.stringify
     renderGroups();
     return newGroup; // Jelena added
 }
