@@ -331,8 +331,18 @@ showAddFriendForm.addEventListener("click", () => { // the add friend button jus
 formAddFriend.addEventListener("submit", (e) => { // function to create friend from input and add friend to overall friend array
     e.preventDefault();
     let name = inputFriendName.value;
-    const friend = createFriend(name);
-    friendsArr.push(friend);
+    let inList = false;
+    friendsArr.forEach(friend => {
+        if (friend.name.toLowerCase() === name.toLowerCase()) {
+            inList = true;
+        }
+    });
+    if (!inList) {
+        const friend = createFriend(name);
+        friendsArr.push(friend);
+    } else {
+        alert(`Friend ${name} already exists, please enter another name.`)
+    }
     inputFriendName.value = '';
     renderFriends();
 });
