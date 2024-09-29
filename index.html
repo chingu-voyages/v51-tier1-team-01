@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Splitter App Tier 1</title>
     <link rel="stylesheet" href="src/styles.css">
-	
+
 </head>
 
 <body>
@@ -50,10 +50,11 @@
     <section class="section-main">
         <section id="new-group">
             <form id="group-form">
-				<div class="new-group-header">
-					<h2>Create New Group</h2>
-					<button type="button" id="close-group-form" title="Close form" aria-label="Close group creation form">x</button>
-				</div>
+                <div class="new-group-header">
+                    <h2>Create New Group</h2>
+                    <button type="button" id="close-group-form" title="Close form"
+                        aria-label="Close group creation form">x</button>
+                </div>
                 <div id="from-user">
                     <input id="group-name" type="text" placeholder="Group Name">
                     <div id="member-inputs">
@@ -64,40 +65,44 @@
                         <button id="group-create-btn" type="submit">Create Group</button>
                         <button id="add-another-member" type="button">Add Member</button>
                     </div>
+                    <fieldset id="add-existing-friend" class="add-existing-friend">
+                        <legend>Choose from existing friends: </legend>
+                        <div id="existing-friends-checkboxes"></div>
+                    </fieldset>
                 </div>
                 <p id="group-error">Please enter a valid group name with at least two members</p>
             </form>
         </section>
         <section class="section-main-group" id="selected-group">
-			<div class="section-main-group-header">
-				<div>
-					<h2 class="section-main-group-title">Bali Trip 🖋️</h2>
-					<p class="text-small">Jane Doe, John Doe, Jessy Doe, Jafar Doe</p>
-					<p class="badge badge-unpaid">You are owed $3,456</p>
-			    </div>
-				<img src="src/img/group-icon.png" alt="Group icon">
-			</div>
+            <div class="section-main-group-header">
+                <div>
+                    <h2 class="section-main-group-title">Bali Trip 🖋️</h2>
+                    <p class="text-small">Jane Doe, John Doe, Jessy Doe, Jafar Doe</p>
+                    <p class="badge badge-unpaid">You are owed $3,456</p>
+                </div>
+                <img src="src/img/group-icon.png" alt="Group icon">
+            </div>
 
-			<div class="section-main-group-info" >
-				<div class="section-main-group-info-nav-container">
-					<ul class="section-main-group-info-nav">
-					<li class="text-small" id="group-members">Members</li>
-					<li class="text-small" id="group-balances">Balances</li>
-					<li class="text-small" id="group-edit">Edit Group</li>
-				</ul>
-				<button id="download-btn"> Download PDF</button>
-				</div>
-				
+            <div class="section-main-group-info">
+                <div class="section-main-group-info-nav-container">
+                    <ul class="section-main-group-info-nav">
+                        <li class="text-small" id="group-members">Members</li>
+                        <li class="text-small" id="group-balances">Balances</li>
+                        <li class="text-small" id="group-edit">Edit Group</li>
+                    </ul>
+                    <button id="download-btn"> Download PDF</button>
+                </div>
 
-				<div id="group-info-container">
-				
-				 <div class="section-main-group-info-balances"></div>
 
-				 <div class="section-main-group-info-statistics"></div>
+                <div id="group-info-container">
 
-				 <div class="section-main-group-info-members"></div>
-				</div>
-			</div>
+                    <div class="section-main-group-info-balances"></div>
+
+                    <div class="section-main-group-info-statistics"></div>
+
+                    <div class="section-main-group-info-members"></div>
+                </div>
+            </div>
 
         </section>
         <!-- add expense form -->

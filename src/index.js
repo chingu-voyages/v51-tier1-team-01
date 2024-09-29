@@ -140,6 +140,7 @@ function showForm() {
     document.querySelectorAll('.default').forEach(member => {
         defaultBorder(member.id);
     })
+    renderExistingFriendsForGroupCreation();
 }
 
 function hideForm() {
@@ -346,6 +347,29 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     inputFriendName.value = '';
     renderFriends();
 });
+
+// add existing friends to group
+
+const addExistingFriendContainer = document.getElementById("existing-friends-checkboxes");
+
+function renderExistingFriendsForGroupCreation() {
+    addExistingFriendContainer.textContent = "";
+    friendsArr.forEach(friend => {
+        const checkbox = document.createElement("input");
+        checkbox.setAttribute("type", "checkbox");
+        checkbox.setAttribute("id", friend.name);
+        const label = document.createElement("label");
+        label.setAttribute("for", friend.name);
+        label.textContent = friend.name;
+        const checkboxDiv = document.createElement("div");
+        checkboxDiv.classList.add("form-control-checkbox");
+        checkboxDiv.appendChild(checkbox);
+        checkboxDiv.appendChild(label);
+        addExistingFriendContainer.appendChild(checkboxDiv);
+    });
+}
+
+
 
 // expense management
 
