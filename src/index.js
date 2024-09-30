@@ -311,13 +311,25 @@ function handleGroupCreation(e) {
     e.preventDefault();
     let allMembersInput = document.querySelectorAll('.group-member');
     // let randomId = Date.now();
-    if (!inputValidation(groupName, allMembersInput)) {
+    // add existing friends
+    const tempMemberArr = [];
+    const checkedOptions = [...document.querySelectorAll(".existing-friend")]
+    checkedOptions.forEach(option => {
+        if (option.checked) {
+            friendsArr.forEach(friend => {
+                if (option.id.toLowerCase() === friend.name.toLowerCase()) {
+                    console.log(friend)
+                    tempMemberArr.push(friend);
+                }
+            })
+        }
+    })
+    if (!inputValidation(groupName, allMembersInput) && tempMemberArr.length < 2) {
         groupError.style.display = "block";
         // return;
     }
     else {
         groupError.style.display = "none";
-        const tempMemberArr = [];
         allMembersInput.forEach(input => {
             if (!isEmpty(input.value)) {
 
@@ -346,7 +358,9 @@ function handleGroupCreation(e) {
             tempMemberArr.forEach(member => {
                 newGroup.membersArr.push(member);
                 // friendsArr.push(member);
-                friendsListStored.push(member);
+                if (!friendsListStored.includes(member)) {
+                    friendsListStored.push(member);
+                }
             })
             localStorage.setItem('friends', JSON.stringify(friendsListStored));
             localStorage.setItem('groups',JSON.stringify(groupsArr));
@@ -378,13 +392,43 @@ showAddFriendForm.addEventListener("click", () => { // the add friend button jus
 formAddFriend.addEventListener("submit", (e) => { // function to create friend from input and add friend to overall friend array
     e.preventDefault();
     let name = inputFriendName.value;
-    const friend = createFriend(name);
-    // friendsArr.push(friend);
-    friendsListStored.push(friend);
+    let inList = false;
+    friendsListStored.forEach(friend => {
+        if (friend.name.toLowerCase() === name.toLowerCase()) {
+            inList = true;
+        }
+    })
+    if (!inList) {
+        const friend = createFriend(name);
+        friendsListStored.push(friend);
+    }
     localStorage.setItem('friends',JSON.stringify(friendsListStored))
     inputFriendName.value = '';
     renderFriends();
 });
+
+// add existing friends to group
+
+const addExistingFriendContainer = document.getElementById("existing-friends-checkboxes");
+
+function renderExistingFriendsForGroupCreation() {
+    addExistingFriendContainer.textContent = "";
+    addExistingFriendContainer.childNodes.forEach(node => node.remove())
+    friendsArr.forEach(friend => {
+        const checkbox = document.createElement("input");
+        checkbox.setAttribute("type", "checkbox");
+        checkbox.setAttribute("id", friend.name);
+        checkbox.classList.add("existing-friend")
+        const label = document.createElement("label");
+        label.setAttribute("for", friend.name);
+        label.textContent = friend.name;
+        const checkboxDiv = document.createElement("div");
+        checkboxDiv.classList.add("form-control-checkbox");
+        checkboxDiv.appendChild(checkbox);
+        checkboxDiv.appendChild(label);
+        addExistingFriendContainer.appendChild(checkboxDiv);
+    });
+}
 
 // expense management
 
