@@ -21,21 +21,7 @@ const btnAddExpense = document.getElementById("btn-add-expense");
 const formAddExpense = document.getElementById("form-add-expense");
 const listExpenses = document.getElementById("list-expenses");
 
-
-
-// console.log(`Before: ${groupDetails}`);
-// console.log(`Before: ${friendsListStored}`);
-// if(!localStorage.getItem('friends')){
-//     localStorage.setItem('friends',JSON.stringify(friendsListStored));
-// }
-// if(!localStorage.getItem('groups')){
-//     localStorage.setItem('groups',JSON.stringify(groupsArr));
-// }
-// console.log(`After: ${groupDetails}`);
-// console.log(`After: ${friendsListStored}`);
-
-//render first existing group by default or show form
-// if(Object.keys(groupDetails).length!=0) {
+let selectedGroupIndex=-1; //just trying to fix the selectedGroupIndex is not defined
 if(groupsArr.length!==0) {
 	hideForm()
 	renderSelectedGroupInfo(groupsArr[0]);
@@ -78,11 +64,11 @@ document.querySelector("body")?.addEventListener("click", (event)=> {
 	} else if(event.target.matches(".group-edit")) {
 		selectedGroupInfo.innerHTML = getGroupEditHTML(selectedGroupId)
 	}
-	return
+	// return
 })
 
 function getGroupMembersHTML(id) {
-	return `<div class="section-main-group-info-members">Members: ${groupsArr.map(group => group.id == id ? group.membersArr.map(member=>member.name).join(", "): "")}</div>`
+	return `<div class="section-main-group-info-members">Members: ${groupsArr.map(group => group.id === id ? group.membersArr.map(member=>member.name).join(", "): "")}</div>`
 }
 
 
@@ -122,13 +108,6 @@ function getGroupEditHTML(selectedId) {
 }
 
 
-// function handleGroupClick(e) {
-// 	e.stopPropagation()
-// 	console.log(e.target.id)
-// 	groupDetails.forEach(group => {
-// 		return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : "";
-// 	})
-// }
 function handleGroupClick(e) {
     console.log(e.target.id)
     e.stopPropagation()
@@ -146,6 +125,7 @@ function renderSelectedGroupInfo(group) {
     console.log("Inside renderSelectedGroup function")
     const { groupName, id, avatar, membersArr, expenses } = group;
     selectedGroup.innerHTML = "";
+    selectedGroupIndex = groupsArr.indexOf(group);
     renderExpenses(groupsArr[selectedGroupIndex]); // Jelena added probably temporary
     renderSelectPayerOptions();
     let friendsImages = membersArr.map(member => {
@@ -219,7 +199,7 @@ function showForm() {
 
 function hideForm() {
     groupForm.style.display = "none";
-    return;
+    // return;
 }
 
 //manage fields
@@ -309,49 +289,20 @@ function renderFriends() {
     friendsListStored.forEach(friend=>{
         const friendElement = createListItem(friend.name);
         friendsList.appendChild(friendElement);
-        return
+        // return
     })
-    // friendsArr.forEach(friend => {
-    //     const friendElement = createListItem(friend.name)
-    //     friendsList.appendChild(friendElement)
-    //     return
-    // })
 }
 
 function renderGroups() {
 	groupList.innerHTML = ""
-	// groupsArr.map(group => {
-
-		// let groupListElement = `
-		// <li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
-        //                 href="#">${group.groupName}</a></li>
-		// `
-		// groupList.innerHTML += groupListElement;
-		// return
-
-	// 	// let groupElement = createListItem(group.groupName)
-	// 	// groupElement.id = group.id;
-	// 	// groupElement.append(document.createElement("a"))
-	// 	// groupElement.append(addImg(group.avatar))
-	// 	// groupList.appendChild(groupElement)
-	// 	// return
-	// })
     groupsArr.map(group=>{
         let groupListElement = `
 		<li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
                         href="#">${titleCase(group.groupName)}</a></li>
 		`
 		groupList.innerHTML += groupListElement;
-		return
+		// return
     })
-    // Object.values(groupDetails).map(group=>{
-    //     let groupListElement = `
-	// 	<li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
-    //                     href="#">${group.groupName}</a></li>
-	// 	`
-	// 	groupList.innerHTML += groupListElement;
-	// 	return
-    // })
 }
 
 function handleGroupCreation(e) {
@@ -362,7 +313,7 @@ function handleGroupCreation(e) {
     // let randomId = Date.now();
     if (!inputValidation(groupName, allMembersInput)) {
         groupError.style.display = "block";
-        return;
+        // return;
     }
     else {
         groupError.style.display = "none";
@@ -458,7 +409,7 @@ function renderSelectPayerOptions() {
 }
 
 btnAddExpense.addEventListener("click", () => {
-    renderSelectPayerOptions;
+    renderSelectPayerOptions();
     formAddExpense.classList.toggle("hidden");
 });
 
@@ -481,13 +432,13 @@ formAddExpense.addEventListener("submit", (e) => {
 
     })
     const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, selectedPayer);
-    groupsArr[selectedGroupIndex].expenses.push(newExpense);
-    console.table(groupsArr[selectedGroupIndex].expenses);
-    inputExpenseName.value = "";
-    inputExpenseAmount.value = "";
-    // inputExpenseParticipant.value = "";
-    formAddExpense.classList.add("hidden");
-    renderExpenses(groupsArr[selectedGroupIndex]);
+        groupsArr[selectedGroupIndex].expenses.push(newExpense);
+        console.table(groupsArr[selectedGroupIndex].expenses);
+        inputExpenseName.value = "";
+        inputExpenseAmount.value = "";
+        // inputExpenseParticipant.value = "";
+        formAddExpense.classList.add("hidden");
+        renderExpenses(groupsArr[selectedGroupIndex]);
 })
 
 function renderExpenses(group) {
