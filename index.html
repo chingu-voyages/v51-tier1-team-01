@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Splitter App Tier 1</title>
     <link rel="stylesheet" href="src/styles.css">
+	
 </head>
 
 <body>
@@ -48,30 +49,77 @@
     </section>
     <section class="section-main">
         <section id="new-group">
-            <h2>Create New Group</h2>
             <form id="group-form">
+				<div class="new-group-header">
+					<h2>Create New Group</h2>
+					<button type="button" id="close-group-form" title="Close form" aria-label="Close group creation form">x</button>
+				</div>
                 <div id="from-user">
                     <input id="group-name" type="text" placeholder="Group Name">
                     <div id="member-inputs">
                         <input type="text" id="member-one" class="default group-member" placeholder="Member 1">
                         <input type="text" id="member-two" class="default group-member" placeholder="Member 2">
                     </div>
-                    <div>
+                    <div class="group-form-buttons">
                         <button id="group-create-btn" type="submit">Create Group</button>
                         <button id="add-another-member" type="button">Add Member</button>
                     </div>
                 </div>
-                <p id="group-error">Please enter a valid group name with atleast two members</p>
+                <p id="group-error">Please enter a valid group name with at least two members</p>
             </form>
         </section>
-        <section>
-            <h2>Selected group name</h2>
-            <p>Selected group member 1, Selected group member 2...</p>
-            <div>member images go here</div>
-            <img src="" alt="selected group image" width="200" height="200"
-                style="display: block; border: 3px solid red;">
+        <section class="section-main-group" id="selected-group">
+			<!-- <div class="section-main-group-header">
+				<div>
+					<h2 class="section-main-group-title">Bali Trip 🖋️</h2>
+					<p class="text-small">Jane Doe, John Doe, Jessy Doe, Jafar Doe</p>
+					<p class="badge badge-unpaid">You are owed $3,456</p>
+			    </div>
+				<img src="src/img/group-icon.png" alt="Group icon">
+			</div> -->
+
+			<!-- <div class="section-main-group-info" >
+				<div class="section-main-group-info-nav-container">
+					<ul class="section-main-group-info-nav">
+					<li class="text-small" id="group-members">Members</li>
+					<li class="text-small" id="group-balances">Balances</li>
+					<li class="text-small" id="group-edit">Edit Group</li>
+				</ul>
+				<button id="download-btn"> Download PDF</button>
+				</div>
+				
+
+				<div id="group-info-container">
+				
+				 <div class="section-main-group-info-balances"></div>
+
+				 <div class="section-main-group-info-statistics"></div>
+
+				 <div class="section-main-group-info-members"></div>
+				</div>
+			</div> -->
+
         </section>
+        <!-- add expense form -->
+        <button id="btn-add-expense">Show the add expense form</button>
+        <form action="" id="form-add-expense" class="hidden">
+            <input type="text" id="input-expense" placeholder="Name of expense" required>
+            <input type="number" id="input-amount" placeholder="Amount" required>
+            <label for="select-payer"></label>
+            <select name="payer" id="select-payer"></select>
+            <!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
+            <button>Submit expense</button>
+        </form>
+
+        <!-- added expenses section -->
         <section>
+            <h2>Expenses</h2>
+            <ul id="list-expenses"></ul>
+        </section>
+
+
+
+        <!-- <section>
             <h2>Balances</h2>
             <div class="container-group-members">
                 <div class="card-member">
@@ -121,7 +169,7 @@
             <ul id="members-list">
 
             </ul>
-        </section>
+        </section> -->
     </section>
 
     <footer>
@@ -131,7 +179,7 @@
 
 
 
-    <script src="src/index.js"></script>
+    <script src="src/index.js" type="module"></script>
 
 </body>
 
