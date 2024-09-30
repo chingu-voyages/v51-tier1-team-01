@@ -63,11 +63,14 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event)=> {
+	
+	const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
+	console.log(event.target)
+	console.log(selectedGroupId)
+
 	document.querySelector(".active")?.classList.remove("active")
-	const selectedGroupId = event.target.closest(".section-main-group-info-nav-container")?.id;
-	event.target.closest("li")?.classList.add("active");
-	// console.log(event.target)
-	// console.log(selectedGroupId)
+	event.target.closest(".section-main-group-info-nav li")?.classList.add("active") 
+
 	const selectedGroupInfo = document.getElementById("group-info-container")
 	selectedGroupInfo.style.display="block"
 	if(event.target.matches(".group-members")) {
@@ -114,13 +117,14 @@ function getGroupStatisticsHTML(id) {
 	</div>`
 }
 
-function getGroupEditHTML(id) {
-	const groupObj = groupsArr.find(({id})=> id === id)
+function getGroupEditHTML(selectedId) {
+	const groupObj = groupsArr.find(({id})=> Number(id) === Number(selectedId))
 	return `<div class="section-main-group-info-edit">Edit group ${groupObj.groupName}</div>`
 }
 
 
 function handleGroupClick(e) {
+	e.stopPropagation()
 	console.log(e.target.id)
 	groupsArr.forEach(group => {
 		return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
@@ -320,6 +324,7 @@ function renderGroups() {
 }
 
 function handleGroupCreation(e) {
+	e.stopPropagation()
     console.log("Handle group creation is called...")
     e.preventDefault();
     let allMembersInput = document.querySelectorAll('.group-member');
