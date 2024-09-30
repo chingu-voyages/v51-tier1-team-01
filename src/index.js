@@ -9,6 +9,10 @@ const closeGroupForm = document.getElementById("close-group-form");
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
+const groupInfoNav = document.getElementById("group-info-nav");
+const selectedGroupInfoContainer = document.getElementById("group-info-container");
+const groupsArr = JSON.parse(localStorage.getItem('groups'))||[];
+const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
@@ -17,40 +21,11 @@ const btnAddExpense = document.getElementById("btn-add-expense");
 const formAddExpense = document.getElementById("form-add-expense");
 const listExpenses = document.getElementById("list-expenses");
 
-
-
-// array with all friends
-
-const friendsArr = [];
-
-// fake data
-friendsArr.push(createFriend("Jane Doe"), createFriend("John Doe"), createFriend("Jessy Doe"), createFriend("Jafar Doe"));
-
-
-// array with all groups, don't forget to delete fake data
-const groupsArr = [{
-
-    groupName: "Fake Group 1",
-    id: Date.now(),
-    avatar: "src/img/group-icon.png",
-    membersArr: [friendsArr[0], friendsArr[1]],
-    expenses: [createExpense("Bali", 1000, friendsArr[0]), createExpense("Shmali", 2000, friendsArr[1])]
-},
-{
-    groupName: "Fake Group 2",
-    id: Date.now() + 1,
-    avatar: "src/img/group-icon.png",
-    membersArr: [friendsArr[2], friendsArr[3]],
-    expenses: [createExpense("Movie Night", 200, friendsArr[2]), createExpense("Boat Tour", 2000, friendsArr[3])]
-}
-];
-
-let selectedGroupIndex = 0;
-
-//render first existing group by default or show form
-if (groupsArr.length) {
-    hideForm()
-    renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+let selectedGroupIndex=-1; //just trying to fix the selectedGroupIndex is not defined
+if(groupsArr.length!==0) {
+	hideForm()
+	renderSelectedGroupInfo(groupsArr[0]);
+	// renderSelectedGroupInfo(groupsArr[0])
 } else {
     showForm();
 }
@@ -66,18 +41,19 @@ closeGroupForm.addEventListener("click", hideForm)
 sidebarAddGroup.addEventListener('click', showForm);
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
+// for not overwriting groups present in local storage
 
 //rendered group events: listen and render selected group on main section
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event)=> {
-	
+
 	const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 	console.log(event.target)
 	console.log(selectedGroupId)
 
 	document.querySelector(".active")?.classList.remove("active")
-	event.target.closest(".section-main-group-info-nav li")?.classList.add("active") 
+	event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
 
 	const selectedGroupInfo = document.getElementById("group-info-container")
 	selectedGroupInfo.style.display="block"
@@ -88,11 +64,11 @@ document.querySelector("body")?.addEventListener("click", (event)=> {
 	} else if(event.target.matches(".group-edit")) {
 		selectedGroupInfo.innerHTML = getGroupEditHTML(selectedGroupId)
 	}
-	return
+	// return
 })
 
 function getGroupMembersHTML(id) {
-	return `<div class="section-main-group-info-members">Members: ${groupsArr.map(group => group.id == id ? group.membersArr.map(member=>member.name).join(", "): "")}</div>`
+	return `<div class="section-main-group-info-members">Members: ${groupsArr.map(group => group.id === id ? group.membersArr.map(member=>member.name).join(", "): "")}</div>`
 }
 
 
@@ -133,13 +109,6 @@ function getGroupEditHTML(selectedId) {
 
 
 function handleGroupClick(e) {
-	e.stopPropagation()
-	console.log(e.target.id)
-	groupsArr.forEach(group => {
-		return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
-	})
-
-function handleGroupClick(e) {
     console.log(e.target.id)
     e.stopPropagation()
     groupsArr.forEach(group => {
@@ -156,6 +125,7 @@ function renderSelectedGroupInfo(group) {
     console.log("Inside renderSelectedGroup function")
     const { groupName, id, avatar, membersArr, expenses } = group;
     selectedGroup.innerHTML = "";
+    selectedGroupIndex = groupsArr.indexOf(group);
     renderExpenses(groupsArr[selectedGroupIndex]); // Jelena added probably temporary
     renderSelectPayerOptions();
     let friendsImages = membersArr.map(member => {
@@ -164,7 +134,7 @@ function renderSelectedGroupInfo(group) {
     return selectedGroup.innerHTML += `
 	<div class="section-main-group-header">
 				<div>
-					<h2 class="section-main-group-title">${groupName} 🖋️</h2>
+					<h2 class="section-main-group-title">${titleCase(groupName)} 🖋️</h2>
 					<p class="text-small">${membersArr.map(member => member.name).join(", ")}</p>
 					${friendsImages.join(" ")}
 					<p class="badge badge-unpaid">You are owed $3,456</p>
@@ -181,7 +151,7 @@ function renderSelectedGroupInfo(group) {
 				</ul>
 				<button id="download-btn"> Download PDF</button>
 				</div>
-				
+
 				<div id="group-info-container">
 					${getGroupMembersHTML(id)}
 				</div>
@@ -191,7 +161,8 @@ function renderSelectedGroupInfo(group) {
 }
 
 //Live testing group calculations
-groupsArr.forEach(group => console.log(`Total outstanding = $${totalCalc(group)}`))
+// groupDetails.forEach(group=>console.log(`Total outstanding = $${totalCalc(group)}`));
+// groupsArr.forEach(group => console.log(`Total outstanding = $${totalCalc(group)}`))
 
 //creating html list templates
 
@@ -219,6 +190,7 @@ function addImg(avatar) {
 
 function showForm() {
     groupForm.style.display = "block";
+    console.log("showing form")
     fromUserInput.style.borderColor = "#006091";
     document.querySelectorAll('.default').forEach(member => {
         defaultBorder(member.id);
@@ -227,7 +199,7 @@ function showForm() {
 
 function hideForm() {
     groupForm.style.display = "none";
-    return;
+    // return;
 }
 
 //manage fields
@@ -235,10 +207,7 @@ function addMemberInputField() {
     const newMemberInput = document.createElement('input');
     newMemberInput.className = 'group-member';
     newMemberInput.placeholder = 'Add Member';
-    // newMemberInput.placeholder = `Member ${memberCount+1}`;
-    // newMemberInput.id = `member-${memberCount+1}`;
     memberInputs.appendChild(newMemberInput);
-    // memberCount++;
 }
 
 function defaultBorder(element) {
@@ -262,6 +231,7 @@ function removeNewInputs(className) {
 //validation
 function inputValidation(groupName, groupMembers) {
     let membersFilled = 0;
+
     groupMembers.forEach(member => {
         if (!isEmpty(member.value)) {
             // console.log(member.className);
@@ -285,10 +255,6 @@ function inputValidation(groupName, groupMembers) {
     return (isEmpty(groupName.value) || membersFilled < 2) ? false : true;
 }
 
-// function titleCase(word) {
-//     word = word.trim()[0].toUpperCase() + word.trim().slice(1).toLowerCase();
-//     return word;
-// }
 
 function isEmpty(value) {
     return value.trim() === '';
@@ -312,38 +278,30 @@ function createNewGroup(name) {
         membersArr: [],
         expenses: []
     };
-    groupsArr.push(newGroup)
-    console.log(groupsArr)
+    groupsArr.push(newGroup);
+    localStorage.setItem('groups',JSON.stringify(groupsArr));
     renderGroups();
     return newGroup; // Jelena added
 }
 
 function renderFriends() {
     friendsList.innerHTML = "";
-    friendsArr.forEach(friend => {
-        const friendElement = createListItem(friend.name)
-        friendsList.appendChild(friendElement)
-        return
+    friendsListStored.forEach(friend=>{
+        const friendElement = createListItem(friend.name);
+        friendsList.appendChild(friendElement);
+        // return
     })
 }
 
 function renderGroups() {
-    groupList.innerHTML = ""
-    groupsArr.map(group => {
-
+	groupList.innerHTML = ""
+    groupsArr.map(group=>{
         let groupListElement = `
 		<li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
-                        href="#">${group.groupName}</a></li>
+                        href="#">${titleCase(group.groupName)}</a></li>
 		`
-        groupList.innerHTML += groupListElement;
-        return
-
-        // let groupElement = createListItem(group.groupName)
-        // groupElement.id = group.id;
-        // groupElement.append(document.createElement("a"))
-        // groupElement.append(addImg(group.avatar))
-        // groupList.appendChild(groupElement)
-        // return
+		groupList.innerHTML += groupListElement;
+		// return
     })
 }
 
@@ -355,20 +313,21 @@ function handleGroupCreation(e) {
     // let randomId = Date.now();
     if (!inputValidation(groupName, allMembersInput)) {
         groupError.style.display = "block";
-        return;
+        // return;
     }
     else {
-        // fromUserInput.style.borderColor = "#006091";
         groupError.style.display = "none";
         const tempMemberArr = [];
         allMembersInput.forEach(input => {
             if (!isEmpty(input.value)) {
 
                 let inList = false;
-
-                friendsArr.forEach(friend => {
+                friendsListStored.forEach(friend => {
                     friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
                 })
+                // friendsArr.forEach(friend => {
+                //     friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
+                // })
                 if (!inList) {
                     const newFriend = createFriend(titleCase(input.value));
                     // friendsArr.push(newFriend);
@@ -376,6 +335,7 @@ function handleGroupCreation(e) {
                 } else {
                     alert(`Friend ${input.value} already exists, please enter another one, or choose ${input.value} from existing friends.`)
                 }
+                console.log(`This is tempmember array ${tempMemberArr}`);
                 clearInputField(input);
             }
         });
@@ -385,8 +345,11 @@ function handleGroupCreation(e) {
             selectedGroupIndex = groupsArr.length - 1 // just added group
             tempMemberArr.forEach(member => {
                 newGroup.membersArr.push(member);
-                friendsArr.push(member);
+                // friendsArr.push(member);
+                friendsListStored.push(member);
             })
+            localStorage.setItem('friends', JSON.stringify(friendsListStored));
+            localStorage.setItem('groups',JSON.stringify(groupsArr));
         } else {
             alert("The group does not have two members so it's not created.")
         }
@@ -416,14 +379,16 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     e.preventDefault();
     let name = inputFriendName.value;
     const friend = createFriend(name);
-    friendsArr.push(friend);
+    // friendsArr.push(friend);
+    friendsListStored.push(friend);
+    localStorage.setItem('friends',JSON.stringify(friendsListStored))
     inputFriendName.value = '';
     renderFriends();
 });
 
 // expense management
 
-// create new expense 
+// create new expense
 
 function createExpense(name, cost, payer) {
     const date = new Date();
@@ -444,7 +409,7 @@ function renderSelectPayerOptions() {
 }
 
 btnAddExpense.addEventListener("click", () => {
-    renderSelectPayerOptions;
+    renderSelectPayerOptions();
     formAddExpense.classList.toggle("hidden");
 });
 
@@ -467,13 +432,13 @@ formAddExpense.addEventListener("submit", (e) => {
 
     })
     const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, selectedPayer);
-    groupsArr[selectedGroupIndex].expenses.push(newExpense);
-    console.table(groupsArr[selectedGroupIndex].expenses);
-    inputExpenseName.value = "";
-    inputExpenseAmount.value = "";
-    // inputExpenseParticipant.value = "";
-    formAddExpense.classList.add("hidden");
-    renderExpenses(groupsArr[selectedGroupIndex]);
+        groupsArr[selectedGroupIndex].expenses.push(newExpense);
+        console.table(groupsArr[selectedGroupIndex].expenses);
+        inputExpenseName.value = "";
+        inputExpenseAmount.value = "";
+        // inputExpenseParticipant.value = "";
+        formAddExpense.classList.add("hidden");
+        renderExpenses(groupsArr[selectedGroupIndex]);
 })
 
 function renderExpenses(group) {
@@ -497,5 +462,4 @@ function renderExpenses(group) {
     })
 }
 
-console.log(selectedGroupIndex)
-
+// console.log(selectedGroupIndex);
