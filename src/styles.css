@@ -631,3 +631,16 @@ th:nth-of-type(2) {
 th:nth-of-type(3) {
 	width: 40%;
 }
+
+/* expenses temporary */
+
+.expense-item {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 1rem;
+    gap: 1rem;
+    border-bottom: 1px dotted lightblue;
+    text-align: center;
+    justify-items: start;
+}
+
