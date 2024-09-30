@@ -11,31 +11,37 @@ const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
 const groupInfoNav = document.getElementById("group-info-nav");
 const selectedGroupInfoContainer = document.getElementById("group-info-container");
-const groupDetails = JSON.parse(localStorage.getItem('groups'))||[];
+const groupsArr = JSON.parse(localStorage.getItem('groups'))||[];
 const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
 
-console.log(`Before: ${groupDetails}`);
-console.log(`Before: ${friendsListStored}`);
+const btnAddExpense = document.getElementById("btn-add-expense");
+const formAddExpense = document.getElementById("form-add-expense");
+const listExpenses = document.getElementById("list-expenses");
+
+
+
+// console.log(`Before: ${groupDetails}`);
+// console.log(`Before: ${friendsListStored}`);
 // if(!localStorage.getItem('friends')){
 //     localStorage.setItem('friends',JSON.stringify(friendsListStored));
 // }
 // if(!localStorage.getItem('groups')){
 //     localStorage.setItem('groups',JSON.stringify(groupsArr));
 // }
-console.log(`After: ${groupDetails}`);
-console.log(`After: ${friendsListStored}`);
+// console.log(`After: ${groupDetails}`);
+// console.log(`After: ${friendsListStored}`);
 
 //render first existing group by default or show form
 // if(Object.keys(groupDetails).length!=0) {
-if(groupDetails.length!=0) {
+if(groupsArr.length!==0) {
 	hideForm()
-	renderSelectedGroupInfo(groupDetails[0]);
+	renderSelectedGroupInfo(groupsArr[0]);
 	// renderSelectedGroupInfo(groupsArr[0])
 } else {
-	showForm();
+    showForm();
 }
 //rendering of existing data from localStorage on page load
 renderFriends();
@@ -54,22 +60,98 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 //rendered group events: listen and render selected group on main section
 groupList.addEventListener("click", handleGroupClick)
 
+document.querySelector("body")?.addEventListener("click", (event)=> {
+
+	const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
+	console.log(event.target)
+	console.log(selectedGroupId)
+
+	document.querySelector(".active")?.classList.remove("active")
+	event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
+
+	const selectedGroupInfo = document.getElementById("group-info-container")
+	selectedGroupInfo.style.display="block"
+	if(event.target.matches(".group-members")) {
+		selectedGroupInfo.innerHTML = getGroupMembersHTML(selectedGroupId)
+	} else if(event.target.matches(".group-statistics")) {
+		selectedGroupInfo.innerHTML = getGroupStatisticsHTML(selectedGroupId)
+	} else if(event.target.matches(".group-edit")) {
+		selectedGroupInfo.innerHTML = getGroupEditHTML(selectedGroupId)
+	}
+	return
+})
+
+function getGroupMembersHTML(id) {
+	return `<div class="section-main-group-info-members">Members: ${groupsArr.map(group => group.id == id ? group.membersArr.map(member=>member.name).join(", "): "")}</div>`
+}
+
+
+function getGroupStatisticsHTML(id) {
+	return `<div class="section-main-group-info-statistics">
+	<p class="total-group-expenses">Total expenses: <span>$1000</span></p>
+	<p class="total-group-paid">Paid: <span>$700</span></p>
+	<p class="total-group-unpaid">Unpaid: <span>$300</span></p>
+	<table>
+		<tr>
+			<th>Debtor (owes)</th>
+			<th>Amount</th>
+			<th>Payer (gets)</th>
+		</tr>
+		<tr>
+			<td>Jessy Doe</td>
+			<td>$100</td>
+			<td>Jack</td>
+		</tr>
+		<tr>
+			<td>Ben</td>
+			<td>$150</td>
+			<td>John</td>
+		</tr>
+		<tr>
+			<td>Jack</td>
+			<td>$50</td>
+			<td>Jane Doe</td>
+		</tr>
+	</table>
+	</div>`
+}
+
+function getGroupEditHTML(selectedId) {
+	const groupObj = groupsArr.find(({id})=> Number(id) === Number(selectedId))
+	return `<div class="section-main-group-info-edit">Edit group ${groupObj.groupName}</div>`
+}
+
+
+// function handleGroupClick(e) {
+// 	e.stopPropagation()
+// 	console.log(e.target.id)
+// 	groupDetails.forEach(group => {
+// 		return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : "";
+// 	})
+// }
 function handleGroupClick(e) {
-	console.log(e.target.id)
-	groupDetails.forEach(group => {
-		return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
-	})
+    console.log(e.target.id)
+    e.stopPropagation()
+    groupsArr.forEach(group => {
+        console.log(Number(group.id))
+        if (e.target.id == Number(group.id)) {
+            selectedGroupIndex = groupsArr.indexOf(group);
+            renderSelectedGroupInfo(group)
+        }
+        // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
+    })
 }
 
 function renderSelectedGroupInfo(group) {
-console.log("Inside renderSelectedGroup function")
-console.log(group);
-const {groupName, id, avatar, membersArr, expenses} = group;
-selectedGroup.innerHTML = "";
-	let friendsImages = membersArr.map(member => {
-		return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
-	})
-return selectedGroup.innerHTML += `
+    console.log("Inside renderSelectedGroup function")
+    const { groupName, id, avatar, membersArr, expenses } = group;
+    selectedGroup.innerHTML = "";
+    renderExpenses(groupsArr[selectedGroupIndex]); // Jelena added probably temporary
+    renderSelectPayerOptions();
+    let friendsImages = membersArr.map(member => {
+        return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
+    })
+    return selectedGroup.innerHTML += `
 	<div class="section-main-group-header">
 				<div>
 					<h2 class="section-main-group-title">${titleCase(groupName)} 🖋️</h2>
@@ -79,7 +161,23 @@ return selectedGroup.innerHTML += `
 			    </div>
 				<img src=${avatar} alt="Group icon">
 	</div>
+
+	<div class="section-main-group-info" >
+				<div class="section-main-group-info-nav-container" id=${id}>
+					<ul class="section-main-group-info-nav">
+					<li class="text-small group-members active">Members</li>
+					<li class="text-small group-statistics" >Statistics</li>
+					<li class="text-small group-edit" >Edit Group</li>
+				</ul>
+				<button id="download-btn"> Download PDF</button>
+				</div>
+
+				<div id="group-info-container">
+					${getGroupMembersHTML(id)}
+				</div>
+			</div>
 `
+
 }
 
 //Live testing group calculations
@@ -96,7 +194,8 @@ function createListItem(content) {
 }
 
 function titleCase(text) {
-    const words = text.split(" ");
+	console.log(text)
+    const words = text?.split(" ");
     return words.map(word => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
 }
 
@@ -113,15 +212,14 @@ function showForm() {
     groupForm.style.display = "block";
     console.log("showing form")
     fromUserInput.style.borderColor = "#006091";
-    document.querySelectorAll('.default').forEach(member=>{
+    document.querySelectorAll('.default').forEach(member => {
         defaultBorder(member.id);
     })
 }
 
 function hideForm() {
-	groupForm.style.display = "none";
-    console.log("Hiding form");
-	return;
+    groupForm.style.display = "none";
+    return;
 }
 
 //manage fields
@@ -158,7 +256,7 @@ function inputValidation(groupName, groupMembers) {
         if (!isEmpty(member.value)) {
             // console.log(member.className);
             membersFilled++;
-            if(member.className.includes('default')){
+            if (member.className.includes('default')) {
                 defaultBorder(member.id);
             }
         } else {
@@ -198,10 +296,10 @@ function createNewGroup(name) {
         id: Date.now(),
         avatar: "src/img/group-icon.png",
         membersArr: [],
-        expenses: [{ name: "Bali", cost: 1000, friends: ["Jane,Jessy,Jafar"], payer: "Jane" }, { name: "Shmali", cost: 2000, friends: ["John,Jessy,Jane"], payer: "John" }]
+        expenses: []
     };
-    groupDetails.push(newGroup);
-    localStorage.setItem('groups',JSON.stringify(groupDetails));
+    groupsArr.push(newGroup);
+    localStorage.setItem('groups',JSON.stringify(groupsArr));
     renderGroups();
     return newGroup; // Jelena added
 }
@@ -238,7 +336,7 @@ function renderGroups() {
 	// 	// groupList.appendChild(groupElement)
 	// 	// return
 	// })
-    groupDetails.map(group=>{
+    groupsArr.map(group=>{
         let groupListElement = `
 		<li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
                         href="#">${titleCase(group.groupName)}</a></li>
@@ -257,6 +355,7 @@ function renderGroups() {
 }
 
 function handleGroupCreation(e) {
+	e.stopPropagation()
     console.log("Handle group creation is called...")
     e.preventDefault();
     let allMembersInput = document.querySelectorAll('.group-member');
@@ -292,19 +391,20 @@ function handleGroupCreation(e) {
 
         if (tempMemberArr.length >= 2) {
             const newGroup = createNewGroup(groupName.value); // this also renders groups
+            selectedGroupIndex = groupsArr.length - 1 // just added group
             tempMemberArr.forEach(member => {
                 newGroup.membersArr.push(member);
                 // friendsArr.push(member);
                 friendsListStored.push(member);
             })
             localStorage.setItem('friends', JSON.stringify(friendsListStored));
-            localStorage.setItem('groups',JSON.stringify(groupDetails));
+            localStorage.setItem('groups',JSON.stringify(groupsArr));
         } else {
             alert("The group does not have two members so it's not created.")
         }
         renderFriends();
         hideForm();
-		renderSelectedGroupInfo(groupDetails[groupDetails.length-1]); //render just added group
+        renderSelectedGroupInfo(groupsArr[selectedGroupIndex]); //render just added group
         tempMemberArr.length = 0;
         clearInputField(groupName);
         removeNewInputs();
@@ -334,3 +434,81 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     inputFriendName.value = '';
     renderFriends();
 });
+
+// expense management
+
+// create new expense
+
+function createExpense(name, cost, payer) {
+    const date = new Date();
+    cost = Number(cost);
+    const paid = [];
+    return { name, cost, payer, date, paid }
+}
+
+function renderSelectPayerOptions() {
+    const selectPayer = document.getElementById("select-payer");
+    selectPayer.textContent = "";
+    groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+        const option = document.createElement("option");
+        option.textContent = member.name;
+        option.setAttribute.value = member.name;
+        selectPayer.appendChild(option);
+    })
+}
+
+btnAddExpense.addEventListener("click", () => {
+    renderSelectPayerOptions;
+    formAddExpense.classList.toggle("hidden");
+});
+
+formAddExpense.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const inputExpenseName = document.getElementById("input-expense");
+    const inputExpenseAmount = document.getElementById("input-amount");
+    const selectOptions = [...document.querySelectorAll("option")];
+    let selectedPayer = null;
+    selectOptions.forEach(option => {
+        if (option.selected) {
+            console.log(option.value)
+            groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+                if (member.name === option.value) {
+                    selectedPayer = member;
+                }
+            })
+        }
+
+
+    })
+    const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, selectedPayer);
+    groupsArr[selectedGroupIndex].expenses.push(newExpense);
+    console.table(groupsArr[selectedGroupIndex].expenses);
+    inputExpenseName.value = "";
+    inputExpenseAmount.value = "";
+    // inputExpenseParticipant.value = "";
+    formAddExpense.classList.add("hidden");
+    renderExpenses(groupsArr[selectedGroupIndex]);
+})
+
+function renderExpenses(group) {
+    listExpenses.textContent = "";
+    group.expenses.forEach(expense => {
+        const listItemExpense = document.createElement("li");
+        listItemExpense.classList.add("expense-item");
+        const nameSpan = document.createElement("span");
+        const amountSpan = document.createElement("span");
+        const participantSpan = document.createElement("span");
+        const dateSpan = document.createElement("span");
+        nameSpan.textContent = expense.name;
+        amountSpan.textContent = expense.cost;
+        participantSpan.textContent = expense.payer.name;
+        dateSpan.textContent = expense.date.toLocaleString();
+        listItemExpense.appendChild(nameSpan);
+        listItemExpense.appendChild(amountSpan);
+        listItemExpense.appendChild(participantSpan);
+        listItemExpense.appendChild(dateSpan);
+        listExpenses.appendChild(listItemExpense);
+    })
+}
+
+// console.log(selectedGroupIndex);

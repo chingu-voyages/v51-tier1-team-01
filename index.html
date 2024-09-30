@@ -69,16 +69,16 @@
             </form>
         </section>
         <section class="section-main-group" id="selected-group">
-			<div class="section-main-group-header">
+			<!-- <div class="section-main-group-header">
 				<div>
 					<h2 class="section-main-group-title">Bali Trip 🖋️</h2>
 					<p class="text-small">Jane Doe, John Doe, Jessy Doe, Jafar Doe</p>
 					<p class="badge badge-unpaid">You are owed $3,456</p>
 			    </div>
 				<img src="src/img/group-icon.png" alt="Group icon">
-			</div>
+			</div> -->
 
-			<div class="section-main-group-info" >
+			<!-- <div class="section-main-group-info" >
 				<div class="section-main-group-info-nav-container">
 					<ul class="section-main-group-info-nav">
 					<li class="text-small" id="group-members">Members</li>
@@ -97,8 +97,24 @@
 
 				 <div class="section-main-group-info-members"></div>
 				</div>
-			</div>
+			</div> -->
 
+        </section>
+        <!-- add expense form -->
+        <button id="btn-add-expense">Show the add expense form</button>
+        <form action="" id="form-add-expense" class="hidden">
+            <input type="text" id="input-expense" placeholder="Name of expense" required>
+            <input type="number" id="input-amount" placeholder="Amount" required>
+            <label for="select-payer"></label>
+            <select name="payer" id="select-payer"></select>
+            <!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
+            <button>Submit expense</button>
+        </form>
+
+        <!-- added expenses section -->
+        <section>
+            <h2>Expenses</h2>
+            <ul id="list-expenses"></ul>
         </section>
 
 
