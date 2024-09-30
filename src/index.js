@@ -47,7 +47,6 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event)=> {
-
 	const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 	console.log(event.target)
 	console.log(selectedGroupId)
@@ -56,7 +55,9 @@ document.querySelector("body")?.addEventListener("click", (event)=> {
 	event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
 
 	const selectedGroupInfo = document.getElementById("group-info-container")
-	selectedGroupInfo.style.display="block"
+
+	selectedGroupInfo ? selectedGroupInfo.style.display="block" : ""
+
 	if(event.target.matches(".group-members")) {
 		selectedGroupInfo.innerHTML = getGroupMembersHTML(selectedGroupId)
 	} else if(event.target.matches(".group-statistics")) {
