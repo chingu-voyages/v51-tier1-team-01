@@ -390,11 +390,15 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
 
 // create new expense
 
-function createExpense(name, cost, payer) {
+function createExpense(name, cost, payer,groupIndex) {
     const date = new Date();
+    const friends = groupsArr[groupIndex].membersArr;
+    console.log(friends);
     cost = Number(cost);
     const paid = [];
-    return { name, cost, payer, date, paid }
+    // console.log(groupsArr.expenses);
+    // console.table(groupsArr[selectedGroupIndex].expenses);
+    return { name, cost, payer, date, paid,friends }
 }
 
 function renderSelectPayerOptions() {
@@ -431,14 +435,16 @@ formAddExpense.addEventListener("submit", (e) => {
 
 
     })
-    const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, selectedPayer);
-        groupsArr[selectedGroupIndex].expenses.push(newExpense);
-        console.table(groupsArr[selectedGroupIndex].expenses);
-        inputExpenseName.value = "";
-        inputExpenseAmount.value = "";
-        // inputExpenseParticipant.value = "";
-        formAddExpense.classList.add("hidden");
-        renderExpenses(groupsArr[selectedGroupIndex]);
+    const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, selectedPayer,selectedGroupIndex);
+    groupsArr[selectedGroupIndex].expenses.push(newExpense);
+    console.table(groupsArr[selectedGroupIndex].expenses);
+    localStorage.setItem('groups',JSON.stringify(groupsArr));
+    // localStorage.setItem('groups',groupsArr);
+    inputExpenseName.value = "";
+    inputExpenseAmount.value = "";
+    // inputExpenseParticipant.value = "";
+    formAddExpense.classList.add("hidden");
+    renderExpenses(groupsArr[selectedGroupIndex]);
 })
 
 function renderExpenses(group) {
