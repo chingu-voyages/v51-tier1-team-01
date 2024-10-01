@@ -47,7 +47,6 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event)=> {
-
 	const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 	console.log(event.target)
 	console.log(selectedGroupId)
@@ -56,55 +55,24 @@ document.querySelector("body")?.addEventListener("click", (event)=> {
 	event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
 
 	const selectedGroupInfo = document.getElementById("group-info-container")
-	selectedGroupInfo.style.display="block"
-	if(event.target.matches(".group-members")) {
-		selectedGroupInfo.innerHTML = getGroupMembersHTML(selectedGroupId)
-	} else if(event.target.matches(".group-statistics")) {
-		selectedGroupInfo.innerHTML = getGroupStatisticsHTML(selectedGroupId)
-	} else if(event.target.matches(".group-edit")) {
-		selectedGroupInfo.innerHTML = getGroupEditHTML(selectedGroupId)
+
+	selectedGroupInfo ? selectedGroupInfo.style.display="block" : ""
+
+	if(event.target.matches(".group-balances")) {
+		selectedGroupInfo.innerHTML = getGroupBalances(selectedGroupId)
+	} else if(event.target.matches(".group-members")) {
+		selectedGroupInfo.innerHTML = getGroupMembers(selectedGroupId)
 	}
 	// return
 })
 
-function getGroupMembersHTML(id) {
-	return `<div class="section-main-group-info-members">Members: ${groupsArr.map(group => group.id === id ? group.membersArr.map(member=>member.name).join(", "): "")}</div>`
+function getGroupBalances(id) {
+	return `<div class="section-main-group-info-members">Balances</div>`
 }
 
-
-function getGroupStatisticsHTML(id) {
-	return `<div class="section-main-group-info-statistics">
-	<p class="total-group-expenses">Total expenses: <span>$1000</span></p>
-	<p class="total-group-paid">Paid: <span>$700</span></p>
-	<p class="total-group-unpaid">Unpaid: <span>$300</span></p>
-	<table>
-		<tr>
-			<th>Debtor (owes)</th>
-			<th>Amount</th>
-			<th>Payer (gets)</th>
-		</tr>
-		<tr>
-			<td>Jessy Doe</td>
-			<td>$100</td>
-			<td>Jack</td>
-		</tr>
-		<tr>
-			<td>Ben</td>
-			<td>$150</td>
-			<td>John</td>
-		</tr>
-		<tr>
-			<td>Jack</td>
-			<td>$50</td>
-			<td>Jane Doe</td>
-		</tr>
-	</table>
-	</div>`
-}
-
-function getGroupEditHTML(selectedId) {
-	const groupObj = groupsArr.find(({id})=> Number(id) === Number(selectedId))
-	return `<div class="section-main-group-info-edit">Edit group ${groupObj.groupName}</div>`
+function getGroupMembers(id) {
+	// console.log(groupsArr[0].id)
+	return `<div class="section-main-group-info-edit">Members:${groupsArr.map(group => group.id == id ? group.membersArr.map(member=>member.name).join(", "): "")}</div>`
 }
 
 
@@ -145,15 +113,14 @@ function renderSelectedGroupInfo(group) {
 	<div class="section-main-group-info" >
 				<div class="section-main-group-info-nav-container" id=${id}>
 					<ul class="section-main-group-info-nav">
-					<li class="text-small group-members active">Members</li>
-					<li class="text-small group-statistics" >Statistics</li>
-					<li class="text-small group-edit" >Edit Group</li>
+					<li class="text-small group-balances active">Balances</li>
+					<li class="text-small group-members">Members</li>
 				</ul>
 				<button id="download-btn"> Download PDF</button>
 				</div>
 
 				<div id="group-info-container">
-					${getGroupMembersHTML(id)}
+					${getGroupBalances(id)}
 				</div>
 			</div>
 `
@@ -174,6 +141,7 @@ function createListItem(content) {
 }
 
 function titleCase(text) {
+    text = text.trim();
 	console.log(text)
     const words = text?.split(" ");
     return words.map(word => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
@@ -434,11 +402,15 @@ function renderExistingFriendsForGroupCreation() {
 
 // create new expense
 
-function createExpense(name, cost, payer) {
+function createExpense(name, cost, payer,groupIndex) {
     const date = new Date();
+    const friends = groupsArr[groupIndex].membersArr;
+    console.log(friends);
     cost = Number(cost);
     const paid = [];
-    return { name, cost, payer, date, paid }
+    // console.log(groupsArr.expenses);
+    // console.table(groupsArr[selectedGroupIndex].expenses);
+    return { name, cost, payer, date, paid,friends }
 }
 
 function renderSelectPayerOptions() {
@@ -475,14 +447,16 @@ formAddExpense.addEventListener("submit", (e) => {
 
 
     })
-    const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, selectedPayer);
-        groupsArr[selectedGroupIndex].expenses.push(newExpense);
-        console.table(groupsArr[selectedGroupIndex].expenses);
-        inputExpenseName.value = "";
-        inputExpenseAmount.value = "";
-        // inputExpenseParticipant.value = "";
-        formAddExpense.classList.add("hidden");
-        renderExpenses(groupsArr[selectedGroupIndex]);
+    const newExpense = createExpense(inputExpenseName.value, inputExpenseAmount.value, selectedPayer,selectedGroupIndex);
+    groupsArr[selectedGroupIndex].expenses.push(newExpense);
+    console.table(groupsArr[selectedGroupIndex].expenses);
+    localStorage.setItem('groups',JSON.stringify(groupsArr));
+    // localStorage.setItem('groups',groupsArr);
+    inputExpenseName.value = "";
+    inputExpenseAmount.value = "";
+    // inputExpenseParticipant.value = "";
+    formAddExpense.classList.add("hidden");
+    renderExpenses(groupsArr[selectedGroupIndex]);
 })
 
 function renderExpenses(group) {
