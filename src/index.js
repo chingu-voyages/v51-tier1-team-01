@@ -65,33 +65,50 @@ document.querySelector("body")?.addEventListener("click", (event)=> {
 	selectedGroupInfo ? selectedGroupInfo.style.display="block" : ""
 
 	if(event.target.matches(".group-balances")) {
-		selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
+		selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup);
 	} else if(event.target.matches(".group-members")) {
-		selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
+		selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup);
 	}
 	// return
 })
 
 function getGroupBalances(selectedGroup) {
 
-	// all group members are rendered for now; badge and image shadow classes are already in css: badge-unpaid, badge-paid, badge-payer. 
-	
-	return `<div class="section-main-group-info-balances">
-		<div class="balances-members-container">
-			${
-				selectedGroup.membersArr.map(member => {
-					return `
-						<div class = "balances-card-member">
-							<div>
-								<p class="balances-card-member-name">
-								${member.name}🖋️
-								</p>
-								<p class="badge badge-paid">You are owed $3,456</p>
-							</div>
-							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
-						</div>
-					`
-				}).join("")
+	// all group members are rendered for now; badge and image shadow classes are already in css: badge-unpaid, badge-paid, badge-payer.
+    if (selectedGroup.expenses.length){
+    // console.log(selectedGroup.expenses[0].payer.name);
+        return `<div class="section-main-group-info-balances">
+            <div class="balances-members-container">
+                ${
+                    selectedGroup.membersArr.map(member => {
+                        // console.log(member);
+                        // console.log(member === selectedGroup.expenses[0].payer.name)
+                        if(member.name === selectedGroup.expenses[0].payer.name){
+                        return `
+                            <div class = "balances-card-member">
+                                <div>
+                                    <p class="balances-card-member-name">
+                                    ${member.name}🖋️
+                                    </p>
+                                    <p class="badge badge-paid">You are owed $3,456</p>
+                                </div>
+                                <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+                            </div>
+                        `}
+        else{
+            return `
+                <div class = "balances-card-member">
+                    <div>
+                        <p class="balances-card-member-name">
+                        ${member.name}🖋️
+                        </p>
+                        <p class="badge badge-paid">You owe $3,456</p>
+                    </div>
+                    <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+                </div>
+            `
+            }
+        }).join("")
 			}
 		</div>
 		<div class="balances-members-footer">
@@ -99,6 +116,9 @@ function getGroupBalances(selectedGroup) {
 			<p>Subtotal: $1948</p>
 		</div>
 	</div>`
+    }else{
+       return `No expenses added yet`
+    }
 }
 
 
@@ -127,6 +147,8 @@ function renderSelectedGroupInfo(group) {
     selectedGroupIndex = groupsArr.indexOf(group);
     renderExpenses(groupsArr[selectedGroupIndex]); // Jelena added probably temporary
     renderSelectPayerOptions();
+
+    // getGroupBalances(groupsArr[selectedGroupIndex]);
     let friendsImages = membersArr.map(member => {
         return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
     })
@@ -490,6 +512,7 @@ formAddExpense.addEventListener("submit", (e) => {
     // inputExpenseParticipant.value = "";
     formAddExpense.classList.add("hidden");
     renderExpenses(groupsArr[selectedGroupIndex]);
+    // getGroupBalances(groupsArr[selectedGroupIndex]);
 })
 
 function renderExpenses(group) {
@@ -510,7 +533,9 @@ function renderExpenses(group) {
         listItemExpense.appendChild(participantSpan);
         listItemExpense.appendChild(dateSpan);
         listExpenses.appendChild(listItemExpense);
+        // getGroupBalances(selectedGroup);
     })
 }
 
 // console.log(selectedGroupIndex);
+    
