@@ -48,8 +48,14 @@ groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event)=> {
 	const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
+
+	const selectedGroup = groupsArr.find(group => {
+		return group.id == selectedGroupId ? group : console.log("there's no group with same id in group array")
+	} )
+
 	console.log(event.target)
 	console.log(selectedGroupId)
+	console.log(selectedGroup)
 
 	document.querySelector(".active")?.classList.remove("active")
 	event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
@@ -59,28 +65,53 @@ document.querySelector("body")?.addEventListener("click", (event)=> {
 	selectedGroupInfo ? selectedGroupInfo.style.display="block" : ""
 
 	if(event.target.matches(".group-balances")) {
-		selectedGroupInfo.innerHTML = getGroupBalances(selectedGroupId)
+		selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
 	} else if(event.target.matches(".group-members")) {
-		selectedGroupInfo.innerHTML = getGroupMembers(selectedGroupId)
+		selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
 	}
 	// return
 })
 
-function getGroupBalances(id) {
-	return `<div class="section-main-group-info-members">Balances</div>`
+function getGroupBalances(selectedGroup) {
+
+	// all group members are rendered for now; badge and image shadow classes are already in css: badge-unpaid, badge-paid, badge-payer. 
+	
+	return `<div class="section-main-group-info-balances">
+		<div class="balances-members-container">
+			${
+				selectedGroup.membersArr.map(member => {
+					return `
+						<div class = "balances-card-member">
+							<div>
+								<p class="balances-card-member-name">
+								${member.name}🖋️
+								</p>
+								<p class="badge badge-paid">You are owed $3,456</p>
+							</div>
+							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+						</div>
+					`
+				}).join("")
+			}
+		</div>
+		<div class="balances-members-footer">
+			<button class="add-btn"><span>+</span>Add member</button>
+			<p>Subtotal: $1948</p>
+		</div>
+	</div>`
 }
 
-function getGroupMembers(id) {
-	// console.log(groupsArr[0].id)
-	return `<div class="section-main-group-info-edit">Members:${groupsArr.map(group => group.id == id ? group.membersArr.map(member=>member.name).join(", "): "")}</div>`
+
+function getGroupMembers(selectedGroup) {
+	// console.log(groupsArr[0].selectedGroupId)
+	return `<div class="section-main-group-info-members">Members:${selectedGroup.membersArr.map(member=>member.name).join(", ")}</div>`
 }
 
 
 function handleGroupClick(e) {
-    console.log(e.target.id)
+    // console.log(e.target.id)
     e.stopPropagation()
     groupsArr.forEach(group => {
-        console.log(Number(group.id))
         if (e.target.id == Number(group.id)) {
             selectedGroupIndex = groupsArr.indexOf(group);
             renderSelectedGroupInfo(group)
@@ -105,7 +136,7 @@ function renderSelectedGroupInfo(group) {
 					<h2 class="section-main-group-title">${titleCase(groupName)} 🖋️</h2>
 					<p class="text-small">${membersArr.map(member => member.name).join(", ")}</p>
 					${friendsImages.join(" ")}
-					<p class="badge badge-unpaid">You are owed $3,456</p>
+					<p class="badge badge-paid">You are owed $3,456</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
 	</div>
@@ -120,7 +151,7 @@ function renderSelectedGroupInfo(group) {
 				</div>
 
 				<div id="group-info-container">
-					${getGroupBalances(id)}
+					${getGroupBalances(group)}
 				</div>
 			</div>
 `
@@ -142,7 +173,7 @@ function createListItem(content) {
 
 function titleCase(text) {
     text = text.trim();
-	console.log(text)
+	// console.log(text)
     const words = text?.split(" ");
     return words.map(word => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
 }
