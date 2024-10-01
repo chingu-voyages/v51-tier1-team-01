@@ -174,6 +174,7 @@ function createListItem(content) {
 }
 
 function titleCase(text) {
+    text = text.trim();
 	console.log(text)
     const words = text?.split(" ");
     return words.map(word => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
