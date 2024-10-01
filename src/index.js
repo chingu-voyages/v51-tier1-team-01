@@ -317,7 +317,8 @@ function handleGroupCreation(e) {
     const checkedOptions = [...document.querySelectorAll(".existing-friend")]
     checkedOptions.forEach(option => {
         if (option.checked) {
-            friendsArr.forEach(friend => {
+            friendsListStored.forEach(friend=>{
+            // friendsArr.forEach(friend => {
                 if (option.id.toLowerCase() === friend.name.toLowerCase()) {
                     console.log(friend)
                     tempMemberArr.push(friend);
@@ -415,7 +416,8 @@ const addExistingFriendContainer = document.getElementById("existing-friends-che
 function renderExistingFriendsForGroupCreation() {
     addExistingFriendContainer.textContent = "";
     addExistingFriendContainer.childNodes.forEach(node => node.remove())
-    friendsArr.forEach(friend => {
+    friendsListStored.forEach(friend => {
+    // friendsArr.forEach(friend => {
         const checkbox = document.createElement("input");
         checkbox.setAttribute("type", "checkbox");
         checkbox.setAttribute("id", friend.name);
