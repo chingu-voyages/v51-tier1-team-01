@@ -182,7 +182,7 @@ h2 {
 }
 
 .logo a:hover, .logo a:focus {
-	outline: none;	
+	outline: none;
 	transform: rotateX(1080deg);
 	transition: transform 1.5s ease-in-out;
 }
@@ -238,7 +238,7 @@ h2 {
 ul {
 	list-style: none;
 }
-    
+
 #group-list,
 #friends-list {
 	margin-bottom: 10px;
@@ -411,7 +411,7 @@ ul {
 /* main section, group info*/
 
 .section-main-group {
-	
+
 }
 
 .section-main-group-header {
@@ -513,7 +513,7 @@ ul {
 	background-color: #00A1C6;
 }
 
-.section-main-group-info-nav>li:hover::before, 
+.section-main-group-info-nav>li:hover::before,
 .section-main-group-info-nav .active::before {
 	background-color: #00A1C6;
 }
@@ -566,6 +566,15 @@ margin-bottom: 5px;
 	padding-top: 3rem;
 }
 
+.balances-members-header {
+	display: flex;
+	justify-content: space-between;
+	padding: 1rem;
+	color: hsl(0deg 0% 99.61%);
+	background-color: hsl(201.4deg 100% 28.04%);
+	border-radius: 50px;
+}
+
 .balances-card-member {
 	display: flex;
 	align-items: center;
@@ -604,6 +613,15 @@ margin-bottom: 5px;
 	padding: 1rem 0 1rem 0;
 }
 
+/* editing name */
+.section-main-group-header div div{
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+}
+.pen {
+    cursor: pointer;
+    margin-left: 8px;}
  /* footer */
 
 footer {
