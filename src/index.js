@@ -136,7 +136,7 @@ function renderSelectedGroupInfo(group) {
 					<h2 class="section-main-group-title">${titleCase(groupName)} 🖋️</h2>
 					<p class="text-small">${membersArr.map(member => member.name).join(", ")}</p>
 					${friendsImages.join(" ")}
-					<p class="badge badge-paid">You are owed $3,456</p>
+					<p class="badge badge-${totalCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid' }">${totalCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' +totalCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
 	</div>
@@ -157,10 +157,6 @@ function renderSelectedGroupInfo(group) {
 `
 
 }
-
-//Live testing group calculations
-// groupDetails.forEach(group=>console.log(`Total outstanding = $${totalCalc(group)}`));
-// groupsArr.forEach(group => console.log(`Total outstanding = $${totalCalc(group)}`))
 
 //creating html list templates
 
