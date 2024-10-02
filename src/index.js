@@ -47,6 +47,7 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event)=> {
+	if(event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members")){
 	const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
 	const selectedGroup = groupsArr.find(group => {
@@ -69,6 +70,9 @@ document.querySelector("body")?.addEventListener("click", (event)=> {
 	} else if(event.target.matches(".group-members")) {
 		selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
 	}
+} else {
+	event.stopPropagation()
+}
 	// return
 })
 
