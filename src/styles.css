@@ -159,7 +159,6 @@ h2 {
 .text-small {
 	color: #8d8d8d;
 	font-size: 0.85rem;
-
 }
 
 
@@ -167,6 +166,12 @@ h2 {
 
 .section-aside, .section-main {
 	padding: 2rem;
+}
+
+@media (max-width: 992px) {
+	.section-aside, .section-main {
+		padding: 1rem;
+	}
 }
 
 .logo {
@@ -213,22 +218,10 @@ h2 {
     background-color: #f4f4f4;
 }
 
-
-@media (min-width: 992px) {
-	.section-main-group, #new-group {
-		max-width: 80%;
-	}
-}
-
-@media (min-width: 1200px) {
-	.section-main-group, #new-group {
-		max-width: 70%;
-	}
-}
-
 @media (min-width: 2000px) {
-	.section-main-group, #new-group {
-		max-width: 60%;
+
+	.section-main-group {
+		max-width: 90%;
 	}
 }
 
@@ -410,18 +403,14 @@ ul {
 
 /* main section, group info*/
 
-.section-main-group {
-	
-}
-
 .section-main-group-header {
 	display: flex;
 	align-items: center;
 	gap: 50px;
 	background-color: #fff;
 	border: 1px solid #d3d3d3;
-	border-top-left-radius: 20% 100%;
-	border-bottom-left-radius:20% 100%;
+	border-top-left-radius: 15% 100%;
+	border-bottom-left-radius: 15% 100%;
 	padding: 2rem;
 }
 
@@ -561,7 +550,8 @@ margin-bottom: 5px;
 
 .balances-members-container {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: repeat( auto-fit, minmax(320px, 1fr) );
+	justify-content: space-between;
 	gap: 1rem;
 	padding-top: 3rem;
 }
@@ -577,11 +567,12 @@ margin-bottom: 5px;
 
 .balances-card-member {
 	display: flex;
+	max-width: 500px;
 	align-items: center;
 	background-color: #fff;
 	border: 1px solid #d3d3d3;
-	border-top-right-radius: 20% 100%;
-	border-bottom-right-radius:20% 100%;
+	border-top-right-radius:20% 100%;
+	border-bottom-right-radius: 20% 100%;
 	padding: 1rem 1rem 1rem 1.5rem;
 }
 
