@@ -47,6 +47,7 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event)=> {
+	if(event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members")){
 	const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
 	const selectedGroup = groupsArr.find(group => {
@@ -69,6 +70,9 @@ document.querySelector("body")?.addEventListener("click", (event)=> {
 	} else if(event.target.matches(".group-members")) {
 		selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
 	}
+} else {
+	event.stopPropagation()
+}
 	// return
 })
 
@@ -136,7 +140,7 @@ function renderSelectedGroupInfo(group) {
 					<h2 class="section-main-group-title">${titleCase(groupName)} 🖋️</h2>
 					<p class="text-small">${membersArr.map(member => member.name).join(", ")}</p>
 					${friendsImages.join(" ")}
-					<p class="badge badge-paid">You are owed $3,456</p>
+					<p class="badge badge-${totalCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid' }">${totalCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' +totalCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
 	</div>
@@ -157,10 +161,6 @@ function renderSelectedGroupInfo(group) {
 `
 
 }
-
-//Live testing group calculations
-// groupDetails.forEach(group=>console.log(`Total outstanding = $${totalCalc(group)}`));
-// groupsArr.forEach(group => console.log(`Total outstanding = $${totalCalc(group)}`))
 
 //creating html list templates
 
@@ -433,15 +433,14 @@ function renderExistingFriendsForGroupCreation() {
 
 // create new expense
 
-function createExpense(name, cost, payer,groupIndex) {
+function createExpense(name, cost, payer, groupIndex) {
+    console.log("Expense created")
     const date = new Date();
-    const friends = groupsArr[groupIndex].membersArr;
-    console.log(friends);
+    const expenseMembers = [];
+    expenseMembers.push(payer);
     cost = Number(cost);
     const paid = [];
-    // console.log(groupsArr.expenses);
-    // console.table(groupsArr[selectedGroupIndex].expenses);
-    return { name, cost, payer, date, paid,friends }
+    return { name, cost, payer, expenseMembers, date, paid }
 }
 
 function renderSelectPayerOptions() {
@@ -493,21 +492,61 @@ formAddExpense.addEventListener("submit", (e) => {
 function renderExpenses(group) {
     listExpenses.textContent = "";
     group.expenses.forEach(expense => {
-        const listItemExpense = document.createElement("li");
-        listItemExpense.classList.add("expense-item");
-        const nameSpan = document.createElement("span");
-        const amountSpan = document.createElement("span");
-        const participantSpan = document.createElement("span");
-        const dateSpan = document.createElement("span");
-        nameSpan.textContent = expense.name;
-        amountSpan.textContent = expense.cost;
-        participantSpan.textContent = expense.payer.name;
-        dateSpan.textContent = expense.date.toLocaleString();
-        listItemExpense.appendChild(nameSpan);
-        listItemExpense.appendChild(amountSpan);
-        listItemExpense.appendChild(participantSpan);
-        listItemExpense.appendChild(dateSpan);
-        listExpenses.appendChild(listItemExpense);
+        const listItem = document.createElement("li");
+        const expenseHeader = document.createElement("h3");
+        expenseHeader.classList.add("balances-members-header");
+        const expenseName = document.createElement("span");
+        const expenseDate = document.createElement("span");
+        expenseName.textContent = expense.name;
+        expenseDate.textContent = expense.date.toLocaleString();
+        expenseHeader.appendChild(expenseName);
+        expenseHeader.appendChild(expenseDate);
+
+        const expenseMembers = document.createElement("div");
+        expenseMembers.classList.add("balances-members-container");
+        expense.expenseMembers.forEach(member => {
+            const memberDiv = document.createElement("div");
+            memberDiv.classList.add("balances-card-member");
+            const memberName = document.createElement("p");
+            memberName.classList.add("balances-card-member-name");
+            const memberImg = document.createElement("img");
+            memberImg.classList.add("balances-card-member-img", "paid");
+            memberImg.setAttribute("src", member.imgSrc);
+            memberImg.setAttribute("alt", "Member icon");
+            memberName.textContent = member.name;
+            memberDiv.appendChild(memberName);
+            memberDiv.appendChild(memberImg);
+            expenseMembers.appendChild(memberDiv);
+        })
+
+        const expenseFooter = document.createElement("div");
+        expenseFooter.classList.add("balances-members-footer");
+        const btnAddMember = document.createElement("button");
+        btnAddMember.classList.add("add-btn");
+        btnAddMember.textContent = "Add member";
+        btnAddMember.addEventListener("click", () => {
+            group.membersArr.forEach(member => {
+                console.log("Expense members:")
+                console.log(expenseMembers)
+                if (!(expense.expenseMembers.includes(member))) {
+                    console.log(member)
+                    expense.expenseMembers.push(member); // temp, pushes all group members to expense members
+                }
+            })
+        });
+        const btnEditExpense = document.createElement("button");
+        btnEditExpense.textContent = "Edit expense";
+        const spanTotal = document.createElement("span");
+        spanTotal.textContent = `Subtotal $${expense.cost}`;
+        expenseFooter.appendChild(btnAddMember);
+        expenseFooter.appendChild(btnEditExpense);
+        expenseFooter.appendChild(spanTotal);
+
+        listItem.appendChild(expenseHeader);
+        listItem.appendChild(expenseMembers)
+        listItem.appendChild(expenseFooter)
+
+        listExpenses.appendChild(listItem);
     })
 }
 

@@ -566,6 +566,15 @@ margin-bottom: 5px;
 	padding-top: 3rem;
 }
 
+.balances-members-header {
+	display: flex;
+	justify-content: space-between;
+	padding: 1rem;
+	color: hsl(0deg 0% 99.61%);
+	background-color: hsl(201.4deg 100% 28.04%);
+	border-radius: 50px;
+}
+
 .balances-card-member {
 	display: flex;
 	align-items: center;
