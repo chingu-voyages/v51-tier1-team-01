@@ -434,12 +434,12 @@ function renderExistingFriendsForGroupCreation() {
 
 function createExpense(name, cost, payer, groupIndex) {
     console.log("Expense created")
-    const date = new Date();
-    const expenseMembers = [];
-    expenseMembers.push(payer);
+    const date = Date.now();
+    const members = [];
+    members.push(payer);
     cost = Number(cost);
     const paid = [];
-    return { name, cost, payer, expenseMembers, date, paid }
+    return { name, cost, payer, members, date, paid }
 }
 
 function renderSelectPayerOptions() {
@@ -490,22 +490,43 @@ formAddExpense.addEventListener("submit", (e) => {
 
 const addMembersToExpenseDialog = document.getElementById("add-members-to-expense");
 
+listExpenses.addEventListener("click", handleExpenseClick)
+let selectedExpenseIndex;
+
+function handleExpenseClick(e) {
+    e.stopPropagation();
+    let selectedExpenseId = Number(e.target.closest(".expense-item").id);
+    groupsArr.forEach(group => {
+        group.expenses.forEach(expense => {
+            if (expense.date === selectedExpenseId) {
+                selectedExpenseIndex = group.expenses.indexOf(expense);
+            }
+        })
+    })
+    console.log(selectedExpenseIndex)
+    addMembersToExpense(groupsArr[selectedGroupIndex]);
+}
+
 function renderExpenses(group) {
     listExpenses.textContent = "";
     group.expenses.forEach(expense => {
         const listItem = document.createElement("li");
+        listItem.setAttribute("id", expense.date.toString());
+        listItem.classList.add("expense-item");
         const expenseHeader = document.createElement("h3");
         expenseHeader.classList.add("balances-members-header");
         const expenseName = document.createElement("span");
         const expenseDate = document.createElement("span");
         expenseName.textContent = expense.name;
-        expenseDate.textContent = expense.date.toLocaleString();
+        expenseDate.textContent = expense.date.toString();
         expenseHeader.appendChild(expenseName);
         expenseHeader.appendChild(expenseDate);
 
         const expenseMembers = document.createElement("div");
         expenseMembers.classList.add("balances-members-container");
-        expense.expenseMembers.forEach(member => {
+        console.log("What are expense members now...")
+        console.log(expense.members)
+        expense.members.forEach(member => {
             const memberDiv = document.createElement("div");
             memberDiv.classList.add("balances-card-member");
             const memberName = document.createElement("p");
@@ -525,9 +546,9 @@ function renderExpenses(group) {
         const btnAddMember = document.createElement("button");
         btnAddMember.classList.add("add-btn");
         btnAddMember.textContent = "Add member";
-        btnAddMember.addEventListener("click", () => {
-            addMembersToExpense(group)
-        })
+        // btnAddMember.addEventListener("click", () => {
+        //     addMembersToExpense(group)
+        // })
 
         const btnEditExpense = document.createElement("button");
         btnEditExpense.textContent = "Edit expense";
@@ -550,9 +571,13 @@ let checkboxes = [...document.querySelectorAll(".add-member-to-expense")];
 
 function addMembersToExpense(group) {
     otherMembersContainer.textContent = "";
-    group.expenses.forEach(expense => {
+    console.log("Selected Expense members: ...")
+    console.log(group.expenses)
+    console.log(selectedExpenseIndex)
+    console.log(group.expenses[selectedExpenseIndex])
         group.membersArr.forEach(member => {
-            if (!expense.expenseMembers.includes(member)) {
+            
+            if (!group.expenses[selectedExpenseIndex].members.includes(member)) {
                 const listItem = document.createElement("li");
                 const checkbox = document.createElement("input");
                 checkbox.setAttribute("type", "checkbox");
@@ -567,11 +592,8 @@ function addMembersToExpense(group) {
                 otherMembersContainer.appendChild(listItem)
             }
         })
-    })
     checkboxes = [...document.querySelectorAll(".add-member-to-expense")]
     addMembersToExpenseDialog.showModal();
-
-
 }
 
 
@@ -583,14 +605,15 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     groupsArr[selectedGroupIndex].membersArr.forEach(member => {
         checkboxes.forEach(checkbox => {
             if (checkbox.checked && checkbox.id.toLowerCase() === member.name.toLowerCase()) {
-                    console.log(member.name)
-                    console.log(groupsArr[selectedGroupIndex].expenses)
+                // console.log(groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex])
+        groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex].members.push(member)
             }
 
         })
     })
 
     addMembersToExpenseDialog.close();
+    renderExpenses(groupsArr[selectedGroupIndex]);
 });
 
 // console.log(selectedGroupIndex);
