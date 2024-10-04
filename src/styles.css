@@ -676,7 +676,7 @@ footer {
 
 /* expenses temporary */
 
-.expense-item {
+/* .expense-item {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     padding: 1rem;
@@ -684,4 +684,4 @@ footer {
     border-bottom: 1px dotted lightblue;
     text-align: center;
     justify-items: start;
-}
+} */
