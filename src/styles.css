@@ -176,6 +176,7 @@ h2 {
 
 .logo {
 	padding: 1rem;
+	text-align: center;
 	animation-name: logo;
 	animation-duration: 2s;
 	position: relative;
@@ -198,8 +199,19 @@ h2 {
 	100% {left: 0px;}
 }
 
+@media (max-width: 992px) {
+
+	.logo{
+		max-width: 50%;
+		margin: 0 auto;
+		padding: 0;
+	}
+
+}
+
 .section-aside-groups {
 	padding: 1rem 1rem 2rem 1rem;
+	border-bottom: 1px solid #d3d3d3;
 }
 
 .section-aside-friends {
@@ -208,10 +220,6 @@ h2 {
 
 .section-aside {
     background-color: #fff;
-}
-
-.section-aside-groups {
-	border-bottom: 1px solid #d3d3d3;
 }
 
 .section-main {
@@ -250,6 +258,23 @@ ul {
 	order:-1;
  }
 
+ #group-list, #friends-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+	justify-content: space-between;
+	gap: .5rem;
+	padding: 1rem 0 1rem 0;
+}
+
+ /* @media (max-width: 992px) {
+
+	#group-list li, #friends-list li {
+		justify-self: center;
+		padding: 5px;
+	}
+
+} */
+
 
  /* links, btns, badges */
 
@@ -261,7 +286,7 @@ ul {
  }
 
  .group-link:hover, .add-btn:hover, .add-btn span:hover, .group-link:focus, .add-btn:focus, .add-btn span:focus {
-	color:#006091;
+	opacity: .7;
 	transform: scale(1.08);
 	cursor: pointer;
 	outline: none;
@@ -271,6 +296,8 @@ ul {
 	border: none;
 	background-color: transparent;
 	font-size: 1rem;
+	font-weight: bold;
+	color: #006091;
 }
 
 .add-btn span {
@@ -622,10 +649,10 @@ footer {
 }
 
 
-@media screen and (min-width: 48rem) {
+@media screen and (min-width: 62rem) {
     body {
         grid-template-rows: auto 1fr auto;
-        grid-template-columns: 20% auto;
+        grid-template-columns: minmax(20%,22%) auto;
     }
 
     header {

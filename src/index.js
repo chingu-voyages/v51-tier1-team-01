@@ -287,6 +287,10 @@ function renderFriends() {
     friendsList.innerHTML = "";
     friendsListStored.forEach(friend=>{
         const friendElement = createListItem(friend.name);
+		const friendImg = document.createElement("img")
+		friendImg.setAttribute("src", friend.imgSrc)
+		friendImg.classList.add("group-icon")
+		friendElement.appendChild(friendImg)
         friendsList.appendChild(friendElement);
         // return
     })
