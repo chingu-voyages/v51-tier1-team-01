@@ -169,8 +169,15 @@ h2 {
 	padding: 2rem;
 }
 
+@media (max-width: 992px) {
+	.section-aside, .section-main {
+		padding: 1rem;
+	}
+}
+
 .logo {
 	padding: 1rem;
+	text-align: center;
 	animation-name: logo;
 	animation-duration: 2s;
 	position: relative;
@@ -193,6 +200,16 @@ h2 {
 	100% {left: 0px;}
 }
 
+@media (max-width: 992px) {
+
+	.logo{
+		max-width: 50%;
+		margin: 0 auto;
+		padding: 0;
+	}
+
+}
+
 .section-aside-groups {
 	padding: 1rem 1rem 2rem 1rem;
 }
@@ -213,22 +230,10 @@ h2 {
     background-color: #f4f4f4;
 }
 
-
-@media (min-width: 992px) {
-	.section-main-group, #new-group {
-		max-width: 80%;
-	}
-}
-
-@media (min-width: 1200px) {
-	.section-main-group, #new-group {
-		max-width: 70%;
-	}
-}
-
 @media (min-width: 2000px) {
-	.section-main-group, #new-group {
-		max-width: 60%;
+
+	.section-main-group {
+		max-width: 90%;
 	}
 }
 
@@ -238,7 +243,7 @@ h2 {
 ul {
 	list-style: none;
 }
-
+    
 #group-list,
 #friends-list {
 	margin-bottom: 10px;
@@ -410,18 +415,14 @@ ul {
 
 /* main section, group info*/
 
-.section-main-group {
-
-}
-
 .section-main-group-header {
 	display: flex;
 	align-items: center;
 	gap: 50px;
 	background-color: #fff;
 	border: 1px solid #d3d3d3;
-	border-top-left-radius: 20% 100%;
-	border-bottom-left-radius:20% 100%;
+	border-top-left-radius: 15% 100%;
+	border-bottom-left-radius: 15% 100%;
 	padding: 2rem;
 }
 
@@ -513,7 +514,7 @@ ul {
 	background-color: #00A1C6;
 }
 
-.section-main-group-info-nav>li:hover::before,
+.section-main-group-info-nav>li:hover::before, 
 .section-main-group-info-nav .active::before {
 	background-color: #00A1C6;
 }
@@ -561,7 +562,8 @@ margin-bottom: 5px;
 
 .balances-members-container {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: repeat( auto-fit, minmax(320px, 1fr) );
+	justify-content: space-between;
 	gap: 1rem;
 	padding-top: 3rem;
 }
@@ -577,11 +579,12 @@ margin-bottom: 5px;
 
 .balances-card-member {
 	display: flex;
+	max-width: 500px;
 	align-items: center;
 	background-color: #fff;
 	border: 1px solid #d3d3d3;
-	border-top-right-radius: 20% 100%;
-	border-bottom-right-radius:20% 100%;
+	border-top-right-radius:20% 100%;
+	border-bottom-right-radius: 20% 100%;
 	padding: 1rem 1rem 1rem 1.5rem;
 }
 
@@ -643,10 +646,10 @@ footer {
 }
 
 
-@media screen and (min-width: 48rem) {
+@media screen and (min-width: 62rem) {
     body {
         grid-template-rows: auto 1fr auto;
-        grid-template-columns: 20% auto;
+        grid-template-columns: minmax(20%,22%) auto;
     }
 
     header {
@@ -670,7 +673,7 @@ footer {
 
 /* expenses temporary */
 
-.expense-item {
+/* .expense-item {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     padding: 1rem;
@@ -678,4 +681,4 @@ footer {
     border-bottom: 1px dotted lightblue;
     text-align: center;
     justify-items: start;
-}
+} */
