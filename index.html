@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Splitter App Tier 1</title>
     <link rel="stylesheet" href="src/styles.css">
-	
+
 </head>
 
 <body>
@@ -18,7 +18,7 @@
             </h1>
         </header>
         <section class="section-aside-groups">
-            <h2>Your Groups</h2>
+            <h2>Groups</h2>
             <ul id="group-list">
                 <li><img src="src/img/group-icon.png" alt="group icon" class="group-icon"><a class="group-link"
                         href="#">Family</a></li>
@@ -27,13 +27,13 @@
                 <li><img src="src/img/group-icon.png" alt="group icon" class="group-icon"><a class="group-link"
                         href="#">Team</a></li>
             </ul>
-            <button class="add-btn" id="sidebar-add-group"><span>+</span>Add new group</button>
+            <button class="add-btn" id="sidebar-add-group"><span>+</span>Add group</button>
         </section>
         <section class="section-aside-friends">
-            <h2>Your Friends</h2>
+            <h2>Friends</h2>
             <ul id="friends-list">
             </ul>
-            <button id="add-btn" class="add-btn"><span>+</span>Add new friend</button>
+            <button id="add-btn" class="add-btn"><span>+</span>Add friend</button>
             <form id="form-add-friend" action="" class="form-add">
                 <div class="form-control">
                     <label for="friend-first-name">First name: </label>
@@ -50,10 +50,11 @@
     <section class="section-main">
         <section id="new-group">
             <form id="group-form">
-				<div class="new-group-header">
-					<h2>Create New Group</h2>
-					<button type="button" id="close-group-form" title="Close form" aria-label="Close group creation form">x</button>
-				</div>
+                <div class="new-group-header">
+                    <h2>Create New Group</h2>
+                    <button type="button" id="close-group-form" title="Close form"
+                        aria-label="Close group creation form">x</button>
+                </div>
                 <div id="from-user">
                     <input id="group-name" type="text" placeholder="Group Name">
                     <div id="member-inputs">
@@ -69,7 +70,7 @@
             </form>
         </section>
         <section class="section-main-group" id="selected-group">
-			<!-- <div class="section-main-group-header">
+            <!-- <div class="section-main-group-header">
 				<div>
 					<h2 class="section-main-group-title">Bali Trip 🖋️</h2>
 					<p class="text-small">Jane Doe, John Doe, Jessy Doe, Jafar Doe</p>
@@ -78,7 +79,7 @@
 				<img src="src/img/group-icon.png" alt="Group icon">
 			</div> -->
 
-			<!-- <div class="section-main-group-info" >
+            <!-- <div class="section-main-group-info" >
 				<div class="section-main-group-info-nav-container">
 					<ul class="section-main-group-info-nav">
 					<li class="text-small" id="group-members">Members</li>
@@ -116,6 +117,14 @@
             <h2>Expenses</h2>
             <ul id="list-expenses"></ul>
         </section>
+        <dialog id="add-members-to-expense">
+            <form>
+                <p>Other group members:</p>
+                <ul id="other-members-container">
+                </ul>
+                <button id="close-add-members-to-expense">Close</button>
+            </form>
+        </dialog>
 
 
 
