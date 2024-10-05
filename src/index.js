@@ -88,37 +88,37 @@ function getGroupBalances(selectedGroup) {
                         // console.log(member);
                         // console.log(member === selectedGroup.expenses[0].payer.name)
                         if(member.name === selectedGroup.expenses[0].payer.name){
-                        return `
-                            <div class = "balances-card-member">
-                                <div>
+                            return `
+                                <div class = "balances-card-member">
                                     <div>
-                                        <p class="balances-card-member-name editable" id=${member.id}>
-                                        ${member.name}
-                                        </p>
-                                        <span class="pen">🖋️</span>
+                                        <div>
+                                            <p class="balances-card-member-name editable" id=${member.id}>
+                                            ${member.name}
+                                            </p>
+                                            <span class="pen">🖋️</span>
+                                        </div>
+                                        <p class="badge badge-paid">You are owed $3,456</p>
                                     </div>
-                                    <p class="badge badge-paid">You are owed $3,456</p>
+                                    <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
                                 </div>
-                                <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
-                            </div>
                         `}
-        else{
-            return `
-                <div class = "balances-card-member">
-                    <div>
-                        <div>
-                            <p class="balances-card-member-name editable" id=${member.id}>
-                            ${member.name}
-                            </p>
-                            <span class="pen">🖋️</span>
-                        </div>
-                        <p class="badge badge-paid">You owe $3,456</p>
-                    </div>
-                    <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
-                </div>
-            `
-            }
-        }).join("")
+                        else{
+                            return `
+                                <div class = "balances-card-member">
+                                    <div>
+                                        <div>
+                                            <p class="balances-card-member-name editable" id=${member.id}>
+                                            ${member.name}
+                                            </p>
+                                            <span class="pen">🖋️</span>
+                                        </div>
+                                        <p class="badge badge-paid">You owe $3,456</p>
+                                    </div>
+                                    <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+                                </div>
+                            `
+                            }
+                        }).join("")
 			}
 		</div>
 		<div class="balances-members-footer">
@@ -127,7 +127,7 @@ function getGroupBalances(selectedGroup) {
 		</div>
 	</div>`
     }else{
-       return `No expenses added yet`
+       return `No expenses added yet`;
     }
 }
 
