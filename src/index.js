@@ -44,7 +44,9 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 //rendered group events: listen and render selected group on main section
 groupList.addEventListener("click", handleGroupClick)
 
+
 document.querySelector("body")?.addEventListener("click", (event)=> {
+	
 	if(event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members")){
 	const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 

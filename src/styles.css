@@ -133,7 +133,7 @@ input[type="radio"]:focus-visible+label {
     border: 0;
 }
 
- {
+.hidden{
     display: none;
 }
 
@@ -454,6 +454,18 @@ ul {
 	max-width: 100%;
 	}
 
+	#from-user, .new-group-header {
+	max-width: 100%;
+	}
+	
+	#form-add-expense select {
+	padding: .65rem;
+	}
+	
+	#form-add-expense select option {
+	width: 50%;	
+	}
+
 }
 
 /* main section, group info*/
@@ -677,7 +689,7 @@ footer {
 }
 
 
-@media screen and (min-width: 62rem) {
+@media (min-width: 993px) {
     body {
         grid-template-rows: auto 1fr auto;
         grid-template-columns: minmax(20%,22%) auto;
@@ -707,6 +719,7 @@ footer {
 	.form-add-visible {
 		display: flex;
 		max-width: 50%;
+		gap: .5rem;
 	}
 
 	#friend-first-name{
