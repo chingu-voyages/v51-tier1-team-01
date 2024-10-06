@@ -802,8 +802,20 @@ document.getElementById('friends-list').addEventListener('click', function(event
         console.log(`Deleting friend: ${friendName}`);
         console.log(`This is friend id: ${listItem.id}`);
         const friendIndex = friendsListStored.findIndex(friend=>friend.id!==listItem.id);
-        friendsListStored.splice(friendIndex,1);
-        localStorage.setItem('friends',JSON.stringify(friendsListStored));
+        if (friendIndex!==-1){
+
+            friendsListStored.splice(friendIndex,1);
+            localStorage.setItem('friends',JSON.stringify(friendsListStored));
+        }
+        groupsArr.forEach(group=>{
+            const memberIndex = group.membersArr.findIndex(member=>member.id==listItem.id);
+            console.log(`deleted the member at ${memberIndex}`);
+            if (memberIndex!==-1){
+                group.membersArr.splice(memberIndex,1)
+            }
+        })
+        localStorage.setItem('groups',JSON.stringify(groupsArr));
+        renderGroups();
         renderFriends();
         // listItem.remove();
 
