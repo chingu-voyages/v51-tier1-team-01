@@ -127,11 +127,7 @@ function getGroupBalances(selectedGroup) {
     }
 }
 
-
-
 function getGroupMembers(selectedGroup) {
-   function getGroupMembers(selectedGroup) {
-	// console.log(groupsArr[0].selectedGroupId)
 	return `<div class="section-main-group-info-balances">
 		<div class="balances-members-container">
 			${
@@ -148,6 +144,13 @@ function getGroupMembers(selectedGroup) {
 						</div>
 					`
 				}).join("")
+			}
+		</div>
+		<div class="balances-members-footer">
+			<button class="add-btn"><span>+</span>Add member</button>
+			<p>Subtotal: $1948</p>
+		</div>
+	</div>`
 }
 
 function handleGroupClick(e) {
