@@ -9,8 +9,6 @@ const closeGroupForm = document.getElementById("close-group-form");
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
-const groupInfoNav = document.getElementById("group-info-nav");
-const selectedGroupInfoContainer = document.getElementById("group-info-container");
 const groupsArr = JSON.parse(localStorage.getItem('groups'))||[];
 const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
 let groupList = document.getElementById('group-list');
@@ -77,8 +75,6 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 })
 
 function getGroupBalances(selectedGroup) {
-
-	// all group members are rendered for now; badge and image shadow classes are already in css: badge-unpaid, badge-paid, badge-payer.
     if (selectedGroup.expenses.length){
     // console.log(selectedGroup.expenses[0].payer.name);
         return `<div class="section-main-group-info-balances">
@@ -132,11 +128,27 @@ function getGroupBalances(selectedGroup) {
 }
 
 
-function getGroupMembers(selectedGroup) {
-    // console.log(groupsArr[0].selectedGroupId)
-    return `<div class="section-main-group-info-members">Members:${selectedGroup.membersArr.map(member => member.name).join(", ")}</div>`
-}
 
+function getGroupMembers(selectedGroup) {
+   function getGroupMembers(selectedGroup) {
+	// console.log(groupsArr[0].selectedGroupId)
+	return `<div class="section-main-group-info-balances">
+		<div class="balances-members-container">
+			${
+				selectedGroup.membersArr.map(member => {
+					return `
+						<div class = "balances-card-member">
+							<div>
+								<p class="balances-card-member-name">
+								${member.name}🖋️
+								</p>
+								<p class="badge badge-paid">You are owed $3,456</p>
+							</div>
+							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+						</div>
+					`
+				}).join("")
+}
 
 function handleGroupClick(e) {
     // console.log(e.target.id)
@@ -421,7 +433,7 @@ const formAddFriend = document.getElementById("form-add-friend");
 const inputFriendName = document.getElementById('friend-first-name');
 
 showAddFriendForm.addEventListener("click", () => { // the add friend button just shows the form
-    formAddFriend.classList.add("form-add-visible");
+    formAddFriend.classList.toggle("form-add-visible");
 });
 
 formAddFriend.addEventListener("submit", (e) => { // function to create friend from input and add friend to overall friend array
@@ -440,6 +452,7 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     localStorage.setItem('friends', JSON.stringify(friendsListStored))
     inputFriendName.value = '';
     renderFriends();
+	formAddFriend.classList.remove("form-add-visible");
 });
 
 // add existing friends to group
