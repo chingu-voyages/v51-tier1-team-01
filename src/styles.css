@@ -159,6 +159,7 @@ h2 {
 .text-small {
 	color: #8d8d8d;
 	font-size: 0.85rem;
+
 }
 
 
@@ -188,7 +189,7 @@ h2 {
 }
 
 .logo a:hover, .logo a:focus {
-	outline: none;	
+	outline: none;
 	transform: rotateX(1080deg);
 	transition: transform 1.5s ease-in-out;
 }
@@ -211,7 +212,6 @@ h2 {
 
 .section-aside-groups {
 	padding: 1rem 1rem 2rem 1rem;
-	border-bottom: 1px solid #d3d3d3;
 }
 
 .section-aside-friends {
@@ -220,6 +220,10 @@ h2 {
 
 .section-aside {
     background-color: #fff;
+}
+
+.section-aside-groups {
+	border-bottom: 1px solid #d3d3d3;
 }
 
 .section-main {
@@ -258,23 +262,6 @@ ul {
 	order:-1;
  }
 
- #group-list, #friends-list {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-	justify-content: space-between;
-	gap: .5rem;
-	padding: 1rem 0 1rem 0;
-}
-
- /* @media (max-width: 992px) {
-
-	#group-list li, #friends-list li {
-		justify-self: center;
-		padding: 5px;
-	}
-
-} */
-
 
  /* links, btns, badges */
 
@@ -286,7 +273,7 @@ ul {
  }
 
  .group-link:hover, .add-btn:hover, .add-btn span:hover, .group-link:focus, .add-btn:focus, .add-btn span:focus {
-	opacity: .7;
+	color:#006091;
 	transform: scale(1.08);
 	cursor: pointer;
 	outline: none;
@@ -296,8 +283,6 @@ ul {
 	border: none;
 	background-color: transparent;
 	font-size: 1rem;
-	font-weight: bold;
-	color: #006091;
 }
 
 .add-btn span {
@@ -631,6 +616,18 @@ margin-bottom: 5px;
 	padding: 1rem 0 1rem 0;
 }
 
+/* editing name */
+.section-main-group-header div div{
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+}
+.balances-card-member div div{
+    display: flex;
+}
+.pen {
+    cursor: pointer;
+    margin-left: 8px;}
  /* footer */
 
 footer {
