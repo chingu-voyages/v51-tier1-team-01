@@ -133,7 +133,7 @@ input[type="radio"]:focus-visible+label {
     border: 0;
 }
 
-.hidden {
+.hidden{
     display: none;
 }
 
@@ -142,6 +142,8 @@ input[type="radio"]:focus-visible+label {
 
 body {
     display: grid;
+	max-width: 1200px;
+	margin: 0 auto;
 	font-family: "AcuminPro", sans-serif;
 	font-size: 16px;
 	font-weight: normal;
@@ -251,7 +253,7 @@ ul {
 
 #group-list li,
 #friends-list li {
-	padding: 5px 0;
+	padding: .5rem 0;
 	display: flex;
 	align-items: center;
 	gap: 7px;
@@ -262,6 +264,20 @@ ul {
 	order:-1;
  }
 
+ #group-list, #friends-list {
+	padding: 1rem 0 1rem 0;
+}
+
+ @media (max-width: 992px) {
+
+	#group-list, #friends-list{
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		justify-content: space-between;
+		gap: .5rem;
+	}
+
+}
 
  /* links, btns, badges */
 
@@ -312,24 +328,18 @@ ul {
 }
 
 
-/* form */
+/* forms */
 
 #group-form{
     display: none;
 	margin-bottom: 2rem;
 }
 
-/* @media (min-width:992px) {
-	#new-group {
-		max-width:50%;
-	}
-} */
-
 .new-group-header {
+	max-width: 50%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 10px;
 }
 
 .new-group-header h2 {
@@ -350,14 +360,15 @@ ul {
 	outline: none;
 }
 
-#from-user{
-    /* width: 30rem; */
+#from-user, #form-add-expense{
+	max-width: 50%;
     display: flex;
     flex-direction:column ;
     justify-content: center;
     gap:1rem;
+	margin: 1rem 0 1rem 0;
 }
-#from-user input{
+#from-user input, .form-add input, #form-add-expense input, #form-add-expense select{
     padding: 0.5rem;
 	line-height: 1.7;
     border: 1px solid #006091;
@@ -365,7 +376,15 @@ ul {
 	letter-spacing: .5px;
 }
 
-#from-user input:focus {
+#form-add-expense select {
+	padding: .65rem;
+}
+
+#form-add-expense.hidden {
+	display: none;
+}
+
+#from-user input:focus, .form-add input:focus, #form-add-expense input:focus, #form-add-expense select:focus {
 	outline: none;
 	outline-offset: unset;
 	border:none;
@@ -384,7 +403,7 @@ ul {
 	gap: 1rem;
 }
 
-#from-user button{
+#from-user button, .form-add button, #form-add-expense button{
     background-color:#5783db;
     color:white;
     /* border:2px solid #006091; */
@@ -398,7 +417,8 @@ ul {
 	transition: all 200ms ease-in-out;
 }
 
-#from-user button:hover, #from-user button:focus {
+#from-user button:hover, #from-user button:focus,
+.form-add button:hover, .form-add button:focus, #form-add-expense button:hover, #form-add-expense button:focus {
 	cursor: pointer;
 	color:#5783db;
 	background-color: #ffffff;
@@ -411,6 +431,42 @@ ul {
     color: red;
     font-weight:bolder ;
     font-size : 1.2rem
+}
+
+@media (max-width:992px) {
+
+	.section-aside {
+		position: relative;
+	}
+
+	#group-form{
+		position: absolute;
+		top:50%;
+		right:50%;
+		transform: translate(50%, -50%);
+		width:80%;
+		background-color: #fff;
+		padding: 1rem;
+		margin: 0 auto;
+		border: 1px solid #006091;
+	}
+
+	#from-user, .new-group-header {
+	max-width: 100%;
+	}
+
+	#from-user, .new-group-header {
+	max-width: 100%;
+	}
+	
+	#form-add-expense select {
+	padding: .65rem;
+	}
+	
+	#form-add-expense select option {
+	width: 50%;	
+	}
+
 }
 
 /* main section, group info*/
@@ -646,7 +702,7 @@ footer {
 }
 
 
-@media screen and (min-width: 62rem) {
+@media (min-width: 993px) {
     body {
         grid-template-rows: auto 1fr auto;
         grid-template-columns: minmax(20%,22%) auto;
@@ -662,13 +718,31 @@ footer {
 
 .form-add {
     display: none;
-    place-items: center;
-    padding: 1rem;
-    gap: 1rem;
+    /* place-items: center; */
+    /* padding: 1rem;
+    gap: 1rem; */
 }
 
 .form-add-visible {
     display: grid;
+}
+
+@media screen and (max-width: 992px) {
+	
+	.form-add-visible {
+		display: flex;
+		max-width: 50%;
+		gap: .5rem;
+	}
+
+	#friend-first-name{
+		margin: 0;
+	}
+	
+}
+
+.form-add input {
+	margin: .5rem 0 .5rem 0;
 }
 
 /* expenses temporary */

@@ -9,8 +9,6 @@ const closeGroupForm = document.getElementById("close-group-form");
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
-const groupInfoNav = document.getElementById("group-info-nav");
-const selectedGroupInfoContainer = document.getElementById("group-info-container");
 const groupsArr = JSON.parse(localStorage.getItem('groups'))||[];
 const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
 let groupList = document.getElementById('group-list');
@@ -77,8 +75,6 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 })
 
 function getGroupBalances(selectedGroup) {
-
-	// all group members are rendered for now; badge and image shadow classes are already in css: badge-unpaid, badge-paid, badge-payer.
     if (selectedGroup.expenses.length){
     // console.log(selectedGroup.expenses[0].payer.name);
         return `<div class="section-main-group-info-balances">
@@ -132,11 +128,27 @@ function getGroupBalances(selectedGroup) {
 }
 
 
-function getGroupMembers(selectedGroup) {
-    // console.log(groupsArr[0].selectedGroupId)
-    return `<div class="section-main-group-info-members">Members:${selectedGroup.membersArr.map(member => member.name).join(", ")}</div>`
-}
 
+function getGroupMembers(selectedGroup) {
+   function getGroupMembers(selectedGroup) {
+	// console.log(groupsArr[0].selectedGroupId)
+	return `<div class="section-main-group-info-balances">
+		<div class="balances-members-container">
+			${
+				selectedGroup.membersArr.map(member => {
+					return `
+						<div class = "balances-card-member">
+							<div>
+								<p class="balances-card-member-name">
+								${member.name}🖋️
+								</p>
+								<p class="badge badge-paid">You are owed $3,456</p>
+							</div>
+							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+						</div>
+					`
+				}).join("")
+}
 
 function handleGroupClick(e) {
     // console.log(e.target.id)
@@ -318,10 +330,10 @@ function renderFriends() {
     friendsList.innerHTML = "";
     friendsListStored.forEach(friend => {
         const friendElement = createListItem(friend.name);
-		const friendImg = document.createElement("img")
-		friendImg.setAttribute("src", friend.imgSrc)
-		friendImg.classList.add("group-icon")
-		friendElement.appendChild(friendImg)
+        const friendImg = document.createElement("img")
+        friendImg.setAttribute("src", friend.imgSrc)
+        friendImg.classList.add("group-icon")
+        friendElement.appendChild(friendImg)
         friendsList.appendChild(friendElement);
         // return
     })
@@ -421,7 +433,7 @@ const formAddFriend = document.getElementById("form-add-friend");
 const inputFriendName = document.getElementById('friend-first-name');
 
 showAddFriendForm.addEventListener("click", () => { // the add friend button just shows the form
-    formAddFriend.classList.add("form-add-visible");
+    formAddFriend.classList.toggle("form-add-visible");
 });
 
 formAddFriend.addEventListener("submit", (e) => { // function to create friend from input and add friend to overall friend array
@@ -440,6 +452,7 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     localStorage.setItem('friends', JSON.stringify(friendsListStored))
     inputFriendName.value = '';
     renderFriends();
+	formAddFriend.classList.remove("form-add-visible");
 });
 
 // add existing friends to group
@@ -533,7 +546,7 @@ listExpenses.addEventListener("click", handleExpenseClick)
 let selectedExpenseIndex;
 
 function handleExpenseClick(e) {
-    e.stopPropagation();
+    // e.stopPropagation();
     let selectedExpenseId = Number(e.target.closest(".expense-item").id);
     groupsArr.forEach(group => {
         group.expenses.forEach(expense => {
@@ -542,8 +555,7 @@ function handleExpenseClick(e) {
             }
         })
     })
-    console.log(selectedExpenseIndex)
-    addMembersToExpense(groupsArr[selectedGroupIndex]);
+    console.log(selectedExpenseIndex);
 }
 
 function renderExpenses(group) {
@@ -585,23 +597,22 @@ function renderExpenses(group) {
         const btnAddMember = document.createElement("button");
         btnAddMember.classList.add("add-btn");
         btnAddMember.textContent = "Add member";
-        btnAddMember.addEventListener("click", () => {
-            group.membersArr.forEach(member => {
-                console.log("Expense members:")
-                console.log(expenseMembers)
-                if (!(expense.expenseMembers.includes(member))) {
-                    console.log(member)
-                    expense.expenseMembers.push(member); // temp, pushes all group members to expense members
-                }
-            })
-        });
+        btnAddMember.addEventListener("click", (e) => {
+            handleExpenseClick(e);
+            addMembersToExpense(groupsArr[selectedGroupIndex]);
+        })
+
         const btnEditExpense = document.createElement("button");
         btnEditExpense.textContent = "Edit expense";
-        const spanTotal = document.createElement("span");
-        spanTotal.textContent = `Subtotal $${expense.cost}`;
+        btnEditExpense.addEventListener("click", (e) => {
+            handleExpenseClick(e);
+            editExpense(group.expenses[selectedExpenseIndex])
+        })
+        const spanSubTotal = document.createElement("span");
+        spanSubTotal.textContent = `Subtotal $${expense.cost}`;
         expenseFooter.appendChild(btnAddMember);
         expenseFooter.appendChild(btnEditExpense);
-        expenseFooter.appendChild(spanTotal);
+        expenseFooter.appendChild(spanSubTotal);
 
         listItem.appendChild(expenseHeader);
         listItem.appendChild(expenseMembers)
@@ -611,32 +622,34 @@ function renderExpenses(group) {
     })
 }
 
+function editExpense(expense) {
+    console.log("editing expense")
+    console.log(expense.name)
+    console.log(expense.cost)
+}
+
 const otherMembersContainer = document.getElementById("other-members-container")
 let checkboxes = [...document.querySelectorAll(".add-member-to-expense")];
 
 function addMembersToExpense(group) {
     otherMembersContainer.textContent = "";
-    console.log("Selected Expense members: ...")
-    console.log(group.expenses)
-    console.log(selectedExpenseIndex)
-    console.log(group.expenses[selectedExpenseIndex])
-        group.membersArr.forEach(member => {
+    group.membersArr.forEach(member => {
 
-            if (!group.expenses[selectedExpenseIndex].members.includes(member)) {
-                const listItem = document.createElement("li");
-                const checkbox = document.createElement("input");
-                checkbox.setAttribute("type", "checkbox");
-                checkbox.setAttribute("id", member.name);
-                checkbox.classList.add("add-member-to-expense")
-                const label = document.createElement("label");
-                label.setAttribute("for", member.name);
-                label.textContent = member.name;
-                listItem.classList.add("form-control-checkbox");
-                listItem.appendChild(checkbox);
-                listItem.appendChild(label);
-                otherMembersContainer.appendChild(listItem)
-            }
-        })
+        if (!group.expenses[selectedExpenseIndex].members.includes(member)) {
+            const listItem = document.createElement("li");
+            const checkbox = document.createElement("input");
+            checkbox.setAttribute("type", "checkbox");
+            checkbox.setAttribute("id", member.name);
+            checkbox.classList.add("add-member-to-expense")
+            const label = document.createElement("label");
+            label.setAttribute("for", member.name);
+            label.textContent = member.name;
+            listItem.classList.add("form-control-checkbox");
+            listItem.appendChild(checkbox);
+            listItem.appendChild(label);
+            otherMembersContainer.appendChild(listItem)
+        }
+    })
     checkboxes = [...document.querySelectorAll(".add-member-to-expense")]
     addMembersToExpenseDialog.showModal();
 }
@@ -651,7 +664,7 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
         checkboxes.forEach(checkbox => {
             if (checkbox.checked && checkbox.id.toLowerCase() === member.name.toLowerCase()) {
                 // console.log(groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex])
-        groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex].members.push(member)
+                groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex].members.push(member)
             }
 
         })
