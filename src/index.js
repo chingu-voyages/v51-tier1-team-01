@@ -543,7 +543,7 @@ listExpenses.addEventListener("click", handleExpenseClick)
 let selectedExpenseIndex;
 
 function handleExpenseClick(e) {
-    e.stopPropagation();
+    // e.stopPropagation();
     let selectedExpenseId = Number(e.target.closest(".expense-item").id);
     groupsArr.forEach(group => {
         group.expenses.forEach(expense => {
@@ -553,7 +553,7 @@ function handleExpenseClick(e) {
         })
     })
     console.log(selectedExpenseIndex)
-    addMembersToExpense(groupsArr[selectedGroupIndex]);
+    // addMembersToExpense(groupsArr[selectedGroupIndex]);
 }
 
 function renderExpenses(group) {
@@ -595,23 +595,22 @@ function renderExpenses(group) {
         const btnAddMember = document.createElement("button");
         btnAddMember.classList.add("add-btn");
         btnAddMember.textContent = "Add member";
-        btnAddMember.addEventListener("click", () => {
-            group.membersArr.forEach(member => {
-                console.log("Expense members:")
-                console.log(expenseMembers)
-                if (!(expense.expenseMembers.includes(member))) {
-                    console.log(member)
-                    expense.expenseMembers.push(member); // temp, pushes all group members to expense members
-                }
-            })
-        });
+        btnAddMember.addEventListener("click", (e) => {
+            handleExpenseClick(e);
+            addMembersToExpense(groupsArr[selectedGroupIndex]);
+        })
+
         const btnEditExpense = document.createElement("button");
         btnEditExpense.textContent = "Edit expense";
-        const spanTotal = document.createElement("span");
-        spanTotal.textContent = `Subtotal $${expense.cost}`;
+        btnEditExpense.addEventListener("click", (e) => {
+            handleExpenseClick(e);
+            editExpense(group.expenses[selectedExpenseIndex])
+        })
+        const spanSubTotal = document.createElement("span");
+        spanSubTotal.textContent = `Subtotal $${expense.cost}`;
         expenseFooter.appendChild(btnAddMember);
         expenseFooter.appendChild(btnEditExpense);
-        expenseFooter.appendChild(spanTotal);
+        expenseFooter.appendChild(spanSubTotal);
 
         listItem.appendChild(expenseHeader);
         listItem.appendChild(expenseMembers)
@@ -621,32 +620,34 @@ function renderExpenses(group) {
     })
 }
 
+function editExpense(expense) {
+    console.log("editing expense")
+    console.log(expense.name)
+    console.log(expense.cost)
+}
+
 const otherMembersContainer = document.getElementById("other-members-container")
 let checkboxes = [...document.querySelectorAll(".add-member-to-expense")];
 
 function addMembersToExpense(group) {
     otherMembersContainer.textContent = "";
-    console.log("Selected Expense members: ...")
-    console.log(group.expenses)
-    console.log(selectedExpenseIndex)
-    console.log(group.expenses[selectedExpenseIndex])
-        group.membersArr.forEach(member => {
+    group.membersArr.forEach(member => {
 
-            if (!group.expenses[selectedExpenseIndex].members.includes(member)) {
-                const listItem = document.createElement("li");
-                const checkbox = document.createElement("input");
-                checkbox.setAttribute("type", "checkbox");
-                checkbox.setAttribute("id", member.name);
-                checkbox.classList.add("add-member-to-expense")
-                const label = document.createElement("label");
-                label.setAttribute("for", member.name);
-                label.textContent = member.name;
-                listItem.classList.add("form-control-checkbox");
-                listItem.appendChild(checkbox);
-                listItem.appendChild(label);
-                otherMembersContainer.appendChild(listItem)
-            }
-        })
+        if (!group.expenses[selectedExpenseIndex].members.includes(member)) {
+            const listItem = document.createElement("li");
+            const checkbox = document.createElement("input");
+            checkbox.setAttribute("type", "checkbox");
+            checkbox.setAttribute("id", member.name);
+            checkbox.classList.add("add-member-to-expense")
+            const label = document.createElement("label");
+            label.setAttribute("for", member.name);
+            label.textContent = member.name;
+            listItem.classList.add("form-control-checkbox");
+            listItem.appendChild(checkbox);
+            listItem.appendChild(label);
+            otherMembersContainer.appendChild(listItem)
+        }
+    })
     checkboxes = [...document.querySelectorAll(".add-member-to-expense")]
     addMembersToExpenseDialog.showModal();
 }
@@ -661,7 +662,7 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
         checkboxes.forEach(checkbox => {
             if (checkbox.checked && checkbox.id.toLowerCase() === member.name.toLowerCase()) {
                 // console.log(groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex])
-        groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex].members.push(member)
+                groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex].members.push(member)
             }
 
         })
@@ -670,6 +671,46 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     addMembersToExpenseDialog.close();
     renderExpenses(groupsArr[selectedGroupIndex]);
 });
+
+// console.log(selectedGroupIndex);
+// selectedGroup.addEventListener('click', function(event) {
+//     if (event.target && event.target.classList.contains('pen')) {
+//         const h2 = event.target.closest('.section-main-group-header').querySelector('.section-main-group-title');
+//         console.log(h2);
+//         const originalName = h2.innerText.trim();
+//         const input = document.createElement('input');
+//         input.type = "text";
+//         input.value = originalName;
+//         // input.value = h2.innerText.trim();
+//         h2.innerHTML = "";
+//         h2.appendChild(input);
+//         input.focus();
+
+//         input.addEventListener('keydown', function(e) {
+//             if (e.key === 'Enter') {
+//                 const updatedGroupName = input.value.trim();
+//                 console.log(updatedGroupName)
+//                 if (updatedGroupName) {
+//                     const groupId = parseInt(h2.getAttribute('id'));
+//                     const groupIndex = groupsArr.findIndex(group => group.id === groupId);
+//                     console.log(groupIndex);
+//                     if (groupIndex !== -1) {
+//                         console.log(groupsArr[groupIndex])
+//                         groupsArr[groupIndex].groupName = updatedGroupName;
+//                         console.log(groupsArr);
+//                         localStorage.setItem('groups', JSON.stringify(groupsArr));
+
+//                         h2.innerHTML = `${titleCase(updatedGroupName)}`;
+//                     }
+//                 }else{
+//                     h2.innerHTML = `${originalName}`;
+//                     // console.log(h2);
+//                 }
+//             }
+//             renderGroups();
+//         });
+//     }
+// });
 
 selectedGroup.addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('pen')) {
