@@ -9,6 +9,7 @@ const closeGroupForm = document.getElementById("close-group-form");
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
+const sectionAside = document.querySelector('.section-aside');
 const groupInfoNav = document.getElementById("group-info-nav");
 const selectedGroupInfoContainer = document.getElementById("group-info-container");
 const groupsArr = JSON.parse(localStorage.getItem('groups'))||[];
@@ -318,10 +319,16 @@ function renderFriends() {
     friendsList.innerHTML = "";
     friendsListStored.forEach(friend => {
         const friendElement = createListItem(friend.name);
-		const friendImg = document.createElement("img")
-		friendImg.setAttribute("src", friend.imgSrc)
-		friendImg.classList.add("group-icon")
-		friendElement.appendChild(friendImg)
+		const friendImg = document.createElement("img");
+        const deleteIcon = document.createElement("span");
+        // <span class="delete">&times</span>
+        deleteIcon.classList.add("delete");
+        deleteIcon.innerHTML = "&times";
+        friendElement.setAttribute('id',friend.id);
+		friendImg.setAttribute("src", friend.imgSrc);
+		friendImg.classList.add("group-icon");
+		friendElement.appendChild(friendImg);
+        friendElement.appendChild(deleteIcon);
         friendsList.appendChild(friendElement);
         // return
     })
@@ -331,8 +338,11 @@ function renderGroups() {
     groupList.innerHTML = ""
     groupsArr.map(group => {
         let groupListElement = `
-		<li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
-                        href="#">${titleCase(group.groupName)}</a></li>
+		<li>
+            <img src=${group.avatar} alt="group icon" class="group-icon">
+            <a id=${group.id} class="group-link" href="#">${titleCase(group.groupName)}</a>
+            <span class="delete">&times;</span>
+        </li>
 		`
         groupList.innerHTML += groupListElement;
         // return
@@ -661,46 +671,6 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     renderExpenses(groupsArr[selectedGroupIndex]);
 });
 
-// console.log(selectedGroupIndex);
-// selectedGroup.addEventListener('click', function(event) {
-//     if (event.target && event.target.classList.contains('pen')) {
-//         const h2 = event.target.closest('.section-main-group-header').querySelector('.section-main-group-title');
-//         console.log(h2);
-//         const originalName = h2.innerText.trim();
-//         const input = document.createElement('input');
-//         input.type = "text";
-//         input.value = originalName;
-//         // input.value = h2.innerText.trim();
-//         h2.innerHTML = "";
-//         h2.appendChild(input);
-//         input.focus();
-
-//         input.addEventListener('keydown', function(e) {
-//             if (e.key === 'Enter') {
-//                 const updatedGroupName = input.value.trim();
-//                 console.log(updatedGroupName)
-//                 if (updatedGroupName) {
-//                     const groupId = parseInt(h2.getAttribute('id'));
-//                     const groupIndex = groupsArr.findIndex(group => group.id === groupId);
-//                     console.log(groupIndex);
-//                     if (groupIndex !== -1) {
-//                         console.log(groupsArr[groupIndex])
-//                         groupsArr[groupIndex].groupName = updatedGroupName;
-//                         console.log(groupsArr);
-//                         localStorage.setItem('groups', JSON.stringify(groupsArr));
-
-//                         h2.innerHTML = `${titleCase(updatedGroupName)}`;
-//                     }
-//                 }else{
-//                     h2.innerHTML = `${originalName}`;
-//                     // console.log(h2);
-//                 }
-//             }
-//             renderGroups();
-//         });
-//     }
-// });
-
 selectedGroup.addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('pen')) {
         const editElement = event.target.closest('div').querySelector('.editable');
@@ -764,5 +734,37 @@ selectedGroup.addEventListener('click', function(event) {
             renderGroups();
             renderFriends()
         });
+    }
+});
+
+
+document.getElementById('group-list').addEventListener('click',function(event){
+    if (event.target && event.target.classList.contains('delete')){
+        const listItem = event.target.closest('li');
+        const groupContainer = listItem.querySelector('.group-link');
+        const groupName = groupContainer.childNodes[0].nodeValue.trim();
+        // const groupName = listItem.querySelector('group-link').textContent.trim();
+        console.log(`Deleting group name: ${groupName}`);
+        console.log(`THis is group id ${groupContainer.id}`);
+        const groupIndex = groupsArr.findIndex(group =>group.id!==groupContainer.id);
+        groupsArr.splice(groupIndex,1);
+        localStorage.setItem('groups',JSON.stringify(groupsArr));
+        // listItem.remove();
+        renderGroups();
+    }
+})
+document.getElementById('friends-list').addEventListener('click', function(event) {
+    if (event.target && event.target.classList.contains('delete')) {
+        const listItem = event.target.closest('li');
+        const friendName = listItem.childNodes[0].nodeValue.trim();
+
+        console.log(`Deleting friend: ${friendName}`);
+        console.log(`This is friend id: ${listItem.id}`);
+        const friendIndex = friendsListStored.findIndex(friend=>friend.id!==listItem.id);
+        friendsListStored.splice(friendIndex,1);
+        localStorage.setItem('friends',JSON.stringify(friendsListStored));
+        renderFriends();
+        // listItem.remove();
+
     }
 });
