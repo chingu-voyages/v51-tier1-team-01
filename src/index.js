@@ -127,11 +127,7 @@ function getGroupBalances(selectedGroup) {
     }
 }
 
-
-
 function getGroupMembers(selectedGroup) {
-   function getGroupMembers(selectedGroup) {
-	// console.log(groupsArr[0].selectedGroupId)
 	return `<div class="section-main-group-info-balances">
 		<div class="balances-members-container">
 			${
@@ -148,6 +144,13 @@ function getGroupMembers(selectedGroup) {
 						</div>
 					`
 				}).join("")
+			}
+		</div>
+		<div class="balances-members-footer">
+			<button class="add-btn"><span>+</span>Add member</button>
+			<p>Subtotal: $1948</p>
+		</div>
+	</div>`
 }
 
 function handleGroupClick(e) {
@@ -622,11 +625,33 @@ function renderExpenses(group) {
     })
 }
 
+const editExpenseDialog = document.getElementById("edit-expense");
+const editExpenseForm = document.getElementById("form-edit");
+const editExpenseNameInput = document.getElementById("edit-name");
+const editExpenseCostInput = document.getElementById("edit-cost");
+
 function editExpense(expense) {
     console.log("editing expense")
     console.log(expense.name)
     console.log(expense.cost)
+    editExpenseDialog.showModal();
+
+    editExpenseNameInput.value = expense.name;
+    editExpenseCostInput.value = expense.cost;
 }
+
+editExpenseForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let selectedExpense = groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex];
+    selectedExpense.name = editExpenseNameInput.value
+    selectedExpense.cost = Number(editExpenseCostInput.value)
+    renderExpenses(groupsArr[selectedGroupIndex]);
+    editExpenseDialog.close();
+})
+
+
+
+
 
 const otherMembersContainer = document.getElementById("other-members-container")
 let checkboxes = [...document.querySelectorAll(".add-member-to-expense")];

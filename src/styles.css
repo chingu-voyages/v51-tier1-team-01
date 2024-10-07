@@ -295,10 +295,12 @@ ul {
 	outline: none;
  }
 
- .add-btn {
+.add-btn {
 	border: none;
 	background-color: transparent;
 	font-size: 1rem;
+	font-weight: bold;
+	color: #006091;
 }
 
 .add-btn span {
@@ -733,6 +735,7 @@ footer {
 		display: flex;
 		max-width: 50%;
 		gap: .5rem;
+		margin-top: 0.5rem;
 	}
 
 	#friend-first-name{
