@@ -1,4 +1,5 @@
 import { totalCalc, memberStatus, memberTotal } from "./calcs.js";
+import {downloadPDF} from "./pdf.js";
 
 const groupCreateBtn = document.getElementById('group-create-btn');
 const groupName = document.getElementById('group-name');
@@ -45,7 +46,7 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event) => {
-    if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members")) {
+    if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") ||event.target.matches("#download-btn")) {
         const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
         const selectedGroup = groupsArr.find(group => {
@@ -69,8 +70,11 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         // } else if (event.target.matches(".group-members")) {
         } else {
             selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
-            listExpenses.classList.add("hidden");
-        }
+           listExpenses.classList.add("hidden");
+
+        } else if (event.target.matches("#download-btn")){
+			console.log("Downloading PDF ...")
+			downloadPDF(selectedGroup)
     } else {
         event.stopPropagation()
     }
