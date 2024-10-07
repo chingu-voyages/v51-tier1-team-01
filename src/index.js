@@ -141,11 +141,11 @@ function getGroupMembers(selectedGroup) {
 						<div class = "balances-card-member">
 							<div>
 								<div>
-                                    <p class="balances-card-member-name editable" id=${member.id}>
-                                    ${member.name}
-                                    </p>
-                                                                    <span class="pen">🖋️</span>
-                                </div>
+								    <p class="balances-card-member-name editable" id=${member.id}>
+								    ${member.name}
+								    </p>
+                                    <span class="pen">🖋️</span>
+								</div>
 								<p class="badge badge-paid">You are owed $3,456</p>
 							</div>
 							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
@@ -589,7 +589,7 @@ function renderExpenses(group) {
         expenseHeader.classList.add("balances-members-header");
         const expenseName = document.createElement("span");
         const expenseDate = document.createElement("span");
-        expenseName.textContent = expense.name;
+        expenseName.textContent = titleCase(expense.name);
         expenseDate.textContent = expense.date.toString();
         expenseHeader.appendChild(expenseName);
         expenseHeader.appendChild(expenseDate);
@@ -607,7 +607,7 @@ function renderExpenses(group) {
             memberImg.classList.add("balances-card-member-img", "paid");
             memberImg.setAttribute("src", member.imgSrc);
             memberImg.setAttribute("alt", "Member icon");
-            memberName.textContent = member.name;
+            memberName.textContent = titleCase(member.name);
             memberDiv.appendChild(memberName);
             memberDiv.appendChild(memberImg);
             expenseMembers.appendChild(memberDiv);
@@ -717,45 +717,6 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     renderExpenses(groupsArr[selectedGroupIndex]);
 });
 
-// console.log(selectedGroupIndex);
-// selectedGroup.addEventListener('click', function(event) {
-//     if (event.target && event.target.classList.contains('pen')) {
-//         const h2 = event.target.closest('.section-main-group-header').querySelector('.section-main-group-title');
-//         console.log(h2);
-//         const originalName = h2.innerText.trim();
-//         const input = document.createElement('input');
-//         input.type = "text";
-//         input.value = originalName;
-//         // input.value = h2.innerText.trim();
-//         h2.innerHTML = "";
-//         h2.appendChild(input);
-//         input.focus();
-
-//         input.addEventListener('keydown', function(e) {
-//             if (e.key === 'Enter') {
-//                 const updatedGroupName = input.value.trim();
-//                 console.log(updatedGroupName)
-//                 if (updatedGroupName) {
-//                     const groupId = parseInt(h2.getAttribute('id'));
-//                     const groupIndex = groupsArr.findIndex(group => group.id === groupId);
-//                     console.log(groupIndex);
-//                     if (groupIndex !== -1) {
-//                         console.log(groupsArr[groupIndex])
-//                         groupsArr[groupIndex].groupName = updatedGroupName;
-//                         console.log(groupsArr);
-//                         localStorage.setItem('groups', JSON.stringify(groupsArr));
-
-//                         h2.innerHTML = `${titleCase(updatedGroupName)}`;
-//                     }
-//                 }else{
-//                     h2.innerHTML = `${originalName}`;
-//                     // console.log(h2);
-//                 }
-//             }
-//             renderGroups();
-//         });
-//     }
-// });
 
 // selectedGroup.addEventListener('click', function(event) {
 //     if (event.target && event.target.classList.contains('pen')) {
@@ -845,18 +806,21 @@ selectedGroup.addEventListener('click', function(event) {
                 console.log(updatedName);
                 if (updatedName) {
                     if (elementType=='h2'){
-                    const groupId = parseInt(editElement.getAttribute('id'));
-                    // console.log(groupId);
-                    const groupIndex = groupsArr.findIndex(group => group.id === groupId);
-                    console.log(groupIndex);
-                    if (groupIndex !== -1) {
-                        console.log(groupsArr[groupIndex])
-                        groupsArr[groupIndex].groupName = updatedName;
-                        console.log(groupsArr);
-                        localStorage.setItem('groups', JSON.stringify(groupsArr));
+                        const groupId = parseInt(editElement.getAttribute('id'));
+                        // console.log(groupId);
+                        const groupIndex = groupsArr.findIndex(group => group.id === groupId);
+                        console.log(groupIndex);
+                            if (groupIndex !== -1) {
+                                console.log(groupsArr[groupIndex])
+                                groupsArr[groupIndex].groupName = updatedName;
+                                console.log(groupsArr);
+                                localStorage.setItem('groups', JSON.stringify(groupsArr));
 
-                        editElement.innerHTML = `${titleCase(updatedName)}`;
-                    }
+                                editElement.innerHTML = `${titleCase(updatedName)}`;
+                                renderSelectedGroupInfo(groupsArr[groupIndex]);
+                                renderExpenses(groupsArr[groupIndex]);
+                            }
+                            console.log(groupsArr[groupIndex]);
                     }
                     else if(elementType=='p'){
                         const memberId = parseInt(editElement.getAttribute('id'));
@@ -866,15 +830,21 @@ selectedGroup.addEventListener('click', function(event) {
                         if (groupIndex!=-1){
                             const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member=>member.id===memberId);
                             const friendIndex = friendsListStored.findIndex(friend=>friend.id ===memberId);
-                            console.log(memberIndex);
+                            console.log(`This is member index ${memberIndex}`);
                             if(memberIndex!=-1&&friendIndex!=-1){
                                 groupsArr[groupIndex].membersArr[memberIndex].name = updatedName;
                                 friendsListStored[friendIndex].name = updatedName;
                                 localStorage.setItem('groups',JSON.stringify(groupsArr));
                                 localStorage.setItem('friends',JSON.stringify(friendsListStored));
-                                editElement.innerHTML = `${titleCase(updatedName)}`
+                                editElement.innerHTML = `${titleCase(updatedName)}`;
+                                console.log(`This is the group`,groupsArr[groupIndex]);
+                                renderExpenses(groupsArr[groupIndex]);
+                                renderSelectedGroupInfo(groupsArr[groupIndex]);
+                                getGroupMembers(groupsArr[groupIndex]);
+                                // renderExistingFriendsForGroupCreation(groupsArr[groupIndex]);
                             }
                         }
+                        console.log(groupsArr[groupIndex])
                     }
 
                 }else{
@@ -882,6 +852,7 @@ selectedGroup.addEventListener('click', function(event) {
                     // console.log(h2);
                 }
             }
+
             renderGroups();
             renderFriends()
         });
@@ -925,6 +896,7 @@ document.getElementById('friends-list').addEventListener('click', function(event
 
                 friendsListStored.splice(friendIndex,1);
                 localStorage.setItem('friends',JSON.stringify(friendsListStored));
+                renderFriends();
             }
             groupsArr.forEach(group=>{
                 const memberIndex = group.membersArr.findIndex(member=>member.id==listItem.id);
@@ -935,7 +907,7 @@ document.getElementById('friends-list').addEventListener('click', function(event
             })
             localStorage.setItem('groups',JSON.stringify(groupsArr));
             renderGroups();
-            renderFriends();
+            // renderFriends();
         }
         // listItem.remove();
 
