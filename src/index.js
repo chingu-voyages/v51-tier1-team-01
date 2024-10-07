@@ -1,4 +1,5 @@
-import { totalCalc, memberStatus } from "./calcs.js";
+import { totalCalc, memberStatus, memberTotal } from "./calcs.js";
+import {downloadPDF} from "./pdf.js";
 
 const groupCreateBtn = document.getElementById('group-create-btn');
 const groupName = document.getElementById('group-name');
@@ -45,7 +46,7 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event) => {
-    if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members")) {
+    if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") ||event.target.matches("#download-btn")) {
         const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
         const selectedGroup = groupsArr.find(group => {
@@ -63,19 +64,24 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
         selectedGroupInfo ? selectedGroupInfo.style.display = "block" : ""
 
-        if (event.target.matches(".group-balances")) {
+		if (event.target.matches(".group-balances")) {
+			selectedGroupInfo.innerHTML = `<div></div>`
             // selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
-            selectedGroupInfo.innerHTML = renderExpenses(selectedGroup);
             listExpenses.classList.remove("hidden");
         // } else if (event.target.matches(".group-members")) {
         } else {
             selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
             listExpenses.classList.add("hidden");
         }
+
+		if (event.target.matches("#download-btn")){
+					console.log("Downloading PDF ...")
+					downloadPDF(selectedGroup)
+		}
+
     } else {
         event.stopPropagation()
     }
-    // return
 })
 
 function getGroupBalances(selectedGroup) {
@@ -147,7 +153,7 @@ function getGroupMembers(selectedGroup) {
 								    </p>
                                     <span class="pen">🖋️</span>
 								</div>
-								<p class="badge badge-paid">You are owed $3,456</p>
+								<p class="badge badge-paid">${memberTotal(member, selectedGroup)}</p>
 							</div>
 							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
 						</div>
@@ -157,7 +163,6 @@ function getGroupMembers(selectedGroup) {
 		</div>
 		<div class="balances-members-footer">
 			<button class="add-btn"><span>+</span>Add member</button>
-			<p>Subtotal: $1948</p>
 		</div>
 	</div>`
 }
@@ -842,7 +847,6 @@ selectedGroup.addEventListener('click', function(event) {
                         const groupId = parseInt(editElement.closest('.section-main-group').querySelector('.section-main-group-title').getAttribute('id'));
                         console.log(`This is group id: ${groupId}`);
                         const groupIndex = groupsArr.findIndex(group => group.id === groupId);
-                        // const gr
                         if (groupIndex!=-1){
                             const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member=>member.id===memberId);
                             const friendIndex = friendsListStored.findIndex(friend=>friend.id ===memberId);
