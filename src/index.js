@@ -682,6 +682,7 @@ editExpenseForm.addEventListener("submit", (e) => {
     selectedExpense.name = editExpenseNameInput.value
     selectedExpense.cost = Number(editExpenseCostInput.value)
     renderExpenses(groupsArr[selectedGroupIndex]);
+    localStorage.setItem('groups', JSON.stringify(groupsArr));
     editExpenseDialog.close();
 })
 
@@ -949,4 +950,34 @@ document.getElementById('friends-list').addEventListener('click', function(event
     }
 });
 
-// renderExpenses(selectedGroupIndex);
+document.getElementById('list-expenses').addEventListener('click',function(event) {
+    if (event.target && event.target.classList.contains('delete')) {
+        // console.log("The expense delete btn was clicked")
+        const listItem = event.target.closest('li');
+        const expenseName = listItem.childNodes[0].childNodes[0].innerText.trim();
+        const expenseId = listItem.id;
+        // console.log(expenseName);
+        const confirmDelete = confirm(`Are you sure you want to delete: ${expenseName}`)
+        if (confirmDelete) {
+            let groupIndex = -1;
+
+            groupsArr.forEach((group, index) => {
+                const expenseExists = group.expenses.find(expense => expense.date == expenseId);
+                if (expenseExists) {
+                    groupIndex = index;
+                }
+            });
+
+            if (groupIndex !== -1) {
+                const expenseIndex = groupsArr[groupIndex].expenses.findIndex(expense => expense.date == expenseId);
+
+                if (expenseIndex !== -1) {
+                    groupsArr[groupIndex].expenses.splice(expenseIndex, 1);
+                    localStorage.setItem('groups', JSON.stringify(groupsArr));
+                    renderExpenses(groupsArr[groupIndex]);
+                }
+            }
+        }
+
+    }
+});
