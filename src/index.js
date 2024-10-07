@@ -594,9 +594,15 @@ function renderExpenses(group) {
         expenseDate.textContent = expense.date.toString();
         expenseHeader.appendChild(expenseName);
         expenseHeader.appendChild(expenseDate);
-
+        const deleteIcon = document.createElement("span");
+        // <span class="delete">&times</span>
+        deleteIcon.classList.add("delete");
+        deleteIcon.innerHTML = "&times";
+        expenseHeader.appendChild(deleteIcon);
         const expenseMembers = document.createElement("div");
+
         expenseMembers.classList.add("balances-members-container");
+
         console.log("What are expense members now...");
         console.log(expense);
         console.log(`This is expense members`,expense.members);
@@ -835,12 +841,28 @@ selectedGroup.addEventListener('click', function(event) {
                         const groupId = parseInt(editElement.closest('.section-main-group').querySelector('.section-main-group-title').getAttribute('id'));
                         console.log(`This is group id: ${groupId}`);
                         const groupIndex = groupsArr.findIndex(group => group.id === groupId);
+                        // const gr
                         if (groupIndex!=-1){
                             const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member=>member.id===memberId);
                             const friendIndex = friendsListStored.findIndex(friend=>friend.id ===memberId);
+                            // const expenseMemberIndex = groupsArr[groupIndex].expenses.members.findIndex(expenseMember=>expenseMember.id===memberId);
+                            // const expenseMemberIndex = groupsArr[groupIndex].expenses
+                            // console.log(`This is expensememberIndex`,expenseMemberIndex);
                             console.log(`This is member index ${memberIndex}`);
                             if(memberIndex!=-1&&friendIndex!=-1){
+                                groupsArr[groupIndex].expenses.forEach(expense => {
+                                    if (expense.payer.id === memberId) {
+                                        expense.payer.name = updatedName;
+                                    }
+
+                                    expense.members.forEach(member => {
+                                        if (member.id === memberId) {
+                                            member.name = updatedName;
+                                        }
+                                    });
+                                });
                                 groupsArr[groupIndex].membersArr[memberIndex].name = updatedName;
+                                // groupsArr[groupIndex].expenses[expenseMemberIndex].name = updatedName;
                                 friendsListStored[friendIndex].name = updatedName;
                                 localStorage.setItem('groups',JSON.stringify(groupsArr));
                                 localStorage.setItem('friends',JSON.stringify(friendsListStored));
@@ -927,4 +949,4 @@ document.getElementById('friends-list').addEventListener('click', function(event
     }
 });
 
-renderExpenses(selectedGroupIndex);
+// renderExpenses(selectedGroupIndex);
