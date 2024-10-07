@@ -1,4 +1,4 @@
-import { totalCalc } from "./calcs.js";
+import { totalCalc, memberStatus } from "./calcs.js";
 
 const groupCreateBtn = document.getElementById('group-create-btn');
 const groupName = document.getElementById('group-name');
@@ -603,6 +603,7 @@ function renderExpenses(group) {
         expense.members.forEach(member => {
             const memberDiv = document.createElement("div");
             memberDiv.classList.add("balances-card-member");
+            memberDiv.setAttribute("id", member.id)
             const memberName = document.createElement("p");
             memberName.classList.add("balances-card-member-name");
             const memberImg = document.createElement("img");
@@ -610,7 +611,16 @@ function renderExpenses(group) {
             memberImg.setAttribute("src", member.imgSrc);
             memberImg.setAttribute("alt", "Member icon");
             memberName.textContent = titleCase(member.name);
+            memberName.textContent = member.name;
+            const memberCardStatus = document.createElement("div")
+            memberCardStatus.textContent = memberStatus(member, expense)
+
+            memberCardStatus.textContent == "Paid" ? memberCardStatus.classList.add("badge", "badge-paid") :
+            memberCardStatus.textContent == "Paid the bill" ? memberCardStatus.classList.add("badge", "badge-payer") :
+            memberCardStatus.classList.add("badge", "badge-unpaid")
+
             memberDiv.appendChild(memberName);
+            memberDiv.appendChild(memberCardStatus);
             memberDiv.appendChild(memberImg);
             expenseMembers.appendChild(memberDiv);
         })
@@ -719,22 +729,18 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     renderExpenses(groupsArr[selectedGroupIndex]);
 });
 
-
+// console.log(selectedGroupIndex);
 // selectedGroup.addEventListener('click', function(event) {
 //     if (event.target && event.target.classList.contains('pen')) {
-//         const editElement = event.target.closest('div').querySelector('.editable');
-//         // const editElement = event.target.closest('.section-main-group-info-nav-container').previousElementSibling.querySelector('.editable');
-//         console.log(`This is value of editelement: ${editElement}`);
-//         // to check if it is h2(group name) or p (member name)
-//         const elementType = editElement.tagName.toLowerCase();
-//         const originalName = editElement.innerText.trim();
-
+//         const h2 = event.target.closest('.section-main-group-header').querySelector('.section-main-group-title');
+//         console.log(h2);
+//         const originalName = h2.innerText.trim();
 //         const input = document.createElement('input');
 //         input.type = "text";
 //         input.value = originalName;
 //         // input.value = h2.innerText.trim();
-//         editElement.innerHTML = ""
-//         editElement.appendChild(input);
+//         h2.innerHTML = "";
+//         h2.appendChild(input);
 //         input.focus();
 
 //         input.addEventListener('keydown', function(e) {
