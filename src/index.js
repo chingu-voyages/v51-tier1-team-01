@@ -1,4 +1,4 @@
-import { totalCalc } from "./calcs.js";
+import { totalCalc, memberStatus } from "./calcs.js";
 
 const groupCreateBtn = document.getElementById('group-create-btn');
 const groupName = document.getElementById('group-name');
@@ -583,14 +583,23 @@ function renderExpenses(group) {
         expense.members.forEach(member => {
             const memberDiv = document.createElement("div");
             memberDiv.classList.add("balances-card-member");
+            memberDiv.setAttribute("id", member.id)
             const memberName = document.createElement("p");
             memberName.classList.add("balances-card-member-name");
             const memberImg = document.createElement("img");
             memberImg.classList.add("balances-card-member-img", "paid");
             memberImg.setAttribute("src", member.imgSrc);
             memberImg.setAttribute("alt", "Member icon");
-            memberName.textContent = member.name;
+            memberName.textContent = member.name;            
+            const memberCardStatus = document.createElement("div")
+            memberCardStatus.textContent = memberStatus(member, expense)
+
+            memberCardStatus.textContent == "Paid" ? memberCardStatus.classList.add("badge", "badge-paid") :
+            memberCardStatus.textContent == "Paid the bill" ? memberCardStatus.classList.add("badge", "badge-payer") :
+            memberCardStatus.classList.add("badge", "badge-unpaid")
+
             memberDiv.appendChild(memberName);
+            memberDiv.appendChild(memberCardStatus);
             memberDiv.appendChild(memberImg);
             expenseMembers.appendChild(memberDiv);
         })
