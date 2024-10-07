@@ -1,79 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Splitter App Tier 1</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>Expense Splitter App Tier 1 Team 1</h1>
-    </header>
-    <aside>
-        <h2>logo - I can't split</h2>
-        <nav>
-            <ul>
-                <li>Home</li>
-                <li>Friends</li>
-                <li>Group</li>
-                <li>Expenses</li>
-                <li>Splitwise Imports</li>
-            </ul>
-        </nav>
-        <h3>Your Groups</h3>
-        <ul id="group-list" >
+    <link rel="stylesheet" href="src/styles.css">
 
-        </ul>
-        <h3>Your Friends</h3>
-        <button>Add friend</button>
-        <ul>
-            <li>Jane Doe</li>
-            <li>Johnny B. Goode</li>
-        </ul>
-    </aside>
-    <main>
-        <section>
-            <input type="text" placeholder="Search...">
+</head>
+
+<body>
+
+    <section class="section-aside">
+        <header>
+            <h1 class="logo">
+                <a href="#"><img src="src/img/logo.png" alt="Splitzy"></a>
+            </h1>
+        </header>
+        <section class="section-aside-groups">
+            <h2>Groups</h2>
+            <ul id="group-list">
+                <li><img src="src/img/group-icon.png" alt="group icon" class="group-icon"><a class="group-link"
+                        href="#">Family</a></li>
+                <li><img src="src/img/group-icon.png" alt="group icon" class="group-icon"><a class="group-link"
+                        href="#">Friends</a></li>
+                <li><img src="src/img/group-icon.png" alt="group icon" class="group-icon"><a class="group-link"
+                        href="#">Team</a></li>
+            </ul>
+            <button class="add-btn" id="sidebar-add-group"><span>+</span>Add group</button>
         </section>
-        <section>
-            <h2>Create New Group</h2>
-            <input id="group-name" type="text" placeholder="Enter group name...">
-            <button id="group-create-btn">Create Group</button>
-            <p id="group-error">Please enter a valid group name</p>
+        <section class="section-aside-friends">
+            <h2>Friends</h2>
+            <ul id="friends-list">
+            </ul>
+            <button id="add-btn" class="add-btn"><span>+</span>Add friend</button>
+            <form id="form-add-friend" action="" class="form-add">
+                <div class="form-control">
+                    <!-- <label for="friend-first-name">First name: </label> -->
+                    <input id="friend-first-name" type="text" placeholder="Friend's Name" required>
+                </div>
+                <!-- <div class="form-control">
+                    <label for="friend-last-name">Last name: </label>
+                    <input id="friend-last-name" type="text" placeholder="Last Name">
+                </div> -->
+                <button>Submit</button>
+            </form>
         </section>
-        <section>
-            <h2>Selected group name</h2>
-            <p>Selected group member 1, Selected group member 2...</p>
-            <div>member images go here</div>
-            <img src="" alt="selected group image" width="200" height="200" style="display: block; border: 3px solid red;">
+    </section>
+    <section class="section-main">
+        <section id="new-group">
+            <form id="group-form">
+                <div class="new-group-header">
+                    <h2>Create New Group</h2>
+                    <button type="button" id="close-group-form" title="Close form"
+                        aria-label="Close group creation form">x</button>
+                </div>
+                <div id="from-user">
+                    <input id="group-name" type="text" placeholder="Group Name">
+                    <div id="member-inputs">
+                        <input type="text" id="member-one" class="default group-member" placeholder="Member 1">
+                        <input type="text" id="member-two" class="default group-member" placeholder="Member 2">
+                    </div>
+                    <div class="group-form-buttons">
+                        <button id="group-create-btn" type="submit">Create Group</button>
+                        <button id="add-another-member" type="button">Add Member</button>
+                    </div>
+                </div>
+                <p id="group-error">Please enter a valid group name with at least two members</p>
+            </form>
         </section>
-        <section>
+        <section class="section-main-group" id="selected-group">
+            <!-- <div class="section-main-group-header">
+				<div>
+					<h2 class="section-main-group-title">Bali Trip 🖋️</h2>
+					<p class="text-small">Jane Doe, John Doe, Jessy Doe, Jafar Doe</p>
+					<p class="badge badge-unpaid">You are owed $3,456</p>
+			    </div>
+				<img src="src/img/group-icon.png" alt="Group icon">
+			</div> -->
+
+            <!-- <div class="section-main-group-info" >
+				<div class="section-main-group-info-nav-container">
+					<ul class="section-main-group-info-nav">
+					<li class="text-small" id="group-members">Members</li>
+					<li class="text-small" id="group-balances">Balances</li>
+					<li class="text-small" id="group-edit">Edit Group</li>
+				</ul>
+				<button id="download-btn"> Download PDF</button>
+				</div>
+				
+
+				<div id="group-info-container">
+				
+				 <div class="section-main-group-info-balances"></div>
+
+				 <div class="section-main-group-info-statistics"></div>
+
+				 <div class="section-main-group-info-members"></div>
+				</div>
+			</div> -->
+
+        </section>
+        <!-- add expense form -->
+        <button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
+        <!-- <button id="btn-add-expense">Show the add expense form</button> -->
+        <form action="" id="form-add-expense" class="hidden">
+            <input type="text" id="input-expense" placeholder="Name of expense" required>
+            <input type="number" id="input-amount" placeholder="Amount" required>
+            <label for="select-payer"></label>
+            <select name="payer" id="select-payer"></select>
+            <!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
+            <button>Submit expense</button>
+        </form>
+
+        <!-- added expenses section -->
+        <section class="section-main-group">
+            <h2>Expenses</h2>
+            <ul id="list-expenses"></ul>
+        </section>
+        <dialog id="add-members-to-expense">
+            <form>
+                <p>Other group members:</p>
+                <ul id="other-members-container">
+                </ul>
+                <button id="close-add-members-to-expense">Close</button>
+            </form>
+        </dialog>
+        <dialog id="edit-expense">
+                <form id="form-edit">
+                    <label for="edit-name">Name: <input type="text" id="edit-name"></label>
+                    <label for="edit-cost">Amount: <input type="number" id="edit-cost"></label>
+                    <div>
+                        <button type="button">Cancel</button>
+                        <button type="submit">Edit expense</button>
+                    </div>
+                </form>
+        </dialog>
+
+
+
+        <!-- <section>
             <h2>Balances</h2>
             <div class="container-group-members">
                 <div class="card-member">
                     <h3>Name</h3>
                     <p>Current balance...</p>
                     <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
                 </div>
                 <div class="card-member">
                     <h3>Name</h3>
                     <p>Current balance...</p>
                     <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
                 </div>
                 <div class="card-member">
                     <h3>Name</h3>
                     <p>Current balance...</p>
                     <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
                 </div>
                 <div class="card-member">
                     <h3>Name</h3>
                     <p>Current balance...</p>
                     <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100" style="display: block; border: 3px solid red; border-radius: 50%;">
+                    <img src="" alt="avatar" width="100" height="100"
+                        style="display: block; border: 3px solid red; border-radius: 50%;">
                 </div>
             </div>
             <button>Show Debt Visualisation</button>
@@ -89,17 +184,23 @@
             <h2>Statistics</h2>
             <p>What goes here?</p>
         </section>
-        <section>
+        <section id="member-display">
             <h2>Friends/Members</h2>
-            <p>What goes here?</p>
-        </section>
+            <ul id="members-list">
 
+            </ul>
+        </section> -->
+    </section>
 
-    </main>
     <footer>
-        <p>Made by Chingu Team 1</p>
+        <p>This project was coded by Chingu <a href="https://github.com/chingu-voyages/v51-tier1-team-01"
+                class="footer-link">v51-tier1-team-01</a> team, and it is open-sourced</p>
     </footer>
 
-<script src="index.js"></script>
+
+
+    <script src="src/index.js" type="module"></script>
+
 </body>
+
 </html>
