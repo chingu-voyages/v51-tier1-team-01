@@ -66,6 +66,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
 		if (event.target.matches(".group-balances")) {
 			selectedGroupInfo.innerHTML = `<div></div>`
+			renderExpenses(selectedGroup)
             // selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
             listExpenses.classList.remove("hidden");
         // } else if (event.target.matches(".group-members")) {
