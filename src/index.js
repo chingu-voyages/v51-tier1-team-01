@@ -65,8 +65,11 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
         if (event.target.matches(".group-balances")) {
             selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
-        } else if (event.target.matches(".group-members")) {
+            listExpenses.classList.remove("hidden");
+        // } else if (event.target.matches(".group-members")) {
+        } else {
             selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
+            listExpenses.classList.add("hidden");
         }
     } else {
         event.stopPropagation()
@@ -75,56 +78,58 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 })
 
 function getGroupBalances(selectedGroup) {
-    if (selectedGroup.expenses.length){
+    renderExpenses(selectedGroup)
+    // if (selectedGroup.expenses.length){
+    //     renderExpenses(selectedGroup);
     // console.log(selectedGroup.expenses[0].payer.name);
-        return `<div class="section-main-group-info-balances">
-            <div class="balances-members-container">
-                ${
-                    selectedGroup.membersArr.map(member => {
-                        // console.log(member);
-                        // console.log(member === selectedGroup.expenses[0].payer.name)
-                        if(member.name === selectedGroup.expenses[0].payer.name){
-                            return `
-                                <div class = "balances-card-member">
-                                    <div>
-                                        <div>
-                                            <p class="balances-card-member-name editable" id=${member.id}>
-                                            ${member.name}
-                                            </p>
-                                            <span class="pen">🖋️</span>
-                                        </div>
-                                        <p class="badge badge-paid">You are owed $3,456</p>
-                                    </div>
-                                    <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
-                                </div>
-                        `}
-                        else{
-                            return `
-                                <div class = "balances-card-member">
-                                    <div>
-                                        <div>
-                                            <p class="balances-card-member-name editable" id=${member.id}>
-                                            ${member.name}
-                                            </p>
-                                            <span class="pen">🖋️</span>
-                                        </div>
-                                        <p class="badge badge-paid">You owe $3,456</p>
-                                    </div>
-                                    <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
-                                </div>
-                            `
-                            }
-                        }).join("")
-			}
-		</div>
-		<div class="balances-members-footer">
-			<button class="add-btn"><span>+</span>Add member</button>
-			<p>Subtotal: $1948</p>
-		</div>
-	</div>`
-    }else{
-       return `No expenses added yet`;
-    }
+    //     return `<div class="section-main-group-info-balances">
+    //         <div class="balances-members-container">
+    //             ${
+    //                 selectedGroup.membersArr.map(member => {
+    //                     // console.log(member);
+    //                     // console.log(member === selectedGroup.expenses[0].payer.name)
+    //                     if(member.name === selectedGroup.expenses[0].payer.name){
+    //                         return `
+    //                             <div class = "balances-card-member">
+    //                                 <div>
+    //                                     <div>
+    //                                         <p class="balances-card-member-name editable" id=${member.id}>
+    //                                         ${member.name}
+    //                                         </p>
+    //                                         <span class="pen">🖋️</span>
+    //                                     </div>
+    //                                     <p class="badge badge-paid">You are owed $3,456</p>
+    //                                 </div>
+    //                                 <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+    //                             </div>
+    //                     `}
+    //                     else{
+    //                         return `
+    //                             <div class = "balances-card-member">
+    //                                 <div>
+    //                                     <div>
+    //                                         <p class="balances-card-member-name editable" id=${member.id}>
+    //                                         ${member.name}
+    //                                         </p>
+    //                                         <span class="pen">🖋️</span>
+    //                                     </div>
+    //                                     <p class="badge badge-paid">You owe $3,456</p>
+    //                                 </div>
+    //                                 <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+    //                             </div>
+    //                         `
+    //                         }
+    //                     }).join("")
+	// 		}
+	// 	</div>
+	// 	<div class="balances-members-footer">
+	// 		<button class="add-btn"><span>+</span>Add member</button>
+	// 		<p>Subtotal: $1948</p>
+	// 	</div>
+	// </div>`
+    // }else{
+    //    return `No expenses added yet`;
+    // }
 }
 
 function getGroupMembers(selectedGroup) {
@@ -161,6 +166,9 @@ function handleGroupClick(e) {
             selectedGroupIndex = groupsArr.indexOf(group);
             renderSelectedGroupInfo(group)
         }
+        // const selectedGroupInfo = document.getElementById("group-info-container")
+        // selectedGroupInfo.innerHTML = getGroupBalances(groupsArr[selectedGroupIndex])
+        listExpenses.classList.remove("hidden");
         // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
     })
 }
@@ -199,10 +207,8 @@ function renderSelectedGroupInfo(group) {
 				</ul>
 				<button id="download-btn"> Download PDF</button>
 				</div>
+                <div id="group-info-container"></div>
 
-				<div id="group-info-container">
-					${getGroupBalances(group)}
-				</div>
 			</div>
 `
 
