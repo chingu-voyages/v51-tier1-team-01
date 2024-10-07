@@ -9,9 +9,6 @@ const closeGroupForm = document.getElementById("close-group-form");
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
-const sectionAside = document.querySelector('.section-aside');
-const groupInfoNav = document.getElementById("group-info-nav");
-const selectedGroupInfoContainer = document.getElementById("group-info-container");
 const groupsArr = JSON.parse(localStorage.getItem('groups'))||[];
 const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
 let groupList = document.getElementById('group-list');
@@ -68,8 +65,11 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
         if (event.target.matches(".group-balances")) {
             selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
-        } else if (event.target.matches(".group-members")) {
+            listExpenses.classList.remove("hidden");
+        // } else if (event.target.matches(".group-members")) {
+        } else {
             selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
+            listExpenses.classList.add("hidden");
         }
     } else {
         event.stopPropagation()
@@ -78,48 +78,77 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 })
 
 function getGroupBalances(selectedGroup) {
-
-	// all group members are rendered for now; badge and image shadow classes are already in css: badge-unpaid, badge-paid, badge-payer.
-    if (selectedGroup.expenses.length){
+    renderExpenses(selectedGroup)
+    // if (selectedGroup.expenses.length){
+    //     renderExpenses(selectedGroup);
     // console.log(selectedGroup.expenses[0].payer.name);
-        return `<div class="section-main-group-info-balances">
-            <div class="balances-members-container">
-                ${
-                    selectedGroup.membersArr.map(member => {
-                        // console.log(member);
-                        // console.log(member === selectedGroup.expenses[0].payer.name)
-                        if(member.name === selectedGroup.expenses[0].payer.name){
-                            return `
-                                <div class = "balances-card-member">
-                                    <div>
-                                        <div>
-                                            <p class="balances-card-member-name editable" id=${member.id}>
-                                            ${member.name}
-                                            </p>
-                                            <span class="pen">🖋️</span>
-                                        </div>
-                                        <p class="badge badge-paid">You are owed $3,456</p>
-                                    </div>
-                                    <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
-                                </div>
-                        `}
-                        else{
-                            return `
-                                <div class = "balances-card-member">
-                                    <div>
-                                        <div>
-                                            <p class="balances-card-member-name editable" id=${member.id}>
-                                            ${member.name}
-                                            </p>
-                                            <span class="pen">🖋️</span>
-                                        </div>
-                                        <p class="badge badge-paid">You owe $3,456</p>
-                                    </div>
-                                    <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
-                                </div>
-                            `
-                            }
-                        }).join("")
+    //     return `<div class="section-main-group-info-balances">
+    //         <div class="balances-members-container">
+    //             ${
+    //                 selectedGroup.membersArr.map(member => {
+    //                     // console.log(member);
+    //                     // console.log(member === selectedGroup.expenses[0].payer.name)
+    //                     if(member.name === selectedGroup.expenses[0].payer.name){
+    //                         return `
+    //                             <div class = "balances-card-member">
+    //                                 <div>
+    //                                     <div>
+    //                                         <p class="balances-card-member-name editable" id=${member.id}>
+    //                                         ${member.name}
+    //                                         </p>
+    //                                         <span class="pen">🖋️</span>
+    //                                     </div>
+    //                                     <p class="badge badge-paid">You are owed $3,456</p>
+    //                                 </div>
+    //                                 <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+    //                             </div>
+    //                     `}
+    //                     else{
+    //                         return `
+    //                             <div class = "balances-card-member">
+    //                                 <div>
+    //                                     <div>
+    //                                         <p class="balances-card-member-name editable" id=${member.id}>
+    //                                         ${member.name}
+    //                                         </p>
+    //                                         <span class="pen">🖋️</span>
+    //                                     </div>
+    //                                     <p class="badge badge-paid">You owe $3,456</p>
+    //                                 </div>
+    //                                 <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+    //                             </div>
+    //                         `
+    //                         }
+    //                     }).join("")
+	// 		}
+	// 	</div>
+	// 	<div class="balances-members-footer">
+	// 		<button class="add-btn"><span>+</span>Add member</button>
+	// 		<p>Subtotal: $1948</p>
+	// 	</div>
+	// </div>`
+    // }else{
+    //    return `No expenses added yet`;
+    // }
+}
+
+function getGroupMembers(selectedGroup) {
+	return `<div class="section-main-group-info-balances">
+		<div class="balances-members-container">
+			${
+				selectedGroup.membersArr.map(member => {
+					return `
+						<div class = "balances-card-member">
+							<div>
+								<p class="balances-card-member-name">
+								${member.name}🖋️
+								</p>
+								<p class="badge badge-paid">You are owed $3,456</p>
+							</div>
+							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+						</div>
+					`
+				}).join("")
 			}
 		</div>
 		<div class="balances-members-footer">
@@ -127,17 +156,7 @@ function getGroupBalances(selectedGroup) {
 			<p>Subtotal: $1948</p>
 		</div>
 	</div>`
-    }else{
-       return `No expenses added yet`;
-    }
 }
-
-
-function getGroupMembers(selectedGroup) {
-    // console.log(groupsArr[0].selectedGroupId)
-    return `<div class="section-main-group-info-members">Members:${selectedGroup.membersArr.map(member => member.name).join(", ")}</div>`
-}
-
 
 function handleGroupClick(e) {
     // console.log(e.target.id)
@@ -147,6 +166,9 @@ function handleGroupClick(e) {
             selectedGroupIndex = groupsArr.indexOf(group);
             renderSelectedGroupInfo(group)
         }
+        // const selectedGroupInfo = document.getElementById("group-info-container")
+        // selectedGroupInfo.innerHTML = getGroupBalances(groupsArr[selectedGroupIndex])
+        listExpenses.classList.remove("hidden");
         // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
     })
 }
@@ -185,10 +207,8 @@ function renderSelectedGroupInfo(group) {
 				</ul>
 				<button id="download-btn"> Download PDF</button>
 				</div>
+                <div id="group-info-container"></div>
 
-				<div id="group-info-container">
-					${getGroupBalances(group)}
-				</div>
 			</div>
 `
 
@@ -431,7 +451,7 @@ const formAddFriend = document.getElementById("form-add-friend");
 const inputFriendName = document.getElementById('friend-first-name');
 
 showAddFriendForm.addEventListener("click", () => { // the add friend button just shows the form
-    formAddFriend.classList.add("form-add-visible");
+    formAddFriend.classList.toggle("form-add-visible");
 });
 
 formAddFriend.addEventListener("submit", (e) => { // function to create friend from input and add friend to overall friend array
@@ -450,6 +470,7 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     localStorage.setItem('friends', JSON.stringify(friendsListStored))
     inputFriendName.value = '';
     renderFriends();
+	formAddFriend.classList.remove("form-add-visible");
 });
 
 // add existing friends to group
@@ -552,8 +573,7 @@ function handleExpenseClick(e) {
             }
         })
     })
-    console.log(selectedExpenseIndex)
-    // addMembersToExpense(groupsArr[selectedGroupIndex]);
+    console.log(selectedExpenseIndex);
 }
 
 function renderExpenses(group) {
@@ -620,11 +640,33 @@ function renderExpenses(group) {
     })
 }
 
+const editExpenseDialog = document.getElementById("edit-expense");
+const editExpenseForm = document.getElementById("form-edit");
+const editExpenseNameInput = document.getElementById("edit-name");
+const editExpenseCostInput = document.getElementById("edit-cost");
+
 function editExpense(expense) {
     console.log("editing expense")
     console.log(expense.name)
     console.log(expense.cost)
+    editExpenseDialog.showModal();
+
+    editExpenseNameInput.value = expense.name;
+    editExpenseCostInput.value = expense.cost;
 }
+
+editExpenseForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let selectedExpense = groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex];
+    selectedExpense.name = editExpenseNameInput.value
+    selectedExpense.cost = Number(editExpenseCostInput.value)
+    renderExpenses(groupsArr[selectedGroupIndex]);
+    editExpenseDialog.close();
+})
+
+
+
+
 
 const otherMembersContainer = document.getElementById("other-members-container")
 let checkboxes = [...document.querySelectorAll(".add-member-to-expense")];
