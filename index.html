@@ -102,20 +102,20 @@
 
         </section>
         <!-- add expense form -->
-        <button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
-        <!-- <button id="btn-add-expense">Show the add expense form</button> -->
-        <form action="" id="form-add-expense" class="hidden">
-            <input type="text" id="input-expense" placeholder="Name of expense" required>
-            <input type="number" id="input-amount" placeholder="Amount" required>
-            <label for="select-payer"></label>
-            <select name="payer" id="select-payer"></select>
-            <!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
-            <button>Submit expense</button>
-        </form>
+      
 
         <!-- added expenses section -->
         <section class="section-main-group">
-            <h2>Expenses</h2>
+            <button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
+            <!-- <button id="btn-add-expense">Show the add expense form</button> -->
+            <form action="" id="form-add-expense" class="hidden">
+                <input type="text" id="input-expense" placeholder="Name of expense" required>
+                <input type="number" id="input-amount" placeholder="Amount" required>
+                <label for="select-payer"></label>
+                <select name="payer" id="select-payer"></select>
+                <!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
+                <button>Submit expense</button>
+            </form>
             <ul id="list-expenses"></ul>
         </section>
         <dialog id="add-members-to-expense">
