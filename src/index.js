@@ -1,4 +1,4 @@
-import { totalCalc, memberStatus } from "./calcs.js";
+import { totalCalc, memberStatus, memberTotal } from "./calcs.js";
 import {downloadPDF} from "./pdf.js";
 
 const groupCreateBtn = document.getElementById('group-create-btn');
@@ -147,7 +147,7 @@ function getGroupMembers(selectedGroup) {
 								<p class="balances-card-member-name">
 								${member.name}🖋️
 								</p>
-								<p class="badge badge-paid">You are owed $3,456</p>
+								<p class="badge badge-paid">${memberTotal(member, selectedGroup)}</p>
 							</div>
 							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
 						</div>
@@ -157,7 +157,6 @@ function getGroupMembers(selectedGroup) {
 		</div>
 		<div class="balances-members-footer">
 			<button class="add-btn"><span>+</span>Add member</button>
-			<p>Subtotal: $1948</p>
 		</div>
 	</div>`
 }
