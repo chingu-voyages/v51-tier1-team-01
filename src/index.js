@@ -140,9 +140,12 @@ function getGroupMembers(selectedGroup) {
 					return `
 						<div class = "balances-card-member">
 							<div>
-								<p class="balances-card-member-name">
-								${member.name}🖋️
-								</p>
+								<div>
+                                    <p class="balances-card-member-name editable" id=${member.id}>
+                                    ${member.name}
+                                    </p>
+                                                                    <span class="pen">🖋️</span>
+                                </div>
 								<p class="badge badge-paid">You are owed $3,456</p>
 							</div>
 							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
@@ -754,6 +757,71 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
 //     }
 // });
 
+// selectedGroup.addEventListener('click', function(event) {
+//     if (event.target && event.target.classList.contains('pen')) {
+//         const editElement = event.target.closest('div').querySelector('.editable');
+//         // const editElement = event.target.closest('.section-main-group-info-nav-container').previousElementSibling.querySelector('.editable');
+//         console.log(`This is value of editelement: ${editElement}`);
+//         // to check if it is h2(group name) or p (member name)
+//         const elementType = editElement.tagName.toLowerCase();
+//         const originalName = editElement.innerText.trim();
+
+//         const input = document.createElement('input');
+//         input.type = "text";
+//         input.value = originalName;
+//         // input.value = h2.innerText.trim();
+//         editElement.innerHTML = ""
+//         editElement.appendChild(input);
+//         input.focus();
+
+//         input.addEventListener('keydown', function(e) {
+//             if (e.key === 'Enter') {
+//                 const updatedName = input.value.trim();
+//                 console.log(updatedName);
+//                 if (updatedName) {
+//                     if (elementType=='h2'){
+//                     const groupId = parseInt(editElement.getAttribute('id'));
+//                     // console.log(groupId);
+//                     const groupIndex = groupsArr.findIndex(group => group.id === groupId);
+//                     console.log(groupIndex);
+//                     if (groupIndex !== -1) {
+//                         console.log(groupsArr[groupIndex])
+//                         groupsArr[groupIndex].groupName = updatedName;
+//                         console.log(groupsArr);
+//                         localStorage.setItem('groups', JSON.stringify(groupsArr));
+
+//                         editElement.innerHTML = `${titleCase(updatedName)}`;
+//                     }
+//                     }
+//                     else if(elementType=='p'){
+//                         const memberId = parseInt(editElement.getAttribute('id'));
+//                         const groupId = parseInt(editElement.closest('.section-main-group').querySelector('.section-main-group-title').getAttribute('id'));
+//                         console.log(`This is group id: ${groupId}`);
+//                         const groupIndex = groupsArr.findIndex(group => group.id === groupId);
+//                         if (groupIndex!=-1){
+//                             const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member=>member.id===memberId);
+//                             const friendIndex = friendsListStored.findIndex(friend=>friend.id ===memberId);
+//                             console.log(memberIndex);
+//                             if(memberIndex!=-1&&friendIndex!=-1){
+//                                 groupsArr[groupIndex].membersArr[memberIndex].name = updatedName;
+//                                 friendsListStored[friendIndex].name = updatedName;
+//                                 localStorage.setItem('groups',JSON.stringify(groupsArr));
+//                                 localStorage.setItem('friends',JSON.stringify(friendsListStored));
+//                                 editElement.innerHTML = `${titleCase(updatedName)}`
+//                             }
+//                         }
+//                     }
+
+//                 }else{
+//                     editElement.innerHTML = `${titleCase(originalName)}`;
+//                     // console.log(h2);
+//                 }
+//             }
+//             renderGroups();
+//             renderFriends()
+//         });
+//     }
+// });
 selectedGroup.addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('pen')) {
         const editElement = event.target.closest('div').querySelector('.editable');
