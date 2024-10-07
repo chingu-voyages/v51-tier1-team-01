@@ -73,7 +73,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         } else {
             selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
             listExpenses.classList.add("hidden");
-        } 
+        }
 
 		if (event.target.matches("#download-btn")){
 					console.log("Downloading PDF ...")
@@ -148,9 +148,12 @@ function getGroupMembers(selectedGroup) {
 					return `
 						<div class = "balances-card-member">
 							<div>
-								<p class="balances-card-member-name">
-								${member.name}🖋️
-								</p>
+								<div>
+								    <p class="balances-card-member-name editable" id=${member.id}>
+								    ${member.name}
+								    </p>
+                                    <span class="pen">🖋️</span>
+								</div>
 								<p class="badge badge-paid">${memberTotal(member, selectedGroup)}</p>
 							</div>
 							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
@@ -346,10 +349,16 @@ function renderFriends() {
     friendsList.innerHTML = "";
     friendsListStored.forEach(friend => {
         const friendElement = createListItem(friend.name);
-        const friendImg = document.createElement("img")
-        friendImg.setAttribute("src", friend.imgSrc)
-        friendImg.classList.add("group-icon")
-        friendElement.appendChild(friendImg)
+		const friendImg = document.createElement("img");
+        const deleteIcon = document.createElement("span");
+        // <span class="delete">&times</span>
+        deleteIcon.classList.add("delete");
+        deleteIcon.innerHTML = "&times";
+        friendElement.setAttribute('id',friend.id);
+		friendImg.setAttribute("src", friend.imgSrc);
+		friendImg.classList.add("group-icon");
+		friendElement.appendChild(friendImg);
+        friendElement.appendChild(deleteIcon);
         friendsList.appendChild(friendElement);
         // return
     })
@@ -359,8 +368,11 @@ function renderGroups() {
     groupList.innerHTML = ""
     groupsArr.map(group => {
         let groupListElement = `
-		<li><img src=${group.avatar} alt="group icon" class="group-icon"><a id=${group.id} class="group-link"
-                        href="#">${titleCase(group.groupName)}</a></li>
+		<li>
+            <img src=${group.avatar} alt="group icon" class="group-icon">
+            <a id=${group.id} class="group-link" href="#">${titleCase(group.groupName)}</a>
+            <span class="delete">&times;</span>
+        </li>
 		`
         groupList.innerHTML += groupListElement;
         // return
@@ -584,15 +596,22 @@ function renderExpenses(group) {
         expenseHeader.classList.add("balances-members-header");
         const expenseName = document.createElement("span");
         const expenseDate = document.createElement("span");
-        expenseName.textContent = expense.name;
+        expenseName.textContent = titleCase(expense.name);
         expenseDate.textContent = expense.date.toString();
         expenseHeader.appendChild(expenseName);
         expenseHeader.appendChild(expenseDate);
-
+        const deleteIcon = document.createElement("span");
+        // <span class="delete">&times</span>
+        deleteIcon.classList.add("delete");
+        deleteIcon.innerHTML = "&times";
+        expenseHeader.appendChild(deleteIcon);
         const expenseMembers = document.createElement("div");
+
         expenseMembers.classList.add("balances-members-container");
-        console.log("What are expense members now...")
-        console.log(expense.members)
+
+        console.log("What are expense members now...");
+        console.log(expense);
+        console.log(`This is expense members`,expense.members);
         expense.members.forEach(member => {
             const memberDiv = document.createElement("div");
             memberDiv.classList.add("balances-card-member");
@@ -603,7 +622,8 @@ function renderExpenses(group) {
             memberImg.classList.add("balances-card-member-img", "paid");
             memberImg.setAttribute("src", member.imgSrc);
             memberImg.setAttribute("alt", "Member icon");
-            memberName.textContent = member.name;            
+            memberName.textContent = titleCase(member.name);
+            memberName.textContent = member.name;
             const memberCardStatus = document.createElement("div")
             memberCardStatus.textContent = memberStatus(member, expense)
 
@@ -668,6 +688,7 @@ editExpenseForm.addEventListener("submit", (e) => {
     selectedExpense.name = editExpenseNameInput.value
     selectedExpense.cost = Number(editExpenseCostInput.value)
     renderExpenses(groupsArr[selectedGroupIndex]);
+    localStorage.setItem('groups', JSON.stringify(groupsArr));
     editExpenseDialog.close();
 })
 
@@ -716,7 +737,7 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
 
         })
     })
-
+    localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
     renderExpenses(groupsArr[selectedGroupIndex]);
 });
@@ -737,30 +758,52 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
 
 //         input.addEventListener('keydown', function(e) {
 //             if (e.key === 'Enter') {
-//                 const updatedGroupName = input.value.trim();
-//                 console.log(updatedGroupName)
-//                 if (updatedGroupName) {
-//                     const groupId = parseInt(h2.getAttribute('id'));
+//                 const updatedName = input.value.trim();
+//                 console.log(updatedName);
+//                 if (updatedName) {
+//                     if (elementType=='h2'){
+//                     const groupId = parseInt(editElement.getAttribute('id'));
+//                     // console.log(groupId);
 //                     const groupIndex = groupsArr.findIndex(group => group.id === groupId);
 //                     console.log(groupIndex);
 //                     if (groupIndex !== -1) {
 //                         console.log(groupsArr[groupIndex])
-//                         groupsArr[groupIndex].groupName = updatedGroupName;
+//                         groupsArr[groupIndex].groupName = updatedName;
 //                         console.log(groupsArr);
 //                         localStorage.setItem('groups', JSON.stringify(groupsArr));
 
-//                         h2.innerHTML = `${titleCase(updatedGroupName)}`;
+//                         editElement.innerHTML = `${titleCase(updatedName)}`;
 //                     }
+//                     }
+//                     else if(elementType=='p'){
+//                         const memberId = parseInt(editElement.getAttribute('id'));
+//                         const groupId = parseInt(editElement.closest('.section-main-group').querySelector('.section-main-group-title').getAttribute('id'));
+//                         console.log(`This is group id: ${groupId}`);
+//                         const groupIndex = groupsArr.findIndex(group => group.id === groupId);
+//                         if (groupIndex!=-1){
+//                             const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member=>member.id===memberId);
+//                             const friendIndex = friendsListStored.findIndex(friend=>friend.id ===memberId);
+//                             console.log(memberIndex);
+//                             if(memberIndex!=-1&&friendIndex!=-1){
+//                                 groupsArr[groupIndex].membersArr[memberIndex].name = updatedName;
+//                                 friendsListStored[friendIndex].name = updatedName;
+//                                 localStorage.setItem('groups',JSON.stringify(groupsArr));
+//                                 localStorage.setItem('friends',JSON.stringify(friendsListStored));
+//                                 editElement.innerHTML = `${titleCase(updatedName)}`
+//                             }
+//                         }
+//                     }
+
 //                 }else{
-//                     h2.innerHTML = `${originalName}`;
+//                     editElement.innerHTML = `${titleCase(originalName)}`;
 //                     // console.log(h2);
 //                 }
 //             }
 //             renderGroups();
+//             renderFriends()
 //         });
 //     }
 // });
-
 selectedGroup.addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('pen')) {
         const editElement = event.target.closest('div').querySelector('.editable');
@@ -784,18 +827,21 @@ selectedGroup.addEventListener('click', function(event) {
                 console.log(updatedName);
                 if (updatedName) {
                     if (elementType=='h2'){
-                    const groupId = parseInt(editElement.getAttribute('id'));
-                    // console.log(groupId);
-                    const groupIndex = groupsArr.findIndex(group => group.id === groupId);
-                    console.log(groupIndex);
-                    if (groupIndex !== -1) {
-                        console.log(groupsArr[groupIndex])
-                        groupsArr[groupIndex].groupName = updatedName;
-                        console.log(groupsArr);
-                        localStorage.setItem('groups', JSON.stringify(groupsArr));
+                        const groupId = parseInt(editElement.getAttribute('id'));
+                        // console.log(groupId);
+                        const groupIndex = groupsArr.findIndex(group => group.id === groupId);
+                        console.log(groupIndex);
+                            if (groupIndex !== -1) {
+                                console.log(groupsArr[groupIndex])
+                                groupsArr[groupIndex].groupName = updatedName;
+                                console.log(groupsArr);
+                                localStorage.setItem('groups', JSON.stringify(groupsArr));
 
-                        editElement.innerHTML = `${titleCase(updatedName)}`;
-                    }
+                                editElement.innerHTML = `${titleCase(updatedName)}`;
+                                renderSelectedGroupInfo(groupsArr[groupIndex]);
+                                renderExpenses(groupsArr[groupIndex]);
+                            }
+                            console.log(groupsArr[groupIndex]);
                     }
                     else if(elementType=='p'){
                         const memberId = parseInt(editElement.getAttribute('id'));
@@ -805,15 +851,41 @@ selectedGroup.addEventListener('click', function(event) {
                         if (groupIndex!=-1){
                             const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member=>member.id===memberId);
                             const friendIndex = friendsListStored.findIndex(friend=>friend.id ===memberId);
-                            console.log(memberIndex);
+                            // const expenseMemberIndex = groupsArr[groupIndex].expenses.members.findIndex(expenseMember=>expenseMember.id===memberId);
+                            // const expenseMemberIndex = groupsArr[groupIndex].expenses
+                            // console.log(`This is expensememberIndex`,expenseMemberIndex);
+                            console.log(`This is member index ${memberIndex}`);
                             if(memberIndex!=-1&&friendIndex!=-1){
+                                groupsArr[groupIndex].expenses.forEach(expense => {
+                                    if (expense.payer.id === memberId) {
+                                        expense.payer.name = updatedName;
+                                    }
+
+                                    expense.members.forEach(member => {
+                                        if (member.id === memberId) {
+                                            member.name = updatedName;
+                                        }
+                                    });
+                                });
                                 groupsArr[groupIndex].membersArr[memberIndex].name = updatedName;
+                                // groupsArr[groupIndex].expenses[expenseMemberIndex].name = updatedName;
                                 friendsListStored[friendIndex].name = updatedName;
                                 localStorage.setItem('groups',JSON.stringify(groupsArr));
                                 localStorage.setItem('friends',JSON.stringify(friendsListStored));
-                                editElement.innerHTML = `${titleCase(updatedName)}`
+                                editElement.innerHTML = `${titleCase(updatedName)}`;
+                                console.log(`This is the group`,groupsArr[groupIndex]);
+                                console.log(`This is the group with slected`,groupsArr[selectedGroupIndex]);
+                                renderFriends();
+                                // renderExpenses(groupsArr[groupIndex]);
+                                renderExpenses(groupsArr[selectedGroupIndex]);
+                                renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+                                getGroupMembers(groupsArr[selectedGroupIndex]);
+                                // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
+                            }else{
+                                console.log("Either memberIndex or friendIndex does not exist");
                             }
                         }
+                        console.log(groupsArr[groupIndex])
                     }
 
                 }else{
@@ -821,8 +893,96 @@ selectedGroup.addEventListener('click', function(event) {
                     // console.log(h2);
                 }
             }
+
             renderGroups();
-            renderFriends()
+            renderFriends();
         });
+    }
+});
+
+
+document.getElementById('group-list').addEventListener('click',function(event){
+    if (event.target && event.target.classList.contains('delete')){
+        const listItem = event.target.closest('li');
+        const groupContainer = listItem.querySelector('.group-link');
+        const groupName = groupContainer.childNodes[0].nodeValue.trim();
+        // const groupName = listItem.querySelector('group-link').textContent.trim();
+        console.log(`Deleting group name: ${groupName}`);
+        console.log(`This is group id ${groupContainer.id}`);
+        const confirmDelete = confirm(`Are you sure you want to delete ${groupName}`)
+        if (confirmDelete){
+
+            const groupIndex = groupsArr.findIndex(group =>group.id!==groupContainer.id);
+            if (groupIndex!==-1){
+                groupsArr.splice(groupIndex,1);
+                localStorage.setItem('groups',JSON.stringify(groupsArr));
+                renderGroups();
+            }
+        }
+        // listItem.remove();
+    }
+})
+document.getElementById('friends-list').addEventListener('click', function(event) {
+    if (event.target && event.target.classList.contains('delete')) {
+        const listItem = event.target.closest('li');
+        const friendName = listItem.childNodes[0].nodeValue.trim();
+        console.log(`Deleting friend: ${friendName}`);
+        console.log(`This is friend id: ${listItem.id}`);
+        const confirmDelete = confirm(`Are you sure you want to delete  ${friendName}`)
+        if(confirmDelete){
+
+            const friendIndex = friendsListStored.findIndex(friend=>friend.id!==listItem.id);
+
+            if (friendIndex!==-1){
+
+                friendsListStored.splice(friendIndex,1);
+                localStorage.setItem('friends',JSON.stringify(friendsListStored));
+                renderFriends();
+            }
+            groupsArr.forEach(group=>{
+                const memberIndex = group.membersArr.findIndex(member=>member.id==listItem.id);
+                console.log(`deleted the member at ${memberIndex}`);
+                if (memberIndex!==-1){
+                    group.membersArr.splice(memberIndex,1)
+                }
+            })
+            localStorage.setItem('groups',JSON.stringify(groupsArr));
+            renderGroups();
+            // renderFriends();
+        }
+        // listItem.remove();
+
+    }
+});
+
+document.getElementById('list-expenses').addEventListener('click',function(event) {
+    if (event.target && event.target.classList.contains('delete')) {
+        // console.log("The expense delete btn was clicked")
+        const listItem = event.target.closest('li');
+        const expenseName = listItem.childNodes[0].childNodes[0].innerText.trim();
+        const expenseId = listItem.id;
+        // console.log(expenseName);
+        const confirmDelete = confirm(`Are you sure you want to delete: ${expenseName}`)
+        if (confirmDelete) {
+            let groupIndex = -1;
+
+            groupsArr.forEach((group, index) => {
+                const expenseExists = group.expenses.find(expense => expense.date == expenseId);
+                if (expenseExists) {
+                    groupIndex = index;
+                }
+            });
+
+            if (groupIndex !== -1) {
+                const expenseIndex = groupsArr[groupIndex].expenses.findIndex(expense => expense.date == expenseId);
+
+                if (expenseIndex !== -1) {
+                    groupsArr[groupIndex].expenses.splice(expenseIndex, 1);
+                    localStorage.setItem('groups', JSON.stringify(groupsArr));
+                    renderExpenses(groupsArr[groupIndex]);
+                }
+            }
+        }
+
     }
 });

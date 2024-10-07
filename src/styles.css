@@ -237,7 +237,7 @@ h2 {
 ul {
 	list-style: none;
 }
-    
+
 #group-list,
 #friends-list {
 	margin-bottom: 10px;
@@ -610,7 +610,7 @@ ul {
 	background-color: #00A1C6;
 }
 
-.section-main-group-info-nav>li:hover::before, 
+.section-main-group-info-nav>li:hover::before,
 .section-main-group-info-nav .active::before {
 	background-color: #00A1C6;
 }
@@ -802,3 +802,8 @@ footer {
     text-align: center;
     justify-items: start;
 } */
+
+.delete{
+    cursor: pointer;
+    color: red;
+}
