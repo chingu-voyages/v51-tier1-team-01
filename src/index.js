@@ -64,7 +64,8 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         selectedGroupInfo ? selectedGroupInfo.style.display = "block" : ""
 
         if (event.target.matches(".group-balances")) {
-            selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
+            // selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
+            selectedGroupInfo.innerHTML = renderExpenses(selectedGroup);
             listExpenses.classList.remove("hidden");
         // } else if (event.target.matches(".group-members")) {
         } else {
@@ -596,8 +597,9 @@ function renderExpenses(group) {
 
         const expenseMembers = document.createElement("div");
         expenseMembers.classList.add("balances-members-container");
-        console.log("What are expense members now...")
-        console.log(expense.members)
+        console.log("What are expense members now...");
+        console.log(expense);
+        console.log(`This is expense members`,expense.members);
         expense.members.forEach(member => {
             const memberDiv = document.createElement("div");
             memberDiv.classList.add("balances-card-member");
@@ -712,7 +714,7 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
 
         })
     })
-
+    localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
     renderExpenses(groupsArr[selectedGroupIndex]);
 });
@@ -838,10 +840,15 @@ selectedGroup.addEventListener('click', function(event) {
                                 localStorage.setItem('friends',JSON.stringify(friendsListStored));
                                 editElement.innerHTML = `${titleCase(updatedName)}`;
                                 console.log(`This is the group`,groupsArr[groupIndex]);
-                                renderExpenses(groupsArr[groupIndex]);
-                                renderSelectedGroupInfo(groupsArr[groupIndex]);
-                                getGroupMembers(groupsArr[groupIndex]);
-                                // renderExistingFriendsForGroupCreation(groupsArr[groupIndex]);
+                                console.log(`This is the group with slected`,groupsArr[selectedGroupIndex]);
+                                renderFriends();
+                                // renderExpenses(groupsArr[groupIndex]);
+                                renderExpenses(groupsArr[selectedGroupIndex]);
+                                renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+                                getGroupMembers(groupsArr[selectedGroupIndex]);
+                                // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
+                            }else{
+                                console.log("Either memberIndex or friendIndex does not exist");
                             }
                         }
                         console.log(groupsArr[groupIndex])
@@ -854,7 +861,7 @@ selectedGroup.addEventListener('click', function(event) {
             }
 
             renderGroups();
-            renderFriends()
+            renderFriends();
         });
     }
 });
@@ -913,3 +920,5 @@ document.getElementById('friends-list').addEventListener('click', function(event
 
     }
 });
+
+renderExpenses(selectedGroupIndex);
