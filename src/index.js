@@ -64,21 +64,24 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
         selectedGroupInfo ? selectedGroupInfo.style.display = "block" : ""
 
-        if (event.target.matches(".group-balances")) {
-            selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
+		if (event.target.matches(".group-balances")) {
+			selectedGroupInfo.innerHTML = `<div></div>`
+            // selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
             listExpenses.classList.remove("hidden");
         // } else if (event.target.matches(".group-members")) {
         } else {
             selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
-           listExpenses.classList.add("hidden");
+            listExpenses.classList.add("hidden");
+        } 
 
-        } else if (event.target.matches("#download-btn")){
-			console.log("Downloading PDF ...")
-			downloadPDF(selectedGroup)
+		if (event.target.matches("#download-btn")){
+					console.log("Downloading PDF ...")
+					downloadPDF(selectedGroup)
+		}
+
     } else {
         event.stopPropagation()
     }
-    // return
 })
 
 function getGroupBalances(selectedGroup) {
