@@ -911,9 +911,9 @@ document.getElementById('group-list').addEventListener('click',function(event){
         console.log(`This is group id ${groupContainer.id}`);
         const confirmDelete = confirm(`Are you sure you want to delete ${groupName}`)
         if (confirmDelete){
-
-            const groupIndex = groupsArr.findIndex(group =>group.id!==groupContainer.id);
+            const groupIndex = groupsArr.findIndex(group =>group.id==groupContainer.id);
             if (groupIndex!==-1){
+                console.log(groupIndex);
                 groupsArr.splice(groupIndex,1);
                 localStorage.setItem('groups',JSON.stringify(groupsArr));
                 renderGroups();
@@ -924,6 +924,7 @@ document.getElementById('group-list').addEventListener('click',function(event){
 })
 document.getElementById('friends-list').addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('delete')) {
+        console.log(event);
         const listItem = event.target.closest('li');
         const friendName = listItem.childNodes[0].nodeValue.trim();
         console.log(`Deleting friend: ${friendName}`);
@@ -931,8 +932,8 @@ document.getElementById('friends-list').addEventListener('click', function(event
         const confirmDelete = confirm(`Are you sure you want to delete  ${friendName}`)
         if(confirmDelete){
 
-            const friendIndex = friendsListStored.findIndex(friend=>friend.id!==listItem.id);
-
+            const friendIndex = friendsListStored.findIndex(friend=>friend.id==listItem.id);
+            console.log(friendIndex);
             if (friendIndex!==-1){
 
                 friendsListStored.splice(friendIndex,1);
