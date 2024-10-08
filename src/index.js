@@ -153,9 +153,10 @@ function getGroupMembers(selectedGroup) {
 								    ${member.name}
 								    </p>
                                     <span class="pen">🖋️</span>
-								</div>
-								<p class="badge badge-paid">${memberTotal(member, selectedGroup)}</p>
-							</div>
+                                    <span class="delete">×</span>
+                                    </div>
+                                    <p class="badge badge-paid">${memberTotal(member, selectedGroup)}</p>
+                                    </div>
 							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
 						</div>
 					`
@@ -804,6 +805,8 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
 //         });
 //     }
 // });
+
+// name editing
 selectedGroup.addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('pen')) {
         const editElement = event.target.closest('div').querySelector('.editable');
@@ -900,7 +903,7 @@ selectedGroup.addEventListener('click', function(event) {
     }
 });
 
-
+// group deletion
 document.getElementById('group-list').addEventListener('click',function(event){
     if (event.target && event.target.classList.contains('delete')){
         const listItem = event.target.closest('li');
@@ -922,6 +925,8 @@ document.getElementById('group-list').addEventListener('click',function(event){
         // listItem.remove();
     }
 })
+
+// friend deletion
 document.getElementById('friends-list').addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('delete')) {
         console.log(event);
@@ -956,6 +961,37 @@ document.getElementById('friends-list').addEventListener('click', function(event
     }
 });
 
+// member deletion
+document.getElementById('selected-group').addEventListener('click',function(event){
+    if(event.target&&event.target.classList.contains('delete')){
+        // console.log('clicked');
+        const memberContainer = event.target.closest('.balances-card-member');
+
+        if (memberContainer) {
+            const memberItem = memberContainer.querySelector('.balances-card-member-name');
+            const memberNameText = memberItem.innerText.trim();
+            // console.log(memberNameText);
+            console.log(`Trying to delete: ${memberNameText}, with ID: ${memberItem.id}`);
+            const confirmDelete = confirm(`Are you sure, you want to delete: ${memberNameText}`);
+            if(confirmDelete){
+                console.log("This is selected group array: ", groupsArr[selectedGroupIndex].membersArr);
+                const memberIndex = groupsArr[selectedGroupIndex].membersArr.findIndex(member=>member.id ==memberItem.id);
+                console.log('This is member index',memberIndex);
+                if(memberIndex!==-1){
+                    groupsArr[selectedGroupIndex].membersArr.splice(memberIndex,1);
+                    localStorage.setItem('groups',JSON.stringify(groupsArr));
+                    renderGroups();
+                    renderFriends();
+                }
+
+            }
+        }else{
+            console.log('Not found')
+        }
+    }
+})
+
+// expense deletion
 document.getElementById('list-expenses').addEventListener('click',function(event) {
     if (event.target && event.target.classList.contains('delete')) {
         // console.log("The expense delete btn was clicked")
