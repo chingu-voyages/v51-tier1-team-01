@@ -1,4 +1,4 @@
-import { totalCalc, memberStatus, memberTotal } from "./calcs.js";
+import { totalOutstandingCalc, memberStatus, memberTotal, totalCalc } from "./calcs.js";
 import {downloadPDF} from "./pdf.js";
 
 const groupCreateBtn = document.getElementById('group-create-btn');
@@ -32,6 +32,7 @@ if(groupsArr.length!==0) {
 renderFriends();
 renderGroups();
 
+console.log(`Total costs for group 1 is $${totalCalc(groupsArr[0])}`)
 
 //events
 //form events
@@ -154,7 +155,7 @@ function getGroupMembers(selectedGroup) {
 								    </p>
                                     <span class="pen">🖋️</span>
 								</div>
-								<p class="badge badge-paid">${memberTotal(member, selectedGroup)}</p>
+								<p class="badge badge-paid">${memberTotal(member.name, selectedGroup)}</p>
 							</div>
 							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
 						</div>
@@ -204,7 +205,7 @@ function renderSelectedGroupInfo(group) {
                     </div>
 					<p class="text-small">${membersArr.map(member => member.name).join(", ")}</p>
 					${friendsImages.join(" ")}
-					<p class="badge badge-${totalCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
+					<p class="badge badge-${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalOutstandingCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
 	</div>
