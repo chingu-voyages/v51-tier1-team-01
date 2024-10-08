@@ -153,9 +153,9 @@ function getGroupMembers(selectedGroup) {
 								    </p>
                                     <span class="pen">🖋️</span>
 								</div>
-								<p class="badge badge-paid">${memberTotal(member.name, selectedGroup)}</p>
+								<p class="badge badge-${memberTotal(member.name, selectedGroup) == 0 ? "paid" : "unpaid"}">$${memberTotal(member.name, selectedGroup)}</p>
 							</div>
-							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+							<img class="balances-card-member-img ${memberTotal(member.name, selectedGroup) == 0 ? "paid" : "unpaid"}" src=${member.imgSrc} alt="Member icon">
 						</div>
 					`
 				}).join("")
@@ -618,7 +618,6 @@ function renderExpenses(group) {
             const memberName = document.createElement("p");
             memberName.classList.add("balances-card-member-name");
             const memberImg = document.createElement("img");
-            memberImg.classList.add("balances-card-member-img", "paid");
             memberImg.setAttribute("src", member.imgSrc);
             memberImg.setAttribute("alt", "Member icon");
             memberName.textContent = titleCase(member.name);
@@ -626,13 +625,23 @@ function renderExpenses(group) {
             const memberCardStatus = document.createElement("div")
             memberCardStatus.textContent = memberStatus(member, expense)
 
+            memberCardStatus.textContent == "Paid" ? memberImg.classList.add("balances-card-member-img", "paid") :
+            memberCardStatus.textContent == "Paid the bill" ? memberImg.classList.add("balances-card-member-img", "payer") :
+            memberImg.classList.add("balances-card-member-img", "unpaid")
+
             memberCardStatus.textContent == "Paid" ? memberCardStatus.classList.add("badge", "badge-paid") :
             memberCardStatus.textContent == "Paid the bill" ? memberCardStatus.classList.add("badge", "badge-payer") :
             memberCardStatus.classList.add("badge", "badge-unpaid")
 
-            memberDiv.appendChild(memberName);
-            memberDiv.appendChild(memberCardStatus);
+            const memberSubDiv = document.createElement("div")
+            memberSubDiv.classList.add("card-sub-div")
+
+            memberSubDiv.appendChild(memberName);
+            memberSubDiv.appendChild(memberCardStatus);
+
+            memberDiv.appendChild(memberSubDiv)
             memberDiv.appendChild(memberImg);
+
             expenseMembers.appendChild(memberDiv);
         })
 
