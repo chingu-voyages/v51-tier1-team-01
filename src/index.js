@@ -32,8 +32,6 @@ if(groupsArr.length!==0) {
 renderFriends();
 renderGroups();
 
-console.log(`Total costs for group 1 is $${totalCalc(groupsArr[0])}`)
-
 //events
 //form events
 groupForm.addEventListener('submit', handleGroupCreation);
