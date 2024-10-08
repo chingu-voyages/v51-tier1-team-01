@@ -357,7 +357,7 @@ ul {
 #from-user, #form-add-expense{
 	max-width: 50%;
     display: flex;
-    flex-direction:column ;
+    flex-direction: column ;
     justify-content: center;
     gap:1rem;
 	margin: 1rem 0;
@@ -628,8 +628,6 @@ ul {
 
 #group-info-container {
 	border-top: 1px solid #d3d3d3;
-	border-bottom: 1px solid #d3d3d3;
-	margin-bottom: 2rem;
 }
 
 .total-group-expenses, .total-group-paid, .total-group-unpaid {
@@ -656,7 +654,8 @@ margin-bottom: 5px;
 
 /* balances */
 
-.balances-members-container {
+.balances-members-container, 
+.balances-expenses-container {
 	display: grid;
 	grid-template-columns: repeat( auto-fit, minmax(320px, 1fr) );
 	justify-content: space-between;
@@ -664,13 +663,32 @@ margin-bottom: 5px;
 	padding-top: 3rem;
 }
 
-.balances-members-header {
+.balances-expenses-container {
+	display: none;
+	padding: 0.5rem 0 1rem 0;
+	transition: transform .3s ease, padding 3s ease;
+}
+
+#list-expenses {
+	padding-top: 3rem;
+}
+
+.expense-item {
+	margin-bottom: 1rem;
+}
+
+.balances-members-header,
+.balances-expenses-header {
 	display: flex;
 	justify-content: space-between;
 	padding: 1rem;
 	color: hsl(0deg 0% 99.61%);
 	background-color: hsl(201.4deg 100% 28.04%);
 	border-radius: 50px;
+}
+
+.balances-expenses-header .date {
+	margin: 0 1rem 0 auto;
 }
 
 .balances-card-member {

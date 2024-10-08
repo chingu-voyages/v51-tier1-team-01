@@ -28,6 +28,7 @@ if(groupsArr.length!==0) {
 } else {
     showForm();
 }
+
 //rendering of existing data from localStorage on page load
 renderFriends();
 renderGroups();
@@ -46,7 +47,14 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event) => {
-    if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") ||event.target.matches("#download-btn")) {
+    if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") ||event.target.matches("#download-btn") || event.target.matches("#show-expenses-members")) {
+
+		if (event.target.matches("#show-expenses-members")) {
+			event.stopPropagation()
+			const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
+			return toggle.style.display ==="grid" ? toggle.style.display ="none" : toggle.style.display="grid";
+		}
+
         const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
         const selectedGroup = groupsArr.find(group => {
@@ -65,14 +73,11 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         selectedGroupInfo ? selectedGroupInfo.style.display = "block" : ""
 
 		if (event.target.matches(".group-balances")) {
-			selectedGroupInfo.innerHTML = `<div></div>`
-			renderExpenses(selectedGroup)
-            // selectedGroupInfo.innerHTML = getGroupBalances(selectedGroup)
-            listExpenses.classList.remove("hidden");
-        // } else if (event.target.matches(".group-members")) {
+			selectedGroupInfo.innerHTML = getExpensesHTML(selectedGroup)
+            listExpenses?.classList.remove("hidden");
         } else {
             selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
-            listExpenses.classList.add("hidden");
+            listExpenses?.classList.add("hidden");
         }
 
 		if (event.target.matches("#download-btn")){
@@ -85,62 +90,8 @@ document.querySelector("body")?.addEventListener("click", (event) => {
     }
 })
 
-function getGroupBalances(selectedGroup) {
-    renderExpenses(selectedGroup)
-    // if (selectedGroup.expenses.length){
-    //     renderExpenses(selectedGroup);
-    // console.log(selectedGroup.expenses[0].payer.name);
-    //     return `<div class="section-main-group-info-balances">
-    //         <div class="balances-members-container">
-    //             ${
-    //                 selectedGroup.membersArr.map(member => {
-    //                     // console.log(member);
-    //                     // console.log(member === selectedGroup.expenses[0].payer.name)
-    //                     if(member.name === selectedGroup.expenses[0].payer.name){
-    //                         return `
-    //                             <div class = "balances-card-member">
-    //                                 <div>
-    //                                     <div>
-    //                                         <p class="balances-card-member-name editable" id=${member.id}>
-    //                                         ${member.name}
-    //                                         </p>
-    //                                         <span class="pen">🖋️</span>
-    //                                     </div>
-    //                                     <p class="badge badge-paid">You are owed $3,456</p>
-    //                                 </div>
-    //                                 <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
-    //                             </div>
-    //                     `}
-    //                     else{
-    //                         return `
-    //                             <div class = "balances-card-member">
-    //                                 <div>
-    //                                     <div>
-    //                                         <p class="balances-card-member-name editable" id=${member.id}>
-    //                                         ${member.name}
-    //                                         </p>
-    //                                         <span class="pen">🖋️</span>
-    //                                     </div>
-    //                                     <p class="badge badge-paid">You owe $3,456</p>
-    //                                 </div>
-    //                                 <img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
-    //                             </div>
-    //                         `
-    //                         }
-    //                     }).join("")
-	// 		}
-	// 	</div>
-	// 	<div class="balances-members-footer">
-	// 		<button class="add-btn"><span>+</span>Add member</button>
-	// 		<p>Subtotal: $1948</p>
-	// 	</div>
-	// </div>`
-    // }else{
-    //    return `No expenses added yet`;
-    // }
-}
-
 function getGroupMembers(selectedGroup) {
+	document.querySelector(".main-group-add-expense").style.display = "none";
 	return `<div class="section-main-group-info-balances">
 		<div class="balances-members-container">
 			${
@@ -178,7 +129,7 @@ function handleGroupClick(e) {
         }
         // const selectedGroupInfo = document.getElementById("group-info-container")
         // selectedGroupInfo.innerHTML = getGroupBalances(groupsArr[selectedGroupIndex])
-        listExpenses.classList.remove("hidden");
+        listExpenses?.classList.remove("hidden");
         // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
     })
 }
@@ -188,7 +139,7 @@ function renderSelectedGroupInfo(group) {
     const { groupName, id, avatar, membersArr, expenses } = group;
     selectedGroup.innerHTML = "";
     selectedGroupIndex = groupsArr.indexOf(group);
-    renderExpenses(groupsArr[selectedGroupIndex]); // Jelena added probably temporary
+    
     renderSelectPayerOptions();
 
     // getGroupBalances(groupsArr[selectedGroupIndex]);
@@ -217,7 +168,9 @@ function renderSelectedGroupInfo(group) {
 				</ul>
 				<button id="download-btn"> Download PDF</button>
 				</div>
-                <div id="group-info-container"></div>
+                <div id="group-info-container">
+					${getExpensesHTML(groupsArr[selectedGroupIndex])}
+				</div>
 
 			</div>
 `
@@ -564,15 +517,16 @@ formAddExpense.addEventListener("submit", (e) => {
     inputExpenseAmount.value = "";
     // inputExpenseParticipant.value = "";
     formAddExpense.classList.add("hidden");
-    renderExpenses(groupsArr[selectedGroupIndex]);
+    getExpensesHTML(groupsArr[selectedGroupIndex]);
     // getGroupBalances(groupsArr[selectedGroupIndex]);
 })
 
 const addMembersToExpenseDialog = document.getElementById("add-members-to-expense");
 
+if(listExpenses){
 listExpenses.addEventListener("click", handleExpenseClick)
 let selectedExpenseIndex;
-
+}
 function handleExpenseClick(e) {
     // e.stopPropagation();
     let selectedExpenseId = Number(e.target.closest(".expense-item").id);
@@ -586,86 +540,137 @@ function handleExpenseClick(e) {
     console.log(selectedExpenseIndex);
 }
 
-function renderExpenses(group) {
-    listExpenses.textContent = "";
-    group.expenses.forEach(expense => {
-        const listItem = document.createElement("li");
-        listItem.setAttribute("id", expense.date.toString());
-        listItem.classList.add("expense-item");
-        const expenseHeader = document.createElement("h3");
-        expenseHeader.classList.add("balances-members-header");
-        const expenseName = document.createElement("span");
-        const expenseDate = document.createElement("span");
-        expenseName.textContent = titleCase(expense.name);
-        expenseDate.textContent = expense.date.toString();
-        expenseHeader.appendChild(expenseName);
-        expenseHeader.appendChild(expenseDate);
-        const deleteIcon = document.createElement("span");
-        // <span class="delete">&times</span>
-        deleteIcon.classList.add("delete");
-        deleteIcon.innerHTML = "&times";
-        expenseHeader.appendChild(deleteIcon);
-        const expenseMembers = document.createElement("div");
-
-        expenseMembers.classList.add("balances-members-container");
-
-        console.log("What are expense members now...");
-        console.log(expense);
-        console.log(`This is expense members`,expense.members);
-        expense.members.forEach(member => {
-            const memberDiv = document.createElement("div");
-            memberDiv.classList.add("balances-card-member");
-            memberDiv.setAttribute("id", member.id)
-            const memberName = document.createElement("p");
-            memberName.classList.add("balances-card-member-name");
-            const memberImg = document.createElement("img");
-            memberImg.classList.add("balances-card-member-img", "paid");
-            memberImg.setAttribute("src", member.imgSrc);
-            memberImg.setAttribute("alt", "Member icon");
-            memberName.textContent = titleCase(member.name);
-            memberName.textContent = member.name;
-            const memberCardStatus = document.createElement("div")
-            memberCardStatus.textContent = memberStatus(member, expense)
-
-            memberCardStatus.textContent == "Paid" ? memberCardStatus.classList.add("badge", "badge-paid") :
-            memberCardStatus.textContent == "Paid the bill" ? memberCardStatus.classList.add("badge", "badge-payer") :
-            memberCardStatus.classList.add("badge", "badge-unpaid")
-
-            memberDiv.appendChild(memberName);
-            memberDiv.appendChild(memberCardStatus);
-            memberDiv.appendChild(memberImg);
-            expenseMembers.appendChild(memberDiv);
-        })
-
-        const expenseFooter = document.createElement("div");
-        expenseFooter.classList.add("balances-members-footer");
-        const btnAddMember = document.createElement("button");
-        btnAddMember.classList.add("add-btn");
-        btnAddMember.textContent = "Add member";
-        btnAddMember.addEventListener("click", (e) => {
-            handleExpenseClick(e);
-            addMembersToExpense(groupsArr[selectedGroupIndex]);
-        })
-
-        const btnEditExpense = document.createElement("button");
-        btnEditExpense.textContent = "Edit expense";
-        btnEditExpense.addEventListener("click", (e) => {
-            handleExpenseClick(e);
-            editExpense(group.expenses[selectedExpenseIndex])
-        })
-        const spanSubTotal = document.createElement("span");
-        spanSubTotal.textContent = `Subtotal $${expense.cost}`;
-        expenseFooter.appendChild(btnAddMember);
-        expenseFooter.appendChild(btnEditExpense);
-        expenseFooter.appendChild(spanSubTotal);
-
-        listItem.appendChild(expenseHeader);
-        listItem.appendChild(expenseMembers)
-        listItem.appendChild(expenseFooter)
-
-        listExpenses.appendChild(listItem);
-    })
+function getExpensesHTML(group) {
+	const {expenses} = group;
+	document.querySelector(".main-group-add-expense").style.display = "block";
+	return `<div class="section-main-group-info-balances">
+	
+		 <ul id="list-expenses">
+			${
+				expenses.map(expense => {
+					return `
+							<li class= "expense-item" id=${expense.date.toString()}>
+								<div class="balances-expenses-header" id="show-expenses-members">
+									<span>${titleCase(expense.name)}</span>
+									<span class="date">${new Date(expense.date).toLocaleDateString()}</span>
+									<span class="delete">&times</span>
+								</div>
+								<div class="balances-expenses-container">
+       					 		${
+									expense.members.map(member => {
+										return `
+											<div class = "balances-card-member">
+												<div>
+													<div>
+													    <p class="balances-card-member-name editable" id=${member.id}>
+													    ${member.name}
+													    </p>
+                					                    <span class="pen">🖋️</span>
+													</div>
+													<p class="badge badge-paid"></p>
+												</div>
+												<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+											</div>
+										`
+									}).join("")
+								}
+								</div>
+							</li>
+					`
+				}).join("")
+			}
+			</ul>
+		<div class="balances-members-footer">
+			<button class="add-btn"><span>+</span>Add member</button>
+		</div>
+	</div>`
 }
+
+
+// !!! ---- currently getExpensesHTML is used wherever renderEsxenses used to be ---- !!!
+
+// function renderExpenses(group) {
+// 	if(listExpenses){
+//     // listExpenses.textContent = "";
+//     group.expenses.forEach(expense => {
+//         const listItem = document.createElement("li");
+//         listItem.setAttribute("id", expense.date.toString());
+//         listItem.classList.add("expense-item");
+//         const expenseHeader = document.createElement("h3");
+//         expenseHeader.classList.add("balances-members-header");
+//         const expenseName = document.createElement("span");
+//         const expenseDate = document.createElement("span");
+//         expenseName.textContent = titleCase(expense.name);
+//         expenseDate.textContent = expense.date.toString();
+//         expenseHeader.appendChild(expenseName);
+//         expenseHeader.appendChild(expenseDate);
+//         const deleteIcon = document.createElement("span");
+//         // <span class="delete">&times</span>
+//         deleteIcon.classList.add("delete");
+//         deleteIcon.innerHTML = "&times";
+//         expenseHeader.appendChild(deleteIcon);
+//         const expenseMembers = document.createElement("div");
+
+//         expenseMembers.classList.add("balances-members-container");
+
+//         console.log("What are expense members now...");
+//         console.log(expense);
+//         console.log(`This is expense members`,expense.members);
+//         expense.members.forEach(member => {
+//             const memberDiv = document.createElement("div");
+//             memberDiv.classList.add("balances-card-member");
+//             memberDiv.setAttribute("id", member.id)
+//             const memberName = document.createElement("p");
+//             memberName.classList.add("balances-card-member-name");
+//             const memberImg = document.createElement("img");
+//             memberImg.classList.add("balances-card-member-img", "paid");
+//             memberImg.setAttribute("src", member.imgSrc);
+//             memberImg.setAttribute("alt", "Member icon");
+//             memberName.textContent = titleCase(member.name);
+//             memberName.textContent = member.name;
+//             const memberCardStatus = document.createElement("div")
+//             memberCardStatus.textContent = memberStatus(member, expense)
+
+//             memberCardStatus.textContent == "Paid" ? memberCardStatus.classList.add("badge", "badge-paid") :
+//             memberCardStatus.textContent == "Paid the bill" ? memberCardStatus.classList.add("badge", "badge-payer") :
+//             memberCardStatus.classList.add("badge", "badge-unpaid")
+
+//             memberDiv.appendChild(memberName);
+//             memberDiv.appendChild(memberCardStatus);
+//             memberDiv.appendChild(memberImg);
+//             expenseMembers.appendChild(memberDiv);
+//         })
+
+//         const expenseFooter = document.createElement("div");
+//         expenseFooter.classList.add("balances-members-footer");
+//         const btnAddMember = document.createElement("button");
+//         btnAddMember.classList.add("add-btn");
+//         btnAddMember.textContent = "Add member";
+//         btnAddMember.addEventListener("click", (e) => {
+//             handleExpenseClick(e);
+//             addMembersToExpense(groupsArr[selectedGroupIndex]);
+//         })
+
+//         const btnEditExpense = document.createElement("button");
+//         btnEditExpense.textContent = "Edit expense";
+//         btnEditExpense.addEventListener("click", (e) => {
+//             handleExpenseClick(e);
+//             editExpense(group.expenses[selectedExpenseIndex])
+//         })
+//         const spanSubTotal = document.createElement("span");
+//         spanSubTotal.textContent = `Subtotal $${expense.cost}`;
+//         expenseFooter.appendChild(btnAddMember);
+//         expenseFooter.appendChild(btnEditExpense);
+//         expenseFooter.appendChild(spanSubTotal);
+
+//         listItem.appendChild(expenseHeader);
+//         listItem.appendChild(expenseMembers)
+//         listItem.appendChild(expenseFooter)
+
+//         listExpenses.appendChild(listItem);
+//     })
+// }
+// }
 
 const editExpenseDialog = document.getElementById("edit-expense");
 const editExpenseForm = document.getElementById("form-edit");
@@ -687,7 +692,7 @@ editExpenseForm.addEventListener("submit", (e) => {
     let selectedExpense = groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex];
     selectedExpense.name = editExpenseNameInput.value
     selectedExpense.cost = Number(editExpenseCostInput.value)
-    renderExpenses(groupsArr[selectedGroupIndex]);
+    getExpensesHTML(groupsArr[selectedGroupIndex]);
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     editExpenseDialog.close();
 })
@@ -739,7 +744,7 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     })
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
-    renderExpenses(groupsArr[selectedGroupIndex]);
+    getExpensesHTML(groupsArr[selectedGroupIndex]);
 });
 
 // console.log(selectedGroupIndex);
@@ -839,7 +844,7 @@ selectedGroup.addEventListener('click', function(event) {
 
                                 editElement.innerHTML = `${titleCase(updatedName)}`;
                                 renderSelectedGroupInfo(groupsArr[groupIndex]);
-                                renderExpenses(groupsArr[groupIndex]);
+                                getExpensesHTML(groupsArr[groupIndex]);
                             }
                             console.log(groupsArr[groupIndex]);
                     }
@@ -876,8 +881,8 @@ selectedGroup.addEventListener('click', function(event) {
                                 console.log(`This is the group`,groupsArr[groupIndex]);
                                 console.log(`This is the group with slected`,groupsArr[selectedGroupIndex]);
                                 renderFriends();
-                                // renderExpenses(groupsArr[groupIndex]);
-                                renderExpenses(groupsArr[selectedGroupIndex]);
+                                // getExpensesHTML(groupsArr[groupIndex]);
+                                getExpensesHTML(groupsArr[selectedGroupIndex]);
                                 renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
                                 getGroupMembers(groupsArr[selectedGroupIndex]);
                                 // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
@@ -955,7 +960,7 @@ document.getElementById('friends-list').addEventListener('click', function(event
     }
 });
 
-document.getElementById('list-expenses').addEventListener('click',function(event) {
+document.getElementById('list-expenses')?.addEventListener('click',function(event) {
     if (event.target && event.target.classList.contains('delete')) {
         // console.log("The expense delete btn was clicked")
         const listItem = event.target.closest('li');
@@ -979,7 +984,7 @@ document.getElementById('list-expenses').addEventListener('click',function(event
                 if (expenseIndex !== -1) {
                     groupsArr[groupIndex].expenses.splice(expenseIndex, 1);
                     localStorage.setItem('groups', JSON.stringify(groupsArr));
-                    renderExpenses(groupsArr[groupIndex]);
+                    getExpensesHTML(groupsArr[groupIndex]);
                 }
             }
         }
