@@ -189,10 +189,6 @@ function renderSelectedGroupInfo(group) {
 	if(groupsArr.length) {
 		selectedGroup.classList.remove("hidden");
 		document.querySelector(".main-group-add-expense").classList.remove("hidden");
-	} else {
-		selectedGroup.classList.add("hidden");
-		document.querySelector(".main-group-add-expense").classList.add("hidden");
-	}
 	
     console.log("Inside renderSelectedGroup function")
     const { groupName, id, avatar, membersArr, expenses } = group;
@@ -223,7 +219,10 @@ function renderSelectedGroupInfo(group) {
 				<img src=${avatar} alt="Group icon">
 `
    listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-
+} else {
+	selectedGroup.classList.add("hidden");
+	document.querySelector(".main-group-add-expense").classList.add("hidden");
+}
 }
 
 //creating html list templates
