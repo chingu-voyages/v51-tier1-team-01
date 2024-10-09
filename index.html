@@ -119,22 +119,25 @@
             <ul id="list-expenses"></ul>
         </section>
         <dialog id="add-members-to-expense">
-            <form>
-                <p>Other group members:</p>
-                <ul id="other-members-container">
-                </ul>
-                <button id="close-add-members-to-expense">Close</button>
-            </form>
+            <div class="dialog-body">
+                <form>
+                    <p>Other group members:</p>
+                    <ul id="other-members-container">
+                    </ul>
+                    <button id="close-add-members-to-expense">Close</button>
+                </form>
+            </div>
         </dialog>
         <dialog id="edit-expense">
-                <form id="form-edit">
-                    <label for="edit-name">Name: <input type="text" id="edit-name"></label>
-                    <label for="edit-cost">Amount: <input type="number" id="edit-cost"></label>
-                    <div>
-                        <button type="button">Cancel</button>
-                        <button type="submit">Edit expense</button>
-                    </div>
-                </form>
+                <div class="dialog-body">
+                    <form id="form-edit">
+                        <label for="edit-name" class="form-control">Name: <input type="text" id="edit-name"></label>
+                        <label for="edit-cost" class="form-control">Amount: <input type="number" id="edit-cost"></label>
+                        <div>
+                            <button type="submit">Edit expense</button>
+                        </div>
+                    </form>
+                </div>
         </dialog>
 
 

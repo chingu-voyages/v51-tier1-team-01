@@ -369,7 +369,8 @@ ul {
 	}
 }
 
-#from-user input, .form-add input, #form-add-expense input, #form-add-expense select{
+input, select {
+/* #from-user input, .form-add input, #form-add-expense input, #form-add-expense select{ */
     padding: 0.5rem;
 	line-height: 1.7;
     border: 1px solid #006091;
@@ -806,4 +807,41 @@ footer {
 .delete{
     cursor: pointer;
     color: red;
+}
+
+/* dialog styles */
+
+dialog {
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 4px;
+    transition: ease all 0.2s;
+}
+
+.dialog-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin: auto;
+    padding: 1.5rem;
+}
+
+.dialog-body>form {
+	display: grid;
+	gap: 0.8rem;
+}
+
+dialog::backdrop {
+    background: hsla(0, 0%, 100%, 0.8);
+}
+
+.form-control {
+	display: grid;
+	margin-bottom: 0.5rem;
+	gap: 0.25rem;
+	justify-items: start;
+}
+
+.form-control-checkbox {
+	grid-template-columns: auto 1fr;
 }
