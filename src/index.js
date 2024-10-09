@@ -152,6 +152,7 @@ function getGroupMembers(selectedGroup) {
 								    ${member.name}
 								    </p>
                                     <span class="pen">🖋️</span>
+                                    <span class="delete">×</span>
 								</div>
 								<p class="badge badge-${memberTotal(member.name, selectedGroup) == 0 ? "paid" : "unpaid"}">$${memberTotal(member.name, selectedGroup)}</p>
 							</div>
@@ -618,6 +619,7 @@ function renderExpenses(group) {
             const memberName = document.createElement("p");
             memberName.classList.add("balances-card-member-name");
             const memberImg = document.createElement("img");
+            // memberImg.classList.add("balances-card-member-img", "paid");
             memberImg.setAttribute("src", member.imgSrc);
             memberImg.setAttribute("alt", "Member icon");
             memberName.textContent = titleCase(member.name);
@@ -812,6 +814,8 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
 //         });
 //     }
 // });
+
+// name editing
 selectedGroup.addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('pen')) {
         const editElement = event.target.closest('div').querySelector('.editable');
@@ -908,7 +912,7 @@ selectedGroup.addEventListener('click', function(event) {
     }
 });
 
-
+// group deletion
 document.getElementById('group-list').addEventListener('click',function(event){
     if (event.target && event.target.classList.contains('delete')){
         const listItem = event.target.closest('li');
@@ -919,9 +923,9 @@ document.getElementById('group-list').addEventListener('click',function(event){
         console.log(`This is group id ${groupContainer.id}`);
         const confirmDelete = confirm(`Are you sure you want to delete ${groupName}`)
         if (confirmDelete){
-
-            const groupIndex = groupsArr.findIndex(group =>group.id!==groupContainer.id);
+            const groupIndex = groupsArr.findIndex(group =>group.id==groupContainer.id);
             if (groupIndex!==-1){
+                console.log(groupIndex);
                 groupsArr.splice(groupIndex,1);
                 localStorage.setItem('groups',JSON.stringify(groupsArr));
                 renderGroups();
@@ -930,8 +934,11 @@ document.getElementById('group-list').addEventListener('click',function(event){
         // listItem.remove();
     }
 })
+
+// friend deletion
 document.getElementById('friends-list').addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('delete')) {
+        console.log(event);
         const listItem = event.target.closest('li');
         const friendName = listItem.childNodes[0].nodeValue.trim();
         console.log(`Deleting friend: ${friendName}`);
@@ -939,8 +946,8 @@ document.getElementById('friends-list').addEventListener('click', function(event
         const confirmDelete = confirm(`Are you sure you want to delete  ${friendName}`)
         if(confirmDelete){
 
-            const friendIndex = friendsListStored.findIndex(friend=>friend.id!==listItem.id);
-
+            const friendIndex = friendsListStored.findIndex(friend=>friend.id==listItem.id);
+            console.log(friendIndex);
             if (friendIndex!==-1){
 
                 friendsListStored.splice(friendIndex,1);
@@ -963,6 +970,37 @@ document.getElementById('friends-list').addEventListener('click', function(event
     }
 });
 
+// member deletion
+document.getElementById('selected-group').addEventListener('click',function(event){
+    if(event.target&&event.target.classList.contains('delete')){
+        // console.log('clicked');
+        const memberContainer = event.target.closest('.balances-card-member');
+
+        if (memberContainer) {
+            const memberItem = memberContainer.querySelector('.balances-card-member-name');
+            const memberNameText = memberItem.innerText.trim();
+            // console.log(memberNameText);
+            console.log(`Trying to delete: ${memberNameText}, with ID: ${memberItem.id}`);
+            const confirmDelete = confirm(`Are you sure, you want to delete: ${memberNameText}`);
+            if(confirmDelete){
+                console.log("This is selected group array: ", groupsArr[selectedGroupIndex].membersArr);
+                const memberIndex = groupsArr[selectedGroupIndex].membersArr.findIndex(member=>member.id ==memberItem.id);
+                console.log('This is member index',memberIndex);
+                if(memberIndex!==-1){
+                    groupsArr[selectedGroupIndex].membersArr.splice(memberIndex,1);
+                    localStorage.setItem('groups',JSON.stringify(groupsArr));
+                    renderGroups();
+                    renderFriends();
+                }
+
+            }
+        }else{
+            console.log('Not found')
+        }
+    }
+})
+
+// expense deletion
 document.getElementById('list-expenses').addEventListener('click',function(event) {
     if (event.target && event.target.classList.contains('delete')) {
         // console.log("The expense delete btn was clicked")
