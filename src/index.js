@@ -22,6 +22,10 @@ const formAddExpense = document.getElementById("form-add-expense");
 const listExpenses = document.getElementById("list-expenses");
 
 let selectedGroupIndex=-1; //just trying to fix the selectedGroupIndex is not defined
+
+selectedGroup.classList.add("hidden");
+document.querySelector(".main-group-add-expense").classList.add("hidden");
+
 if(groupsArr.length!==0) {
 	hideForm()
 	renderSelectedGroupInfo(groupsArr[0]);
@@ -182,6 +186,14 @@ function handleGroupClick(e) {
 
 
 function renderSelectedGroupInfo(group) {
+	if(groupsArr.length) {
+		selectedGroup.classList.remove("hidden");
+		document.querySelector(".main-group-add-expense").classList.remove("hidden");
+	} else {
+		selectedGroup.classList.add("hidden");
+		document.querySelector(".main-group-add-expense").classList.add("hidden");
+	}
+	
     console.log("Inside renderSelectedGroup function")
     const { groupName, id, avatar, membersArr, expenses } = group;
 	const header = document.querySelector(".section-main-group-header")
@@ -676,7 +688,7 @@ function getExpensesHTML(group) {
 								}
 									<div class="balances-members-footer" id=${expense.date.toString()}>
 										<button class="add-btn" id="add-expense-member"><span>+</span>Add member</button>
-										<button class="add-btn" id="edit-expense-btn"><span>+</span>Edit 	expense</button>
+										<button class="add-btn" id="edit-expense-btn"><span>+</span>Edit expense</button>
 										<span>Subtotal $${expense.cost}</span>
 									</div>
 								</div>
@@ -1050,7 +1062,7 @@ document.getElementById('group-list').addEventListener('click',function(event){
                 console.log(groupIndex);
                 groupsArr.splice(groupIndex,1);
                 localStorage.setItem('groups',JSON.stringify(groupsArr));
-                renderGroups();
+                renderSelectedGroupInfo();
             }
         }
         // listItem.remove();
@@ -1084,7 +1096,7 @@ document.getElementById('friends-list').addEventListener('click', function(event
                 }
             })
             localStorage.setItem('groups',JSON.stringify(groupsArr));
-            renderGroups();
+            renderSelectedGroupInfo();
             // renderFriends();
         }
         // listItem.remove();
