@@ -665,8 +665,7 @@ margin-bottom: 5px;
 
 .balances-expenses-container {
 	display: none;
-	padding: 0.5rem 0 1rem 0;
-	transition: transform .3s ease, padding 3s ease;
+	padding-top: 1rem;
 }
 
 #list-expenses {
@@ -726,8 +725,9 @@ margin-bottom: 5px;
 
 .balances-members-footer {
 	display: flex;
+	grid-column: 1/-1;
 	justify-content: space-between;
-	padding: 1rem 0 1rem 0;
+	padding: .5rem 0 .5rem 0;
 }
 
 /* editing name */

@@ -47,14 +47,9 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event) => {
-    if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") ||event.target.matches("#download-btn") || event.target.matches("#show-expenses-members")) {
 
-		if (event.target.matches("#show-expenses-members")) {
-			event.stopPropagation()
-			const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
-			return toggle.style.display ==="grid" ? toggle.style.display ="none" : toggle.style.display="grid";
-		}
-
+	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members")) {
+		
         const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
         const selectedGroup = groupsArr.find(group => {
@@ -74,17 +69,60 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
 		if (event.target.matches(".group-balances")) {
 			selectedGroupInfo.innerHTML = getExpensesHTML(selectedGroup)
-            listExpenses?.classList.remove("hidden");
+			
+
         } else {
             selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
             listExpenses?.classList.add("hidden");
         }
+	} else {
+        event.stopPropagation()
+    }
 
-		if (event.target.matches("#download-btn")){
+	if (event.target.matches("#show-expenses-members")) {
+		{
+			event.stopPropagation()
+			const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
+			return toggle.style.display ==="grid" ? toggle.style.display ="none" : toggle.style.display="grid";
+		}
+	} else {
+        event.stopPropagation()
+    }
+
+	if (event.target.matches("#add-expense-member")) {
+			event.stopPropagation()
+			// handleExpenseClick(event);
+			const groupId = document.querySelector(".section-main-group-info-nav-container").id
+			const group = groupsArr.find(group=> group.id === Number(groupId))
+			console.log(group)
+			const expenseId = Number(event.target.parentNode.id)
+			
+			addMembersToExpense(expenseId, group);
+	} else {
+        event.stopPropagation()
+    }
+
+	if (event.target.matches("#edit-expense-btn")) {
+		{
+			event.stopPropagation()
+			// handleExpenseClick(event);
+			
+			const expenseId = Number(event.target.parentNode.id)
+			const group = groupsArr.find(group=> {
+				return group.expenses.find( expense=> expense.date === Number(expenseId))
+			})
+			const expense = group.expenses.find( expense=> expense.date === Number(expenseId))
+
+			console.log(expense)
+			editExpense(expense)
+		}
+	} else {
+        event.stopPropagation()
+    }
+
+    if (event.target.matches("#download-btn")) {
 					console.log("Downloading PDF ...")
 					downloadPDF(selectedGroup)
-		}
-
     } else {
         event.stopPropagation()
     }
@@ -574,15 +612,18 @@ function getExpensesHTML(group) {
 										`
 									}).join("")
 								}
+									<div class="balances-members-footer" id=${expense.date.toString()}>
+										<button class="add-btn" id="add-expense-member"><span>+</span>Add member</button>
+										<button class="add-btn" id="edit-expense-btn"><span>+</span>Edit 	expense</button>
+										<span>Subtotal $${expense.cost}</span>
+									</div>
 								</div>
+								
 							</li>
 					`
 				}).join("")
 			}
 			</ul>
-		<div class="balances-members-footer">
-			<button class="add-btn"><span>+</span>Add member</button>
-		</div>
 	</div>`
 }
 
@@ -672,6 +713,8 @@ function getExpensesHTML(group) {
 // }
 // }
 
+
+
 const editExpenseDialog = document.getElementById("edit-expense");
 const editExpenseForm = document.getElementById("form-edit");
 const editExpenseNameInput = document.getElementById("edit-name");
@@ -704,11 +747,12 @@ editExpenseForm.addEventListener("submit", (e) => {
 const otherMembersContainer = document.getElementById("other-members-container")
 let checkboxes = [...document.querySelectorAll(".add-member-to-expense")];
 
-function addMembersToExpense(group) {
+function addMembersToExpense(id, group) {
+	console.log(group)
     otherMembersContainer.textContent = "";
     group.membersArr.forEach(member => {
 
-        if (!group.expenses[selectedExpenseIndex].members.includes(member)) {
+        if (group.expenses.id === Number(id) && !group.expenses.members.includes(member)) {
             const listItem = document.createElement("li");
             const checkbox = document.createElement("input");
             checkbox.setAttribute("type", "checkbox");
@@ -726,6 +770,29 @@ function addMembersToExpense(group) {
     checkboxes = [...document.querySelectorAll(".add-member-to-expense")]
     addMembersToExpenseDialog.showModal();
 }
+
+// function addMembersToExpense(group) {
+//     otherMembersContainer.textContent = "";
+//     group.membersArr.forEach(member => {
+
+//         if (!group.expenses[selectedExpenseIndex].members.includes(member)) {
+//             const listItem = document.createElement("li");
+//             const checkbox = document.createElement("input");
+//             checkbox.setAttribute("type", "checkbox");
+//             checkbox.setAttribute("id", member.name);
+//             checkbox.classList.add("add-member-to-expense")
+//             const label = document.createElement("label");
+//             label.setAttribute("for", member.name);
+//             label.textContent = member.name;
+//             listItem.classList.add("form-control-checkbox");
+//             listItem.appendChild(checkbox);
+//             listItem.appendChild(label);
+//             otherMembersContainer.appendChild(listItem)
+//         }
+//     })
+//     checkboxes = [...document.querySelectorAll(".add-member-to-expense")]
+//     addMembersToExpenseDialog.showModal();
+// }
 
 
 
