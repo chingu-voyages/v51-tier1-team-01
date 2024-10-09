@@ -823,20 +823,26 @@ const otherMembersContainer = document.getElementById("other-members-container")
 let checkboxes = [...document.querySelectorAll(".add-member-to-expense")];
 
 function addMembersToExpense(id, group) {
+    console.log("Add members to expense called")
 	console.log(group)
     otherMembersContainer.textContent = "";
+    const expense = group.expenses.find(expense => expense.date === id);
+    console.log(expense)
+    console.log(group.expense)
+    group.expense
     group.membersArr.forEach(member => {
-
-        if (group.expenses.id === Number(id) && !group.expenses.members.includes(member)) {
+        if (!expense.members.includes(member)) {
             const listItem = document.createElement("li");
             const checkbox = document.createElement("input");
             checkbox.setAttribute("type", "checkbox");
             checkbox.setAttribute("id", member.name);
+            console.log("Member to add")
+            console.log(member.name)
             checkbox.classList.add("add-member-to-expense")
             const label = document.createElement("label");
             label.setAttribute("for", member.name);
             label.textContent = member.name;
-            listItem.classList.add("form-control-checkbox");
+            listItem.classList.add("form-control", "form-control-checkbox");
             listItem.appendChild(checkbox);
             listItem.appendChild(label);
             otherMembersContainer.appendChild(listItem)
