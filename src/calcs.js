@@ -24,7 +24,7 @@ export const memberTotal = (member, group) => {
         let expenseMembers = expense.members.map(value => value.name)
         total = expense.payer.name == member || expense.paid.includes(member) || !expenseMembers.includes(member) ? total : total + split;
     });
-    return `$${total.toFixed(2)}`
+    return `${total.toFixed(2)}`
 }
 
 //Individual status for expense
