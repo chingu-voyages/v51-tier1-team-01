@@ -10,6 +10,7 @@ const closeGroupForm = document.getElementById("close-group-form");
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
+const groupContainer = document.getElementById("group-info-container")
 const groupsArr = JSON.parse(localStorage.getItem('groups'))||[];
 const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
 let groupList = document.getElementById('group-list');
@@ -21,6 +22,10 @@ const formAddExpense = document.getElementById("form-add-expense");
 const listExpenses = document.getElementById("list-expenses");
 
 let selectedGroupIndex=-1; //just trying to fix the selectedGroupIndex is not defined
+
+selectedGroup.classList.add("hidden");
+document.querySelector(".main-group-add-expense").classList.add("hidden");
+
 if(groupsArr.length!==0) {
 	hideForm()
 	renderSelectedGroupInfo(groupsArr[0]);
@@ -28,9 +33,13 @@ if(groupsArr.length!==0) {
 } else {
     showForm();
 }
+
 //rendering of existing data from localStorage on page load
 renderFriends();
 renderGroups();
+
+
+
 
 //events
 //form events
@@ -45,7 +54,9 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event) => {
-    if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") ||event.target.matches("#download-btn")) {
+
+	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members")) {
+
         const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
         const selectedGroup = groupsArr.find(group => {
@@ -971,10 +982,7 @@ document.getElementById('friends-list').addEventListener('click', function(event
 });
 
 // member deletion
-// const
-// document.getElementById('selected-group').addEventListener('click',function(event){
-if (selectedGroup){
-    selectedGroup.addEventListener('click',function(eventt){
+document.getElementById('selected-group').addEventListener('click',function(event){
     if(event.target&&event.target.classList.contains('delete')){
         // console.log('clicked');
         const memberContainer = event.target.closest('.balances-card-member');
@@ -994,7 +1002,7 @@ if (selectedGroup){
                     localStorage.setItem('groups',JSON.stringify(groupsArr));
                     renderGroups();
                     renderFriends();
-                    renderSelectedGroupInfo(groupsArr[selectedGroupIndex])
+                    renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
                 }
 
             }
@@ -1003,7 +1011,6 @@ if (selectedGroup){
         }
     }
 })
-}
 
 // expense deletion
 if(listExpenses){
@@ -1011,7 +1018,7 @@ if(listExpenses){
     listExpenses.addEventListener('click',function(event) {
 
     if (event.target && event.target.classList.contains('delete')) {
-        // console.log("The expense deletge btn was clicked")
+        // console.log("The expense delete btn was clicked")
         const listItem = event.target.closest('li');
         const expenseName = listItem.childNodes[0].childNodes[0].innerText.trim();
         const expenseId = listItem.id;
@@ -1039,7 +1046,7 @@ if(listExpenses){
         }
 
     }
-})};
+});
 
 selectedGroup.addEventListener('click',function(event){
     if(event.target&&event.target.id==='add-member-btn')

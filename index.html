@@ -39,10 +39,6 @@
                     <!-- <label for="friend-first-name">First name: </label> -->
                     <input id="friend-first-name" type="text" placeholder="Friend's Name" required>
                 </div>
-                <!-- <div class="form-control">
-                    <label for="friend-last-name">Last name: </label>
-                    <input id="friend-last-name" type="text" placeholder="Last Name">
-                </div> -->
                 <button>Submit</button>
             </form>
         </section>
@@ -70,42 +66,24 @@
             </form>
         </section>
         <section class="section-main-group" id="selected-group">
-            <!-- <div class="section-main-group-header">
-				<div>
-					<h2 class="section-main-group-title">Bali Trip 🖋️</h2>
-					<p class="text-small">Jane Doe, John Doe, Jessy Doe, Jafar Doe</p>
-					<p class="badge badge-unpaid">You are owed $3,456</p>
-			    </div>
-				<img src="src/img/group-icon.png" alt="Group icon">
-			</div> -->
-
-            <!-- <div class="section-main-group-info" >
+			<div class="section-main-group-header"></div>
+			<div class="section-main-group-info" >
 				<div class="section-main-group-info-nav-container">
 					<ul class="section-main-group-info-nav">
-					<li class="text-small" id="group-members">Members</li>
-					<li class="text-small" id="group-balances">Balances</li>
-					<li class="text-small" id="group-edit">Edit Group</li>
+					<li class="text-small group-balances active">Balances</li>
+					<li class="text-small group-members">Members</li>
 				</ul>
 				<button id="download-btn"> Download PDF</button>
 				</div>
-				
-
-				<div id="group-info-container">
-				
-				 <div class="section-main-group-info-balances"></div>
-
-				 <div class="section-main-group-info-statistics"></div>
-
-				 <div class="section-main-group-info-members"></div>
+                <div id="group-info-container">
+					<ul id="list-expenses"></ul>
 				</div>
-			</div> -->
 
+			</div>
         </section>
-        <!-- add expense form -->
-      
 
         <!-- added expenses section -->
-        <section class="section-main-group">
+        <section class="main-group-add-expense">
             <button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
             <!-- <button id="btn-add-expense">Show the add expense form</button> -->
             <form action="" id="form-add-expense" class="hidden">
@@ -119,77 +97,28 @@
             <ul id="list-expenses"></ul>
         </section>
         <dialog id="add-members-to-expense">
-            <form>
-                <p>Other group members:</p>
-                <ul id="other-members-container">
-                </ul>
-                <button id="close-add-members-to-expense">Close</button>
-            </form>
+            <div class="dialog-body">
+                <form>
+                    <p>Other group members:</p>
+                    <ul id="other-members-container">
+                    </ul>
+                    <button id="close-add-members-to-expense">Close</button>
+                </form>
+            </div>
         </dialog>
         <dialog id="edit-expense">
-                <form id="form-edit">
-                    <label for="edit-name">Name: <input type="text" id="edit-name"></label>
-                    <label for="edit-cost">Amount: <input type="number" id="edit-cost"></label>
-                    <div>
-                        <button type="button">Cancel</button>
-                        <button type="submit">Edit expense</button>
-                    </div>
-                </form>
+                <div class="dialog-body">
+                    <form id="form-edit">
+                        <label for="edit-name" class="form-control">Name: <input type="text" id="edit-name"></label>
+                        <label for="edit-cost" class="form-control">Amount: <input type="number" id="edit-cost"></label>
+                        <div>
+                            <button type="submit">Edit expense</button>
+                        </div>
+                    </form>
+                </div>
         </dialog>
+		 </section>
 
-
-
-        <!-- <section>
-            <h2>Balances</h2>
-            <div class="container-group-members">
-                <div class="card-member">
-                    <h3>Name</h3>
-                    <p>Current balance...</p>
-                    <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100"
-                        style="display: block; border: 3px solid red; border-radius: 50%;">
-                </div>
-                <div class="card-member">
-                    <h3>Name</h3>
-                    <p>Current balance...</p>
-                    <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100"
-                        style="display: block; border: 3px solid red; border-radius: 50%;">
-                </div>
-                <div class="card-member">
-                    <h3>Name</h3>
-                    <p>Current balance...</p>
-                    <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100"
-                        style="display: block; border: 3px solid red; border-radius: 50%;">
-                </div>
-                <div class="card-member">
-                    <h3>Name</h3>
-                    <p>Current balance...</p>
-                    <p>Number of payments</p>
-                    <img src="" alt="avatar" width="100" height="100"
-                        style="display: block; border: 3px solid red; border-radius: 50%;">
-                </div>
-            </div>
-            <button>Show Debt Visualisation</button>
-            <ul>Expenses
-                <li>Costco Groceries</li>
-                <li>Airbnb</li>
-                <li>Peloton</li>
-                <li>...</li>
-            </ul>
-
-        </section>
-        <section>
-            <h2>Statistics</h2>
-            <p>What goes here?</p>
-        </section>
-        <section id="member-display">
-            <h2>Friends/Members</h2>
-            <ul id="members-list">
-
-            </ul>
-        </section> -->
     </section>
 
     <footer>

@@ -357,7 +357,7 @@ ul {
 #from-user, #form-add-expense{
 	max-width: 50%;
     display: flex;
-    flex-direction:column ;
+    flex-direction: column ;
     justify-content: center;
     gap:1rem;
 	margin: 1rem 0;
@@ -369,7 +369,8 @@ ul {
 	}
 }
 
-#from-user input, .form-add input, #form-add-expense input, #form-add-expense select{
+input, select {
+/* #from-user input, .form-add input, #form-add-expense input, #form-add-expense select{ */
     padding: 0.5rem;
 	line-height: 1.7;
     border: 1px solid #006091;
@@ -628,8 +629,6 @@ ul {
 
 #group-info-container {
 	border-top: 1px solid #d3d3d3;
-	border-bottom: 1px solid #d3d3d3;
-	margin-bottom: 2rem;
 }
 
 .total-group-expenses, .total-group-paid, .total-group-unpaid {
@@ -656,7 +655,8 @@ margin-bottom: 5px;
 
 /* balances */
 
-.balances-members-container {
+.balances-members-container, 
+.balances-expenses-container {
 	display: grid;
 	grid-template-columns: repeat( auto-fit, minmax(320px, 1fr) );
 	justify-content: space-between;
@@ -664,13 +664,31 @@ margin-bottom: 5px;
 	padding-top: 3rem;
 }
 
-.balances-members-header {
+.balances-expenses-container {
+	display: none;
+	padding-top: 1rem;
+}
+
+#list-expenses {
+	padding-top: 3rem;
+}
+
+.expense-item {
+	margin-bottom: 1rem;
+}
+
+.balances-members-header,
+.balances-expenses-header {
 	display: flex;
 	justify-content: space-between;
 	padding: 1rem;
 	color: hsl(0deg 0% 99.61%);
 	background-color: hsl(201.4deg 100% 28.04%);
 	border-radius: 50px;
+}
+
+.balances-expenses-header .date {
+	margin: 0 1rem 0 auto;
 }
 
 .balances-card-member {
@@ -708,8 +726,9 @@ margin-bottom: 5px;
 
 .balances-members-footer {
 	display: flex;
+	grid-column: 1/-1;
 	justify-content: space-between;
-	padding: 1rem 0 1rem 0;
+	padding: .5rem 0 .5rem 0;
 }
 
 /* editing name */
@@ -814,3 +833,42 @@ footer {
 .balances-card-member div div:hover .delete{
     display: inline-block;
 }
+
+/* dialog styles */
+
+dialog {
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 4px;
+    transition: ease all 0.2s;
+}
+
+.dialog-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin: auto;
+    padding: 1.5rem;
+}
+
+.dialog-body>form {
+	display: grid;
+	gap: 0.8rem;
+}
+
+dialog::backdrop {
+    background: hsla(0, 0%, 100%, 0.8);
+}
+
+.form-control {
+	display: grid;
+	margin-bottom: 0.5rem;
+	gap: 0.25rem;
+	justify-items: start;
+}
+
+.form-control-checkbox {
+	grid-template-columns: auto 1fr;
+}
+
+
