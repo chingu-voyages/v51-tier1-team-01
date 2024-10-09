@@ -10,6 +10,7 @@ const closeGroupForm = document.getElementById("close-group-form");
 const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
+const groupContainer = document.getElementById("group-info-container")
 const groupsArr = JSON.parse(localStorage.getItem('groups'))||[];
 const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
 let groupList = document.getElementById('group-list');
@@ -32,6 +33,9 @@ if(groupsArr.length!==0) {
 //rendering of existing data from localStorage on page load
 renderFriends();
 renderGroups();
+
+
+
 
 //events
 //form events
@@ -62,18 +66,22 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         document.querySelector(".active")?.classList.remove("active")
         event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
 
-        const selectedGroupInfo = document.getElementById("group-info-container")
+        // const selectedGroupInfo = document.getElementById("group-info-container")
+		// console.log(selectedGroupInfo === groupContainer)
 
-        selectedGroupInfo ? selectedGroupInfo.style.display = "block" : ""
+        // groupContainer ? groupContainer.style.display = "block" : ""
 
 		if (event.target.matches(".group-balances")) {
-			selectedGroupInfo.innerHTML = getExpensesHTML(selectedGroup)
-			
-
+			listExpenses.innerHTML = getExpensesHTML(selectedGroup)
+			groupContainer.innerHTML = ""
+			groupContainer.appendChild(listExpenses)
         } else {
-            selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
-            listExpenses?.classList.add("hidden");
+			// listExpenses.classList.add("hidden");
+			listExpenses.display = "none"
+            groupContainer.innerHTML = getGroupMembers(selectedGroup)
+            
         }
+
 	} else {
         event.stopPropagation()
     }
@@ -129,7 +137,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
 function getGroupMembers(selectedGroup) {
 	document.querySelector(".main-group-add-expense").style.display = "none";
-	return `<div class="section-main-group-info-balances">
+	return `
 		<div class="balances-members-container">
 			${
 				selectedGroup.membersArr.map(member => {
@@ -154,7 +162,7 @@ function getGroupMembers(selectedGroup) {
 		<div class="balances-members-footer">
 			<button class="add-btn" id="add-member-btn"><span>+</span>Add member</button>
 		</div>
-	</div>`
+	`
 }
 
 function handleGroupClick(e) {
@@ -172,11 +180,16 @@ function handleGroupClick(e) {
     })
 }
 
+
 function renderSelectedGroupInfo(group) {
     console.log("Inside renderSelectedGroup function")
     const { groupName, id, avatar, membersArr, expenses } = group;
-    selectedGroup.innerHTML = "";
+	const header = document.querySelector(".section-main-group-header")
+    header.innerHTML = "";
+    document.querySelector(".section-main-group-info-nav-container").id = id;
+	console.log(document.querySelector(".section-main-group-info-nav-container").id)
     selectedGroupIndex = groupsArr.indexOf(group);
+	
     
     renderSelectPayerOptions();
 
@@ -184,8 +197,8 @@ function renderSelectedGroupInfo(group) {
     let friendsImages = membersArr.map(member => {
         return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
     })
-    return selectedGroup.innerHTML += `
-	<div class="section-main-group-header">
+	
+    header.innerHTML += `
 				<div>
 					<div>
                         <h2 class="section-main-group-title editable" id=${id}>${titleCase(groupName)} </h2>
@@ -196,22 +209,8 @@ function renderSelectedGroupInfo(group) {
 					<p class="badge badge-${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalOutstandingCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
-	</div>
-
-	<div class="section-main-group-info" >
-				<div class="section-main-group-info-nav-container" id=${id}>
-					<ul class="section-main-group-info-nav">
-					<li class="text-small group-balances active">Balances</li>
-					<li class="text-small group-members">Members</li>
-				</ul>
-				<button id="download-btn"> Download PDF</button>
-				</div>
-                <div id="group-info-container">
-					${getExpensesHTML(groupsArr[selectedGroupIndex])}
-				</div>
-
-			</div>
 `
+   listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
 
 }
 
@@ -555,7 +554,7 @@ formAddExpense.addEventListener("submit", (e) => {
     inputExpenseAmount.value = "";
     // inputExpenseParticipant.value = "";
     formAddExpense.classList.add("hidden");
-    getExpensesHTML(groupsArr[selectedGroupIndex]);
+    listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
     // getGroupBalances(groupsArr[selectedGroupIndex]);
 })
 
@@ -563,8 +562,9 @@ const addMembersToExpenseDialog = document.getElementById("add-members-to-expens
 
 if(listExpenses){
 listExpenses.addEventListener("click", handleExpenseClick)
-let selectedExpenseIndex;
 }
+let selectedExpenseIndex;
+
 function handleExpenseClick(e) {
     // e.stopPropagation();
     let selectedExpenseId = Number(e.target.closest(".expense-item").id);
@@ -644,10 +644,7 @@ function renderExpenses(group) {
 function getExpensesHTML(group) {
 	const {expenses} = group;
 	document.querySelector(".main-group-add-expense").style.display = "block";
-	return `<div class="section-main-group-info-balances">
-	
-		 <ul id="list-expenses">
-			${
+	return `${
 				expenses.map(expense => {
 					return `
 							<li class= "expense-item" id=${expense.date.toString()}>
@@ -659,6 +656,8 @@ function getExpensesHTML(group) {
 								<div class="balances-expenses-container">
        					 		${
 									expense.members.map(member => {
+										const status = memberStatus(member, expense)
+										const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
 										return `
 											<div class = "balances-card-member">
 												<div>
@@ -668,9 +667,9 @@ function getExpensesHTML(group) {
 													    </p>
                 					                    <span class="pen">🖋️</span>
 													</div>
-													<p class="badge badge-paid"></p>
+														<p class="badge badge-${paidClass}">${status}</p>
 												</div>
-												<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+												<img class="balances-card-member-img ${paidClass}" src=${member.imgSrc} alt="Member icon">
 											</div>
 										`
 									}).join("")
@@ -685,9 +684,7 @@ function getExpensesHTML(group) {
 							</li>
 					`
 				}).join("")
-			}
-			</ul>
-	</div>`
+			}`
 }
 
 
@@ -798,7 +795,7 @@ editExpenseForm.addEventListener("submit", (e) => {
     let selectedExpense = groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex];
     selectedExpense.name = editExpenseNameInput.value
     selectedExpense.cost = Number(editExpenseCostInput.value)
-    getExpensesHTML(groupsArr[selectedGroupIndex]);
+    listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     editExpenseDialog.close();
 })
@@ -976,7 +973,7 @@ selectedGroup.addEventListener('click', function(event) {
 
                                 editElement.innerHTML = `${titleCase(updatedName)}`;
                                 renderSelectedGroupInfo(groupsArr[groupIndex]);
-                                getExpensesHTML(groupsArr[groupIndex]);
+                                listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
                             }
                             console.log(groupsArr[groupIndex]);
                     }
@@ -1014,7 +1011,7 @@ selectedGroup.addEventListener('click', function(event) {
                                 console.log(`This is the group with slected`,groupsArr[selectedGroupIndex]);
                                 renderFriends();
                                 // getExpensesHTML(groupsArr[groupIndex]);
-                                getExpensesHTML(groupsArr[selectedGroupIndex]);
+                                listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
                                 renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
                                 getGroupMembers(groupsArr[selectedGroupIndex]);
                                 // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
@@ -1151,7 +1148,7 @@ document.getElementById('list-expenses')?.addEventListener('click',function(even
                 if (expenseIndex !== -1) {
                     groupsArr[groupIndex].expenses.splice(expenseIndex, 1);
                     localStorage.setItem('groups', JSON.stringify(groupsArr));
-                    getExpensesHTML(groupsArr[groupIndex]);
+                    listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
                 }
             }
         }
