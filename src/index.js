@@ -554,7 +554,9 @@ formAddExpense.addEventListener("submit", (e) => {
     inputExpenseAmount.value = "";
     // inputExpenseParticipant.value = "";
     formAddExpense.classList.add("hidden");
+
     listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+
     // getGroupBalances(groupsArr[selectedGroupIndex]);
 })
 
@@ -795,7 +797,9 @@ editExpenseForm.addEventListener("submit", (e) => {
     let selectedExpense = groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex];
     selectedExpense.name = editExpenseNameInput.value
     selectedExpense.cost = Number(editExpenseCostInput.value)
+
     listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     editExpenseDialog.close();
 })
@@ -973,6 +977,7 @@ selectedGroup.addEventListener('click', function(event) {
 
                                 editElement.innerHTML = `${titleCase(updatedName)}`;
                                 renderSelectedGroupInfo(groupsArr[groupIndex]);
+
                                 listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
                             }
                             console.log(groupsArr[groupIndex]);
@@ -1011,7 +1016,9 @@ selectedGroup.addEventListener('click', function(event) {
                                 console.log(`This is the group with slected`,groupsArr[selectedGroupIndex]);
                                 renderFriends();
                                 // getExpensesHTML(groupsArr[groupIndex]);
+
                                 listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+
                                 renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
                                 getGroupMembers(groupsArr[selectedGroupIndex]);
                                 // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
@@ -1148,7 +1155,9 @@ document.getElementById('list-expenses')?.addEventListener('click',function(even
                 if (expenseIndex !== -1) {
                     groupsArr[groupIndex].expenses.splice(expenseIndex, 1);
                     localStorage.setItem('groups', JSON.stringify(groupsArr));
+
                     listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
+
                 }
             }
         }
