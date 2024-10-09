@@ -459,13 +459,13 @@ ul {
 	#from-user, .new-group-header {
 	max-width: 100%;
 	}
-	
+
 	#form-add-expense select {
 	padding: .65rem;
 	}
-	
+
 	#form-add-expense select option {
-	width: 50%;	
+	width: 50%;
 	}
 
 }
@@ -547,7 +547,7 @@ ul {
 	.section-main-group-info-nav {
 		width: 55%;
 	}
-	
+
 }
 
 .section-main-group-info-nav>li {
@@ -760,6 +760,7 @@ footer {
 }
 
 
+
 @media (min-width: 993px) {
     body {
         grid-template-rows: auto 1fr auto;
@@ -786,7 +787,7 @@ footer {
 }
 
 @media screen and (max-width: 992px) {
-	
+
 	.form-add-visible {
 		display: flex;
 		max-width: 500px;
@@ -802,7 +803,7 @@ footer {
 		width: 100%;
 		margin: 0;
 	}
-	
+
 }
 
 .form-add input {
@@ -824,4 +825,10 @@ footer {
 .delete{
     cursor: pointer;
     color: red;
+    display: none;
+
+}
+#group-list li:hover .delete,#friends-list li:hover .delete,#list-expenses li:hover .delete,
+.balances-card-member div div:hover .delete{
+    display: inline-block;
 }
