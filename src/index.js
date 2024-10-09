@@ -1,4 +1,4 @@
-import { totalCalc, memberStatus, memberTotal } from "./calcs.js";
+import { totalOutstandingCalc, memberStatus, memberTotal, totalCalc } from "./calcs.js";
 import {downloadPDF} from "./pdf.js";
 
 const groupCreateBtn = document.getElementById('group-create-btn');
@@ -32,7 +32,6 @@ if(groupsArr.length!==0) {
 //rendering of existing data from localStorage on page load
 renderFriends();
 renderGroups();
-
 
 //events
 //form events
@@ -143,9 +142,9 @@ function getGroupMembers(selectedGroup) {
 								    </p>
                                     <span class="pen">🖋️</span>
 								</div>
-								<p class="badge badge-paid">${memberTotal(member, selectedGroup)}</p>
+								<p class="badge badge-${memberTotal(member.name, selectedGroup) == 0 ? "paid" : "unpaid"}">$${memberTotal(member.name, selectedGroup)}</p>
 							</div>
-							<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+							<img class="balances-card-member-img ${memberTotal(member.name, selectedGroup) == 0 ? "paid" : "unpaid"}" src=${member.imgSrc} alt="Member icon">
 						</div>
 					`
 				}).join("")
@@ -193,7 +192,7 @@ function renderSelectedGroupInfo(group) {
                     </div>
 					<p class="text-small">${membersArr.map(member => member.name).join(", ")}</p>
 					${friendsImages.join(" ")}
-					<p class="badge badge-${totalCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
+					<p class="badge badge-${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalOutstandingCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
 	</div>
@@ -577,6 +576,7 @@ function handleExpenseClick(e) {
     })
     console.log(selectedExpenseIndex);
 }
+
 
 function getExpensesHTML(group) {
 	const {expenses} = group;
