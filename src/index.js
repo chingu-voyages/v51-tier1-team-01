@@ -66,18 +66,22 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         document.querySelector(".active")?.classList.remove("active")
         event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
 
-        const selectedGroupInfo = document.getElementById("group-info-container")
+        // const selectedGroupInfo = document.getElementById("group-info-container")
+		// console.log(selectedGroupInfo === groupContainer)
 
-        selectedGroupInfo ? selectedGroupInfo.style.display = "block" : ""
+        // groupContainer ? groupContainer.style.display = "block" : ""
 
 		if (event.target.matches(".group-balances")) {
-			selectedGroupInfo.innerHTML = getExpensesHTML(selectedGroup)
-			
-
+			listExpenses.innerHTML = getExpensesHTML(selectedGroup)
+			groupContainer.innerHTML = ""
+			groupContainer.appendChild(listExpenses)
         } else {
-            selectedGroupInfo.innerHTML = getGroupMembers(selectedGroup)
-            listExpenses?.classList.add("hidden");
+			// listExpenses.classList.add("hidden");
+			listExpenses.display = "none"
+            groupContainer.innerHTML = getGroupMembers(selectedGroup)
+            
         }
+
 	} else {
         event.stopPropagation()
     }
@@ -206,7 +210,7 @@ function renderSelectedGroupInfo(group) {
 			    </div>
 				<img src=${avatar} alt="Group icon">
 `
-   groupContainer.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+   listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
 
 }
 
@@ -550,7 +554,7 @@ formAddExpense.addEventListener("submit", (e) => {
     inputExpenseAmount.value = "";
     // inputExpenseParticipant.value = "";
     formAddExpense.classList.add("hidden");
-    groupContainer.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+    listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
     // getGroupBalances(groupsArr[selectedGroupIndex]);
 })
 
@@ -558,8 +562,9 @@ const addMembersToExpenseDialog = document.getElementById("add-members-to-expens
 
 if(listExpenses){
 listExpenses.addEventListener("click", handleExpenseClick)
-let selectedExpenseIndex;
 }
+let selectedExpenseIndex;
+
 function handleExpenseClick(e) {
     // e.stopPropagation();
     let selectedExpenseId = Number(e.target.closest(".expense-item").id);
@@ -790,7 +795,7 @@ editExpenseForm.addEventListener("submit", (e) => {
     let selectedExpense = groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex];
     selectedExpense.name = editExpenseNameInput.value
     selectedExpense.cost = Number(editExpenseCostInput.value)
-    groupContainer.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+    listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     editExpenseDialog.close();
 })
@@ -968,7 +973,7 @@ selectedGroup.addEventListener('click', function(event) {
 
                                 editElement.innerHTML = `${titleCase(updatedName)}`;
                                 renderSelectedGroupInfo(groupsArr[groupIndex]);
-                                groupContainer.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
+                                listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
                             }
                             console.log(groupsArr[groupIndex]);
                     }
@@ -1006,7 +1011,7 @@ selectedGroup.addEventListener('click', function(event) {
                                 console.log(`This is the group with slected`,groupsArr[selectedGroupIndex]);
                                 renderFriends();
                                 // getExpensesHTML(groupsArr[groupIndex]);
-                                groupContainer.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+                                listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
                                 renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
                                 getGroupMembers(groupsArr[selectedGroupIndex]);
                                 // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
@@ -1142,7 +1147,7 @@ document.getElementById('list-expenses')?.addEventListener('click',function(even
                 if (expenseIndex !== -1) {
                     groupsArr[groupIndex].expenses.splice(expenseIndex, 1);
                     localStorage.setItem('groups', JSON.stringify(groupsArr));
-                    groupContainer.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
+                    listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
                 }
             }
         }
