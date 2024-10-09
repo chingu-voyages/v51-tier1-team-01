@@ -971,7 +971,10 @@ document.getElementById('friends-list').addEventListener('click', function(event
 });
 
 // member deletion
-document.getElementById('selected-group').addEventListener('click',function(event){
+// const
+// document.getElementById('selected-group').addEventListener('click',function(event){
+if (selectedGroup){
+    selectedGroup.addEventListener('click',function(eventt){
     if(event.target&&event.target.classList.contains('delete')){
         // console.log('clicked');
         const memberContainer = event.target.closest('.balances-card-member');
@@ -991,7 +994,7 @@ document.getElementById('selected-group').addEventListener('click',function(even
                     localStorage.setItem('groups',JSON.stringify(groupsArr));
                     renderGroups();
                     renderFriends();
-                    renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+                    renderSelectedGroupInfo(groupsArr[selectedGroupIndex])
                 }
 
             }
@@ -1000,11 +1003,15 @@ document.getElementById('selected-group').addEventListener('click',function(even
         }
     }
 })
+}
 
 // expense deletion
-document.getElementById('list-expenses').addEventListener('click',function(event) {
+if(listExpenses){
+    // document.getElementById('list-expenses').addEventListener('click',function(event) {
+    listExpenses.addEventListener('click',function(event) {
+
     if (event.target && event.target.classList.contains('delete')) {
-        // console.log("The expense delete btn was clicked")
+        // console.log("The expense deletge btn was clicked")
         const listItem = event.target.closest('li');
         const expenseName = listItem.childNodes[0].childNodes[0].innerText.trim();
         const expenseId = listItem.id;
@@ -1032,7 +1039,7 @@ document.getElementById('list-expenses').addEventListener('click',function(event
         }
 
     }
-});
+})};
 
 selectedGroup.addEventListener('click',function(event){
     if(event.target&&event.target.id==='add-member-btn')
