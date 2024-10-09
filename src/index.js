@@ -659,6 +659,8 @@ function getExpensesHTML(group) {
 								<div class="balances-expenses-container">
        					 		${
 									expense.members.map(member => {
+										const status = memberStatus(member, expense)
+										const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
 										return `
 											<div class = "balances-card-member">
 												<div>
@@ -668,9 +670,9 @@ function getExpensesHTML(group) {
 													    </p>
                 					                    <span class="pen">🖋️</span>
 													</div>
-													<p class="badge badge-paid"></p>
+														<p class="badge badge-${paidClass}">${status}</p>
 												</div>
-												<img class="balances-card-member-img paid" src=${member.imgSrc} alt="Member icon">
+												<img class="balances-card-member-img ${paidClass}" src=${member.imgSrc} alt="Member icon">
 											</div>
 										`
 									}).join("")
