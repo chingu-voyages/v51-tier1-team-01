@@ -1,5 +1,6 @@
 import { totalOutstandingCalc, memberStatus, memberTotal, totalCalc } from "./calcs.js";
-import {downloadPDF} from "./pdf.js";
+import { getGroupSummary } from "./summary.js";
+// import {downloadPDF} from "./pdf.js";
 
 const groupCreateBtn = document.getElementById('group-create-btn');
 const groupName = document.getElementById('group-name');
@@ -16,6 +17,7 @@ const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
+const summary = document.getElementById("summary")
 
 const btnAddExpense = document.getElementById("btn-add-expense");
 const formAddExpense = document.getElementById("form-add-expense");
@@ -39,8 +41,6 @@ renderFriends();
 renderGroups();
 
 
-
-
 //events
 //form events
 groupForm.addEventListener('submit', handleGroupCreation);
@@ -49,6 +49,10 @@ sidebarAddGroup.addEventListener('click', showForm);
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 // for not overwriting groups present in local storage
+
+summary.addEventListener("click", () => {
+	groupContainer.innerHTML = getGroupSummary();
+})
 
 //rendered group events: listen and render selected group on main section
 groupList.addEventListener("click", handleGroupClick)
@@ -132,8 +136,11 @@ document.querySelector("body")?.addEventListener("click", (event) => {
     }
 
     if (event.target.matches("#download-btn")) {
+					groupContainer.innerHTML = getGroupSummary();
 					console.log("Downloading PDF ...")
-					downloadPDF(selectedGroup)
+					// downloadPDF(selectedGroup)
+					const pdfExp = document.querySelector(".export-summary");
+					html2pdf(pdfExp);
     } else {
         event.stopPropagation()
     }
