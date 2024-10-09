@@ -163,7 +163,7 @@ function getGroupMembers(selectedGroup) {
 			}
 		</div>
 		<div class="balances-members-footer">
-			<button class="add-btn"><span>+</span>Add member</button>
+			<button class="add-btn" id="add-member-btn"><span>+</span>Add member</button>
 		</div>
 	</div>`
 }
@@ -991,6 +991,7 @@ document.getElementById('selected-group').addEventListener('click',function(even
                     localStorage.setItem('groups',JSON.stringify(groupsArr));
                     renderGroups();
                     renderFriends();
+                    renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
                 }
 
             }
@@ -1032,3 +1033,59 @@ document.getElementById('list-expenses').addEventListener('click',function(event
 
     }
 });
+
+selectedGroup.addEventListener('click',function(event){
+    if(event.target&&event.target.id==='add-member-btn')
+    {
+        console.log("add btn clicked");
+        const balancesMembersFooter = document.querySelector('.balances-members-footer');
+        const inputElement = document.createElement('input');
+        inputElement.setAttribute('type','text')
+        inputElement.setAttribute('required',true);
+        balancesMembersFooter.appendChild(inputElement);
+        inputElement.focus();
+        console.log(balancesMembersFooter);
+        inputElement.addEventListener('keydown',function(event){
+        const inputValue = inputElement.value.trim();
+        if (event.key==='Enter' &&!isEmpty(inputValue)){
+            if (!isEmpty(inputValue)) {
+                let inList = false;
+                friendsListStored.forEach(friend =>
+                {
+                    friend.name.toLowerCase() === inputValue.toLowerCase() ? inList = true : ""
+                })
+                groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+                    if (member.name.toLowerCase() === inputValue.toLowerCase()) {
+                        inList = true;
+                    }
+                });
+                if (!inList)
+                {
+                    const newFriend = createFriend(titleCase(inputValue));
+                    console.log(newFriend);
+                    console.log(selectedGroup)
+                    friendsListStored.push(newFriend);
+                    localStorage.setItem('friends', JSON.stringify(friendsListStored));
+                    groupsArr[selectedGroupIndex].membersArr.push(newFriend);
+                    localStorage.setItem('groups', JSON.stringify(groupsArr));
+                    renderGroups();
+                    renderFriends();
+                    renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+                }
+                else {
+                    alert(`Friend ${inputValue} already exists, please enter another one, or choose ${inputValue} from existing friends.`)
+                }
+                clearInputField(inputElement);
+                balancesMembersFooter.removeChild(inputElement);
+            }else
+            {
+                console.log("Please enter a valid name")
+            }
+            }
+            })
+    }
+    else
+    {
+        console.log("No such btn");
+    }
+})
