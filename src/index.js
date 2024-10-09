@@ -1061,6 +1061,7 @@ document.getElementById('group-list').addEventListener('click',function(event){
                 console.log(groupIndex);
                 groupsArr.splice(groupIndex,1);
                 localStorage.setItem('groups',JSON.stringify(groupsArr));
+				renderGroups()
                 renderSelectedGroupInfo();
             }
         }
