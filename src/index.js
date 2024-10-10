@@ -50,7 +50,8 @@ groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 // for not overwriting groups present in local storage
 
-summary.addEventListener("click", () => {
+summary.addEventListener("click", (event) => {
+	console.log(document.querySelector(".section-main-group-info-nav-container"))
 	groupContainer.innerHTML = getGroupSummary();
 })
 
@@ -136,7 +137,9 @@ document.querySelector("body")?.addEventListener("click", (event) => {
     }
 
     if (event.target.matches("#download-btn")) {
-					groupContainer.innerHTML = getGroupSummary();
+					const group = groupsArr.find(group => group.id === Number(event.target.parentNode.id))
+					console.log(event.target.parentNode)
+					groupContainer.innerHTML = getGroupSummary(group);
 					console.log("Downloading PDF ...")
 					// downloadPDF(selectedGroup)
 					const pdfExp = document.querySelector(".export-summary");
