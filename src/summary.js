@@ -1,43 +1,40 @@
+import { memberStatus, totalCalc } from "./calcs.js";
+
 export const getGroupSummary = (group) => {
-	const {groupName, membersArr, expenses} = group;
+	const { expenses } = group;
 
-	const total = expenses.map(expense => expense.cost).reduce((total, num) => total + num);
-	console.log(total)
+	return `<div id="summary-overview-section">
 
-	return `<div class="export-summary">
-	<p class="total-group-expenses-title">Expenses statistics for the "${groupName}" group</p>
-	<p class="total-group-expenses-members">Group members:
-		<ol>
-			${membersArr.map(member=>{return `
-				<li>${member.name}</li>
-			`}).join("")}
-		</ol>
-	</p>
-	<p class="total-group-expenses">Total expenses: <span>${total}</span></p>
-	<p class="total-group-paid">Paid: <span></span></p>
-	<p class="total-group-unpaid">Unpaid: <span></span></p>
-	<table>
-		<tr>
-			<th>Debtor</th>
-			<th>Amount</th>
-			<th>Payer</th>
-		</tr>
-		<tr>
-			<td>Jessy Doe</td>
-			<td>$100</td>
-			<td>Jack</td>
-		</tr>
-		<tr>
-			<td>Ben</td>
-			<td>$150</td>
-			<td>John</td>
-		</tr>
-		<tr>
-			<td>Jack</td>
-			<td>$50</td>
-			<td>Jane Doe</td>
-		</tr>
-	</table>
+	${expenses.map(expense => {
+
+		const memberOwes = (expense.cost / expense.members.length).toFixed(2)
+		const totalOwing = memberOwes * (expense.members.length - 1 - expense.paid.length).toFixed(2)
+
+		return `
+
+		<div id="expense-summary-title">
+			<h2>${expense.name}</h2>
+		</div>
+		<div id="expense-details">		
+		${expense.members.map(member => {
+
+			const status = memberStatus(member, expense)
+			const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
+
+			return paidClass == 'paid' || paidClass == 'unpaid' ? `
+				<div id="member-summary-line">
+					<p>${member.name} <span class="badge badge-${paidClass}">${paidClass}</span></p>
+					<p>$${memberOwes}</p>
+				</div>
+			` : ""}).join("")}
+			<div id="Subtotal">
+				<p>Cost: $${expense.cost}</p>
+				<p>Owed to <b>${expense.payer.name}:</b> $${totalOwing}</p>
+			</div>
+
+	`}).join("")}
+
+	<div id="Total">Total cost: $${totalCalc(group)}</div>
 	</div>`
 }
 

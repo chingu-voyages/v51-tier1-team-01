@@ -936,3 +936,35 @@ th:nth-of-type(2) {
 th:nth-of-type(3) {
 	width: 40%;
 }
+
+/* summary */
+
+#member-summary-line {
+    display: inline-flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+#expense-summary-title {
+    padding-top: 20px;
+}
+
+#Subtotal {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    color: #005c8f;
+    padding: 10px 0;
+    border-bottom: 1px solid #d3d3d3;
+    border-top: 1px solid #d3d3d3;
+    margin-top: 12px;
+}
+
+#Total {
+    padding: 10px 0;
+    text-align: end;
+    color: #005c8f;
+    font-weight: bold;
+}
