@@ -514,6 +514,24 @@ input, select {
 	margin-bottom: 5px;
 }
 
+section.main-group-add-expense {
+    padding: 10px 0;
+    border-bottom: 1px solid #d3d3d3;
+    border-top: 1px solid #d3d3d3;
+}
+
+#group-total {
+    color: #005c8f;
+    font-weight: bold;
+}
+
+#expense-total-section {
+    display: inline-flex;
+    width: 100%;
+    justify-content: space-between;
+	padding-right: 30px;
+}
+
 .group-title-friends-img{
 	max-width: 30px;
 	display: inline-block;
