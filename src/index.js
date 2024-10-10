@@ -893,6 +893,7 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
     getExpensesHTML(groupsArr[selectedGroupIndex]);
+    renderSelectedGroupInfo(groupsArr[selectedGroupIndex])
 });
 
 // console.log(selectedGroupIndex);
