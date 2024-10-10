@@ -61,7 +61,7 @@ groupList.addEventListener("click", handleGroupClick)
 document.querySelector("body")?.addEventListener("click", (event) => {
 
 	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members")) {
-		
+
         const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
         const selectedGroup = groupsArr.find(group => {
@@ -1162,40 +1162,43 @@ document.getElementById('selected-group').addEventListener('click',function(even
 })
 
 // expense deletion
-document.getElementById('list-expenses')?.addEventListener('click',function(event) {
-    if (event.target && event.target.classList.contains('delete')) {
-        // console.log("The expense delete btn was clicked")
-        const listItem = event.target.closest('li');
-        const expenseName = listItem.childNodes[0].childNodes[0].innerText.trim();
-        const expenseId = listItem.id;
-        // console.log(expenseName);
-        const confirmDelete = confirm(`Are you sure you want to delete: ${expenseName}`)
-        if (confirmDelete) {
-            let groupIndex = -1;
+if(listExpenses) {
+    listExpenses.addEventListener('click', function (event) {
+        if (event.target && event.target.classList.contains('delete')) {
+            // console.log("The expense delete btn was clicked")
+            const listItem = event.target.closest('li');
+            console.log(listItem);
+            // const expenseName = listItem.childNodes[0].childNodes[0].innerText.trim();
+            const expenseName = listItem.querySelector('.balances-expenses-header span').innerText;
+            const expenseId = listItem.id;
+            console.log(expenseName);
+            const confirmDelete = confirm(`Are you sure you want to delete: ${expenseName}`)
+            if (confirmDelete) {
+                let groupIndex = -1;
 
-            groupsArr.forEach((group, index) => {
-                const expenseExists = group.expenses.find(expense => expense.date == expenseId);
-                if (expenseExists) {
-                    groupIndex = index;
-                }
-            });
+                groupsArr.forEach((group, index) => {
+                    const expenseExists = group.expenses.find(expense => expense.date == expenseId);
+                    if (expenseExists) {
+                        groupIndex = index;
+                    }
+                });
 
-            if (groupIndex !== -1) {
-                const expenseIndex = groupsArr[groupIndex].expenses.findIndex(expense => expense.date == expenseId);
+                if (groupIndex !== -1) {
+                    const expenseIndex = groupsArr[groupIndex].expenses.findIndex(expense => expense.date == expenseId);
 
-                if (expenseIndex !== -1) {
-                    groupsArr[groupIndex].expenses.splice(expenseIndex, 1);
-                    localStorage.setItem('groups', JSON.stringify(groupsArr));
+                    if (expenseIndex !== -1) {
+                        groupsArr[groupIndex].expenses.splice(expenseIndex, 1);
+                        localStorage.setItem('groups', JSON.stringify(groupsArr));
 
-                    listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
+                        listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
 
+                    }
                 }
             }
+
         }
-
-    }
-});
-
+    });
+}
 selectedGroup.addEventListener('click',function(event){
     if(event.target&&event.target.id==='add-member-btn')
     {
