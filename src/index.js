@@ -991,7 +991,6 @@ selectedGroup.addEventListener('click', function(event) {
         editElement.innerHTML = ""
         editElement.appendChild(input);
         input.focus();
-
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const updatedName = input.value.trim();
@@ -1205,22 +1204,63 @@ if(listExpenses) {
 }
 
 // add member btn under members section
-
-// console.log("This is the list of group members",groupsArr[selectedGroupIndex].membersArr);
-// friendsListStored.forEach(friend=>{
-//     const isFriendInGroup =groupsArr[selectedGroupIndex].membersArr.some(member=>member.name === friend.name);
-//     console.log(isFriendInGroup);
-//     if (!(isFriendInGroup)){
-//         console.log("this friend is not in group",friend);
-//     }
-// })
 const addMembersToGroupDialog = document.getElementById('add-members-to-group-dialog');
 const otherFriendsContainer = document.getElementById('other-friends-container');
+const newMemberInput = document.getElementById('new-member-input');
 let friendCheckBoxes = [...document.querySelectorAll(".add-friend-to-group")]
 function addMembersToGroup(index){
     // console.log("Add friends to group called");
 	// console.log(group);
     otherFriendsContainer.textContent = "";
+    const addSomeOtherPerson = document.getElementById('add-someother-person');
+    // const dialogBodyForm = document.querySelector('.dialog-body form');
+    addSomeOtherPerson.addEventListener('click',function(e){
+        e.preventDefault();
+        newMemberInput.style.display = "block";
+        newMemberInput.focus();
+        newMemberInput.addEventListener('keydown',function(event){
+            if (event.key==='Enter'){
+                event.preventDefault();
+                const inputValue = newMemberInput.value.trim();
+                if (!isEmpty(inputValue)) {
+                    let inList = false;
+                    friendsListStored.forEach(friend =>
+                    {
+                        friend.name.toLowerCase() === inputValue.toLowerCase() ? inList = true : ""
+                    })
+                    groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+                        if (member.name.toLowerCase() === inputValue.toLowerCase()) {
+                            inList = true;
+                        }
+                    });
+                    if (!inList)
+                    {
+                        const newFriend = createFriend(titleCase(inputValue));
+                        console.log(newFriend);
+                        console.log(selectedGroup)
+                        friendsListStored.push(newFriend);
+                        localStorage.setItem('friends', JSON.stringify(friendsListStored));
+                        groupsArr[selectedGroupIndex].membersArr.push(newFriend);
+                        localStorage.setItem('groups', JSON.stringify(groupsArr));
+                        addMembersToGroupDialog.close();
+                        // renderGroups();
+                        // renderFriends();
+                        // renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+                    }
+                    else {
+                        alert(`Friend ${inputValue} already exists, please enter another one, or choose ${inputValue} from existing friends.`)
+                    }
+                    groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
+                    clearInputField(newMemberInput);
+                    newMemberInput.style.display = "none";
+                    // balancesMembersFooter.removeChild(inputElement);
+                }else
+                {
+                    console.log("Please enter a valid name")
+                }
+                }
+                })
+    })
     friendsListStored.forEach(friend=>{
         const isFriendInGroup =groupsArr[index].membersArr.some(member=>member.name === friend.name);
         // const isFriendInGroup =groupsArr[selectedGroupIndex].membersArr.some(member=>member.name === friend.name);
