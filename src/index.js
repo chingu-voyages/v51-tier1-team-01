@@ -486,6 +486,8 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
 
 // add existing friends to group
 
+const btnAddExistingFriend = document.getElementById("add-existing-friend");
+const dialogAddExistingFriend = document.getElementById("dialog-add-friend");
 const addExistingFriendContainer = document.getElementById("existing-friends-checkboxes");
 
 function renderExistingFriendsForGroupCreation() {
@@ -501,12 +503,37 @@ function renderExistingFriendsForGroupCreation() {
         label.setAttribute("for", friend.name);
         label.textContent = friend.name;
         const checkboxDiv = document.createElement("div");
-        checkboxDiv.classList.add("form-control-checkbox");
+        checkboxDiv.classList.add("form-control", "form-control-checkbox");
         checkboxDiv.appendChild(checkbox);
         checkboxDiv.appendChild(label);
         addExistingFriendContainer.appendChild(checkboxDiv);
     });
 }
+
+btnAddExistingFriend.addEventListener("click", () => {
+    renderExistingFriendsForGroupCreation();
+    dialogAddExistingFriend.showModal();
+})
+
+const btnCloseAddFriendsToGroup = document.getElementById("close-add-friends-to-group")
+
+btnCloseAddFriendsToGroup.addEventListener("click", (e) => {
+    e.preventDefault()
+    handleGroupCreation(e);
+    // groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+    //     checkboxes.forEach(checkbox => {
+    //         if (checkbox.checked && checkbox.id.toLowerCase() === member.name.toLowerCase()) {
+    //             // console.log(groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex])
+    //             groupsArr[selectedGroupIndex].members.push(member)
+    //         }
+
+    //     })
+    // })
+    localStorage.setItem('groups', JSON.stringify(groupsArr));
+    dialogAddExistingFriend.close();
+    // getExpensesHTML(groupsArr[selectedGroupIndex]);
+    renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+});
 
 // expense management
 
