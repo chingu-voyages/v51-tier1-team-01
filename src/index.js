@@ -52,7 +52,7 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 
 
 //rendered group events: listen and render selected group on main section
-groupList.addEventListener("click", handleGroupClick)
+// groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event) => {
 
@@ -77,17 +77,23 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
         // groupContainer ? groupContainer.style.display = "block" : ""
 
-		if (event.target.matches(".group-balances")) {
+		if (event.target.matches(".group-balances") || event.target.matches(".group-link")) {
 			listExpenses.innerHTML = getExpensesHTML(selectedGroup)
 			groupContainer.innerHTML = ""
-			groupContainer.appendChild(listExpenses)
+			document.querySelector(".group-balances").classList.add("active")
+			renderSelectedGroupInfo(selectedGroup, groupContainer.appendChild(listExpenses))
+			// listExpenses.innerHTML = getExpensesHTML(selectedGroup)
+			// groupContainer.innerHTML = ""
+			// groupContainer.appendChild(listExpenses)
         } else if (event.target.matches("#summary")){
-			const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id) 
-			groupContainer.innerHTML = getGroupSummary(group);
+			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupSummary(selectedGroup))
+			// const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id) 
+			// groupContainer.innerHTML = getGroupSummary(group);
 		} else {
+			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupMembers(selectedGroup))
 			// listExpenses.classList.add("hidden");
-			listExpenses.display = "none"
-            groupContainer.innerHTML = getGroupMembers(selectedGroup)
+			// listExpenses.display = "none"
+            // groupContainer.innerHTML = getGroupMembers(selectedGroup)
             
         }
 
@@ -147,15 +153,16 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
 					console.log("Downloading PDF ...")
 					setTimeout(()=>{
+						if(confirm("Do you want to download your group's expense summary?")){
 						const pdfExp = document.querySelector("#group-info-container");
-						console.log(pdfExp);
 						var opt = {
 							margin:       1,
 							filename:     `${group.groupName}-summary.pdf`,
 							jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
 						  };
 						html2pdf(pdfExp, opt);
-					},2000)
+						}
+					},1000)
 					
     } else {
         event.stopPropagation()
@@ -163,7 +170,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 })
 
 function getGroupMembers(selectedGroup) {
-	document.querySelector(".main-group-add-expense").style.display = "none";
+	// document.querySelector(".main-group-add-expense").style.display = "none";
 	return `
 		<div class="balances-members-container">
 			${
@@ -192,35 +199,33 @@ function getGroupMembers(selectedGroup) {
 	`
 }
 
-function handleGroupClick(e) {
-    // console.log(e.target.id)
-    e.stopPropagation()
-    groupsArr.forEach(group => {
-        if (e.target.id == Number(group.id)) {
-            selectedGroupIndex = groupsArr.indexOf(group);
-            renderSelectedGroupInfo(group)
-        }
-        // const selectedGroupInfo = document.getElementById("group-info-container")
-        // selectedGroupInfo.innerHTML = getGroupBalances(groupsArr[selectedGroupIndex])
-        listExpenses?.classList.remove("hidden");
-        // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
-    })
-}
+// function handleGroupClick(e) {
+//     // console.log(e.target.id)
+//     e.stopPropagation()
+//     groupsArr.forEach(group => {
+//         if (e.target.id == Number(group.id)) {
+//             selectedGroupIndex = groupsArr.indexOf(group);
+//             renderSelectedGroupInfo(group)
+//         }
+//         // const selectedGroupInfo = document.getElementById("group-info-container")
+//         // selectedGroupInfo.innerHTML = getGroupBalances(groupsArr[selectedGroupIndex])
+//         listExpenses?.classList.remove("hidden");
+//         // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
+//     })
+// }
 
 
-function renderSelectedGroupInfo(group) {
-	if(groupsArr.length) {
+function renderSelectedGroupInfo(group, content) {
+	if(groupsArr.length > 0) {
 		selectedGroup.classList.remove("hidden");
 		document.querySelector(".main-group-add-expense").classList.remove("hidden");
-	
-    console.log("Inside renderSelectedGroup function")
+	console.log(content)
     const { groupName, id, avatar, membersArr, expenses } = group;
 	const header = document.querySelector(".section-main-group-header")
     header.innerHTML = "";
     document.querySelector(".section-main-group-info-nav-container").id = id;
 	console.log(document.querySelector(".section-main-group-info-nav-container").id)
     selectedGroupIndex = groupsArr.indexOf(group);
-	
     
     renderSelectPayerOptions();
 
@@ -240,8 +245,16 @@ function renderSelectedGroupInfo(group) {
 					<p class="badge badge-${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalOutstandingCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
-`
-   listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+` 
+if(content) {
+	content
+} else {
+	groupContainer.innerHTML = ""
+	listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+}
+
+//    content ? groupContainer.innerHTML = content : listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+
 } else {
 	selectedGroup.classList.add("hidden");
 	document.querySelector(".main-group-add-expense").classList.add("hidden");
