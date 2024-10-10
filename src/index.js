@@ -50,17 +50,13 @@ groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 // for not overwriting groups present in local storage
 
-summary.addEventListener("click", (event) => {
-	const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id) 
-	groupContainer.innerHTML = getGroupSummary(group);
-})
 
 //rendered group events: listen and render selected group on main section
 groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event) => {
 
-	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members")) {
+	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") || event.target.matches("#summary")) {
 
         const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
@@ -71,9 +67,10 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         console.log(event.target)
         console.log(selectedGroupId)
         console.log(selectedGroup)
-
+		
         document.querySelector(".active")?.classList.remove("active")
         event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
+		
 
         // const selectedGroupInfo = document.getElementById("group-info-container")
 		// console.log(selectedGroupInfo === groupContainer)
@@ -84,7 +81,10 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 			listExpenses.innerHTML = getExpensesHTML(selectedGroup)
 			groupContainer.innerHTML = ""
 			groupContainer.appendChild(listExpenses)
-        } else {
+        } else if (event.target.matches("#summary")){
+			const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id) 
+			groupContainer.innerHTML = getGroupSummary(group);
+		} else {
 			// listExpenses.classList.add("hidden");
 			listExpenses.display = "none"
             groupContainer.innerHTML = getGroupMembers(selectedGroup)
@@ -151,12 +151,25 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
     if (event.target.matches("#download-btn")) {
 					const group = groupsArr.find(group => group.id === Number(event.target.parentNode.id))
-					console.log(event.target.parentNode)
+					
 					groupContainer.innerHTML = getGroupSummary(group);
+					
+					summary.classList.add("active")
+					document.querySelector(".group-members").classList.remove("active")
+					document.querySelector(".group-balances").classList.remove("active")
+
 					console.log("Downloading PDF ...")
-					// downloadPDF(selectedGroup)
-					const pdfExp = document.querySelector(".export-summary");
-					html2pdf(pdfExp);
+					setTimeout(()=>{
+						const pdfExp = document.querySelector("#group-info-container");
+						console.log(pdfExp);
+						var opt = {
+							margin:       1,
+							filename:     `${group.groupName}-summary.pdf`,
+							jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+						  };
+						html2pdf(pdfExp, opt);
+					},2000)
+					
     } else {
         event.stopPropagation()
     }
