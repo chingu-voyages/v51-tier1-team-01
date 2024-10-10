@@ -13,7 +13,7 @@ export const totalCalc = (group) => {
     group.expenses.forEach(expense => { 
         total += expense.cost
     });
-    return total
+    return total.toFixed(2)
 }
 
 //Individual overall total for group
