@@ -51,8 +51,8 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 // for not overwriting groups present in local storage
 
 summary.addEventListener("click", (event) => {
-	console.log(document.querySelector(".section-main-group-info-nav-container"))
-	groupContainer.innerHTML = getGroupSummary();
+	const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id) 
+	groupContainer.innerHTML = getGroupSummary(group);
 })
 
 //rendered group events: listen and render selected group on main section
