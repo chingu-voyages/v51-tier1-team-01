@@ -655,6 +655,8 @@ function renderExpenses(group) {
 */
 
 function getExpensesHTML(group) {
+    const groupTotalBlock = document.getElementById("group-total")
+    groupTotalBlock.innerText = `Total Cost: $${totalCalc(group)}`
 	const {expenses} = group;
 	document.querySelector(".main-group-add-expense").style.display = "block";
 	return `${
