@@ -880,7 +880,7 @@ selectedGroup.addEventListener('click', function(event) {
                             console.log(`This is member index ${memberIndex}`);
                             if(memberIndex!=-1&&friendIndex!=-1){
                                 groupsArr[groupIndex].expenses.forEach(expense => {
-                                    if (expense.payer.id === memberId) {
+                                    if (parseInt(expense.payer.id) === memberId) {
                                         expense.payer.name = updatedName;
                                     }
 
@@ -1102,4 +1102,4 @@ selectedGroup.addEventListener('click',function(event){
     {
         console.log("No such btn");
     }
-})
+})}
