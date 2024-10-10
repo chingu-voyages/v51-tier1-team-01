@@ -95,7 +95,10 @@
 
         <!-- added expenses section -->
         <section class="main-group-add-expense">
-            <button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
+            <div id="expense-total-section">
+                <button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
+                <div id="group-total"></div>
+            </div>
             <!-- <button id="btn-add-expense">Show the add expense form</button> -->
             <form action="" id="form-add-expense" class="hidden">
                 <input type="text" id="input-expense" placeholder="Name of expense" required>
@@ -105,7 +108,6 @@
                 <!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
                 <button>Submit expense</button>
             </form>
-            <ul id="list-expenses"></ul>
         </section>
         <dialog id="add-members-to-expense">
             <div class="dialog-body">
