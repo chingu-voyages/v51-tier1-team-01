@@ -22,6 +22,10 @@ const formAddExpense = document.getElementById("form-add-expense");
 const listExpenses = document.getElementById("list-expenses");
 
 let selectedGroupIndex=-1; //just trying to fix the selectedGroupIndex is not defined
+
+selectedGroup.classList.add("hidden");
+document.querySelector(".main-group-add-expense").classList.add("hidden");
+
 if(groupsArr.length!==0) {
 	hideForm()
 	renderSelectedGroupInfo(groupsArr[0]);
@@ -182,6 +186,10 @@ function handleGroupClick(e) {
 
 
 function renderSelectedGroupInfo(group) {
+	if(groupsArr.length) {
+		selectedGroup.classList.remove("hidden");
+		document.querySelector(".main-group-add-expense").classList.remove("hidden");
+	
     console.log("Inside renderSelectedGroup function")
     const { groupName, id, avatar, membersArr, expenses } = group;
 	const header = document.querySelector(".section-main-group-header")
@@ -211,7 +219,10 @@ function renderSelectedGroupInfo(group) {
 				<img src=${avatar} alt="Group icon">
 `
    listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-
+} else {
+	selectedGroup.classList.add("hidden");
+	document.querySelector(".main-group-add-expense").classList.add("hidden");
+}
 }
 
 //creating html list templates
@@ -644,6 +655,8 @@ function renderExpenses(group) {
 */
 
 function getExpensesHTML(group) {
+    const groupTotalBlock = document.getElementById("group-total")
+    groupTotalBlock.innerText = `Total Cost: $${totalCalc(group)}`
 	const {expenses} = group;
 	document.querySelector(".main-group-add-expense").style.display = "block";
 	return `${
@@ -678,7 +691,7 @@ function getExpensesHTML(group) {
 								}
 									<div class="balances-members-footer" id=${expense.date.toString()}>
 										<button class="add-btn" id="add-expense-member"><span>+</span>Add member</button>
-										<button class="add-btn" id="edit-expense-btn"><span>+</span>Edit 	expense</button>
+										<button class="add-btn" id="edit-expense-btn"><span>+</span>Edit expense</button>
 										<span>Subtotal $${expense.cost}</span>
 									</div>
 								</div>
@@ -812,20 +825,26 @@ const otherMembersContainer = document.getElementById("other-members-container")
 let checkboxes = [...document.querySelectorAll(".add-member-to-expense")];
 
 function addMembersToExpense(id, group) {
+    console.log("Add members to expense called")
 	console.log(group)
     otherMembersContainer.textContent = "";
+    const expense = group.expenses.find(expense => expense.date === id);
+    console.log(expense)
+    console.log(group.expense)
+    group.expense
     group.membersArr.forEach(member => {
-
-        if (group.expenses.id === Number(id) && !group.expenses.members.includes(member)) {
+        if (!expense.members.includes(member)) {
             const listItem = document.createElement("li");
             const checkbox = document.createElement("input");
             checkbox.setAttribute("type", "checkbox");
             checkbox.setAttribute("id", member.name);
+            console.log("Member to add")
+            console.log(member.name)
             checkbox.classList.add("add-member-to-expense")
             const label = document.createElement("label");
             label.setAttribute("for", member.name);
             label.textContent = member.name;
-            listItem.classList.add("form-control-checkbox");
+            listItem.classList.add("form-control", "form-control-checkbox");
             listItem.appendChild(checkbox);
             listItem.appendChild(label);
             otherMembersContainer.appendChild(listItem)
@@ -876,6 +895,7 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
     getExpensesHTML(groupsArr[selectedGroupIndex]);
+    renderSelectedGroupInfo(groupsArr[selectedGroupIndex])
 });
 
 // console.log(selectedGroupIndex);
@@ -1057,7 +1077,8 @@ document.getElementById('group-list').addEventListener('click',function(event){
                 console.log(groupIndex);
                 groupsArr.splice(groupIndex,1);
                 localStorage.setItem('groups',JSON.stringify(groupsArr));
-                renderGroups();
+				renderGroups()
+                renderSelectedGroupInfo();
             }
         }
         // listItem.remove();
@@ -1091,7 +1112,7 @@ document.getElementById('friends-list').addEventListener('click', function(event
                 }
             })
             localStorage.setItem('groups',JSON.stringify(groupsArr));
-            renderGroups();
+            renderSelectedGroupInfo();
             // renderFriends();
         }
         // listItem.remove();
