@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Splitter App Tier 1</title>
     <link rel="stylesheet" href="src/styles.css">
-	<script src="https://unpkg.com/pdf-lib@1.4.0"></script>
-    <script src="https://unpkg.com/downloadjs@1.4.7"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+	<!-- <script src="https://unpkg.com/pdf-lib@1.4.0"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7"></script> -->
 </head>
 
 <body>
@@ -88,6 +91,7 @@
                 <button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
                 <div id="group-total"></div>
             </div>
+            <button id="summary" class="add-btn">Summary</button>
             <!-- <button id="btn-add-expense">Show the add expense form</button> -->
             <form action="" id="form-add-expense" class="hidden">
                 <input type="text" id="input-expense" placeholder="Name of expense" required>
@@ -97,6 +101,7 @@
                 <!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
                 <button>Submit expense</button>
             </form>
+
         </section>
         <dialog id="add-members-to-expense">
             <div class="dialog-body">
@@ -119,7 +124,7 @@
                     </form>
                 </div>
         </dialog>
-		 </section>
+		 
 
     </section>
 
