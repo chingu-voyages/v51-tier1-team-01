@@ -59,7 +59,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") || event.target.matches("#summary") ||  event.target.matches("#toggle")) {
 
 
-        const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
+        const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id || event.target.closest(".expense-item")?.id;
 
         const selectedGroup = groupsArr.find(group => {
             return group.id == selectedGroupId ? group : console.log("there's no group with same id in group array")
@@ -90,12 +90,25 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupSummary(selectedGroup))
 			// const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id) 
 			// groupContainer.innerHTML = getGroupSummary(group);
-		} else {
+		} else if (event.target.matches("#toggle")) {
+			const expenseId = event.target.closest(".expense-item").id
+			const group = groupsArr.find(group=> {
+				return group.expenses.find( expense=> expense.date === Number(expenseId))
+			})
+			console.log(expenseId)
+			const expense = group.expenses.find( expense => expense.date === Number(expenseId))
+			const member = expense.members.find(member => member.id === expenseId)
+			console.log(expense.members.map(member => console.log(member.name)))
+			console.log(expense.members)
+			console.log(member.name + " " + expense)
+
+		} else if (event.target.matches(".group-members")){
 			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupMembers(selectedGroup))
 			// listExpenses.classList.add("hidden");
 			// listExpenses.display = "none"
             // groupContainer.innerHTML = getGroupMembers(selectedGroup)
         }
+
 
     } else {
         event.stopPropagation()
@@ -152,23 +165,6 @@ document.querySelector("body")?.addEventListener("click", (event) => {
             editExpense(expense)
         }
     } else {
-        event.stopPropagation()
-    }
-
-    if (event.target.matches("#toggle")) {
-		{
-			event.stopPropagation()
-
-			const expenseId = Number(event.target.parentNode.id)
-			const group = groupsArr.find(group=> {
-				return group.expenses.find( expense=> expense.date === Number(expenseId))
-			})
-			const expense = group.expenses.find( expense => expense.date === Number(expenseId))
-            const member = expense.members.find( member => member.id === event.id )
-            console.log(member.name + " " + expense)
-
-		}
-	} else {
         event.stopPropagation()
     }
 
@@ -250,7 +246,6 @@ function renderSelectedGroupInfo(group, content) {
 	if(groupsArr.length > 0) {
 		selectedGroup.classList.remove("hidden");
 		document.querySelector(".main-group-add-expense").display = "flex";
-	console.log(content)
     const { groupName, id, avatar, membersArr, expenses } = group;
 	const header = document.querySelector(".section-main-group-header")
     header.innerHTML = "";
@@ -780,26 +775,26 @@ function getExpensesHTML(group) {
 								</div>
 								<div class="balances-expenses-container">
        					 		${expense.members.map(member => {
-            const status = memberStatus(member, expense)
-            const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
-            return `
-											<div class = "balances-card-member">
-												<div>
-													<div>
-													    <p class="balances-card-member-name editable" id=${member.id}>
-													    ${member.name}
-													    </p>
-                					                    <span class="pen">🖋️</span>
-													</div>
-                                                    <div id="badges">
-														<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id="toggle" class="toggle toggle-${paidClass}">toggle</p>`}
-                                                    </div>
-												</div>
-												<img class="balances-card-member-img ${paidClass}" src=${member.imgSrc} alt="Member icon">
-											</div>
-										`
-        }).join("")
-            }
+           							 const status = memberStatus(member, expense)
+           							 const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
+           							 return `
+																		<div class = "balances-card-member">
+																			<div>
+																				<div>
+																				    <p class="balances-card-member-name editable" id=${member.id}>
+																				    ${member.name}
+																				    </p>
+           							     					                    <span class="pen">🖋️</span>
+																				</div>
+           							                                         <div id="badges">
+																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id="toggle" class="toggle toggle-${paidClass}">toggle</p>`}
+           							                                         </div>
+																			</div>
+																			<img class="balances-card-member-img ${paidClass}" src=${member.imgSrc} alt="Member icon">
+																		</div>
+																	`
+        							}).join("")
+        						}
 									<div class="balances-members-footer" id=${expense.date.toString()}>
 										<button class="add-btn" id="add-expense-member"><span>+</span>Add member</button>
 										<button class="add-btn" id="edit-expense-btn"><span>+</span>Edit expense</button>
