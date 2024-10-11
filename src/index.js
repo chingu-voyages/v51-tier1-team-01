@@ -276,7 +276,7 @@ function titleCase(text) {
         const words = text?.split(" ");
         return words.map(word => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
     } else {
-        return "No name."
+        return "No name"
     }
    
 }
@@ -354,7 +354,7 @@ function inputValidation(groupName, groupMembers) {
     } else {
         defaultBorder(groupName.id);
     }
-    return (isEmpty(groupName.value) || membersFilled < 2) ? false : true;
+    return (isEmpty(groupName.value) || membersFilled < 2 && !tempExistingFriendsIdsArr.length) ? false : true;
 }
 
 
@@ -425,7 +425,6 @@ function handleGroupCreation(e) {
     console.log("Handle group creation is called...")
     e.preventDefault();
     let allMembersInput = document.querySelectorAll('.group-member');
-    // let randomId = Date.now();
     // add existing friends
     const tempMemberArr = [];
     if (tempExistingFriendsIdsArr.length) {
@@ -436,23 +435,11 @@ function handleGroupCreation(e) {
                 }
             })
         })
+        console.log("temp member arr after checking existing friends: ")
+        console.log(tempMemberArr)
     }
-
-    // const checkedOptions = [...document.querySelectorAll(".existing-friend")]
-    // checkedOptions.forEach(option => {
-    //     if (option.checked) {
-    //         friendsListStored.forEach(friend => {
-    //             // friendsArr.forEach(friend => {
-    //             if (option.id.toLowerCase() === friend.name.toLowerCase()) {
-    //                 console.log(friend)
-    //                 tempMemberArr.push(friend);
-    //             }
-    //         })
-    //     }
-    // })
     if (!inputValidation(groupName, allMembersInput) && tempMemberArr.length < 2) {
         groupError.style.display = "block";
-        // return;
     }
     else {
         groupError.style.display = "none";
@@ -463,9 +450,6 @@ function handleGroupCreation(e) {
                 friendsListStored.forEach(friend => {
                     friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
                 })
-                // friendsArr.forEach(friend => {
-                //     friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
-                // })
                 if (!inList) {
                     const newFriend = createFriend(titleCase(input.value));
                     // friendsArr.push(newFriend);
@@ -483,7 +467,6 @@ function handleGroupCreation(e) {
             selectedGroupIndex = groupsArr.length - 1 // just added group
             tempMemberArr.forEach(member => {
                 newGroup.membersArr.push(member);
-                // friendsArr.push(member);
                 if (!friendsListStored.includes(member)) {
                     friendsListStored.push(member);
                 }
