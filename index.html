@@ -63,11 +63,22 @@
                     <div class="group-form-buttons">
                         <button id="group-create-btn" type="submit">Create Group</button>
                         <button id="add-another-member" type="button">Add Member</button>
+                        <button id="add-existing-friend" type="button">Add friend</button>
                     </div>
                 </div>
                 <p id="group-error">Please enter a valid group name with at least two members</p>
             </form>
         </section>
+        <dialog id="dialog-add-friend">
+            <div class="dialog-body">
+                <form>
+                    <p>Add existing friends to group</p>
+                    <ul id="existing-friends-checkboxes">
+                    </ul>
+                    <button id="close-add-existing-friends-to-group">Close</button>
+                </form>
+            </div>
+        </dialog>
         <section class="section-main-group" id="selected-group">
 			<div class="section-main-group-header"></div>
 			<div class="section-main-group-info" >
