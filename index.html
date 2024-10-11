@@ -74,7 +74,7 @@
 				<div class="section-main-group-info-nav-container">
 					<ul class="section-main-group-info-nav">
 					<li class="text-small group-balances active">Balances</li>
-                    <li class="text-small group-summary">Summary</li>
+                    <li class="text-small group-summary" id="summary">Summary</li>
 					<li class="text-small group-members">Members</li>
 				</ul>
 				<button id="download-btn"> Download PDF</button>
@@ -85,14 +85,25 @@
 
 			</div>
         </section>
-
+        <!-- pop up for adding friends to members  -->
+        <dialog id="add-members-to-group-dialog">
+            <div class="dialog-body">
+                <form>
+                    <p>Friends you can add:</p>
+                    <ul id="other-friends-container">
+                    </ul>
+                    <button id="add-someother-person">Add someone else</button>
+                    <input type="text" id="new-member-input" placeholder="Enter new friend's name" style="display: none;">
+                    <button id="close-add-members-to-group">Close</button>
+                </form>
+            </div>
+        </dialog>
         <!-- added expenses section -->
         <section class="main-group-add-expense">
             <div id="expense-total-section">
                 <button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
                 <div id="group-total"></div>
             </div>
-            <button id="summary" class="add-btn">Summary</button>
             <!-- <button id="btn-add-expense">Show the add expense form</button> -->
             <form action="" id="form-add-expense" class="hidden">
                 <input type="text" id="input-expense" placeholder="Name of expense" required>
