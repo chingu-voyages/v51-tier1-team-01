@@ -56,7 +56,8 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 
 document.querySelector("body")?.addEventListener("click", (event) => {
 
-    if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") || event.target.matches("#summary")) {
+	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") || event.target.matches("#summary") ||  event.target.matches("#toggle")) {
+
 
         const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
@@ -151,6 +152,23 @@ document.querySelector("body")?.addEventListener("click", (event) => {
             editExpense(expense)
         }
     } else {
+        event.stopPropagation()
+    }
+
+    if (event.target.matches("#toggle")) {
+		{
+			event.stopPropagation()
+
+			const expenseId = Number(event.target.parentNode.id)
+			const group = groupsArr.find(group=> {
+				return group.expenses.find( expense=> expense.date === Number(expenseId))
+			})
+			const expense = group.expenses.find( expense => expense.date === Number(expenseId))
+            const member = expense.members.find( member => member.id === event.id )
+            console.log(member.name + " " + expense)
+
+		}
+	} else {
         event.stopPropagation()
     }
 
@@ -790,7 +808,9 @@ function getExpensesHTML(group) {
 													    </p>
                 					                    <span class="pen">🖋️</span>
 													</div>
-														<p class="badge badge-${paidClass}">${status}</p>
+                                                    <div id="badges">
+														<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id="toggle" class="toggle toggle-${paidClass}">toggle</p>`}
+                                                    </div>
 												</div>
 												<img class="balances-card-member-img ${paidClass}" src=${member.imgSrc} alt="Member icon">
 											</div>
@@ -809,7 +829,6 @@ function getExpensesHTML(group) {
     }).join("")
         }`
 }
-
 
 // !!! ---- currently getExpensesHTML is used wherever renderEsxenses used to be ---- !!!
 
