@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Splitter App Tier 1</title>
     <link rel="stylesheet" href="src/styles.css">
-	<script src="https://unpkg.com/pdf-lib@1.4.0"></script>
-    <script src="https://unpkg.com/downloadjs@1.4.7"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+	<!-- <script src="https://unpkg.com/pdf-lib@1.4.0"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7"></script> -->
 </head>
 
 <body>
@@ -82,6 +85,7 @@
 				<div class="section-main-group-info-nav-container">
 					<ul class="section-main-group-info-nav">
 					<li class="text-small group-balances active">Balances</li>
+                    <li class="text-small group-summary" id="summary">Summary</li>
 					<li class="text-small group-members">Members</li>
 				</ul>
 				<button id="download-btn"> Download PDF</button>
@@ -92,7 +96,19 @@
 
 			</div>
         </section>
-
+        <!-- pop up for adding friends to members  -->
+        <dialog id="add-members-to-group-dialog">
+            <div class="dialog-body">
+                <form>
+                    <p>Friends you can add:</p>
+                    <ul id="other-friends-container">
+                    </ul>
+                    <button id="add-someother-person">Add someone else</button>
+                    <input type="text" id="new-member-input" placeholder="Enter new friend's name" style="display: none;">
+                    <button id="close-add-members-to-group">Close</button>
+                </form>
+            </div>
+        </dialog>
         <!-- added expenses section -->
         <section class="main-group-add-expense">
             <div id="expense-total-section">
@@ -108,6 +124,7 @@
                 <!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
                 <button>Submit expense</button>
             </form>
+
         </section>
         <dialog id="add-members-to-expense">
             <div class="dialog-body">
@@ -130,7 +147,7 @@
                     </form>
                 </div>
         </dialog>
-		 </section>
+		 
 
     </section>
 

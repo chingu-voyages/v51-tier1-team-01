@@ -321,6 +321,15 @@ ul {
 	background-color: #005B8E;
 }
 
+.main-group-add-expense {
+	display: flex;
+	justify-content: space-between;
+}
+
+#summary {
+	float: right;
+}
+
 
 /* forms */
 
@@ -688,7 +697,7 @@ margin-bottom: 5px;
 }
 
 #list-expenses {
-	padding-top: 3rem;
+	padding-top: 2rem;
 }
 
 .expense-item {
@@ -761,6 +770,7 @@ margin-bottom: 5px;
 .pen {
     cursor: pointer;
     margin-left: 8px;}
+
  /* footer */
 
 footer {
@@ -782,13 +792,17 @@ footer {
 
 @media (min-width: 993px) {
     body {
-        grid-template-rows: auto 1fr auto;
+        grid-template-rows: auto 50px;
         grid-template-columns: minmax(20%,22%) auto;
     }
 
     header {
         grid-column: 1 / span 2;
     }
+
+	footer {
+		grid-row: 2/3;
+	}
 
 }
 
@@ -889,4 +903,34 @@ dialog::backdrop {
 	grid-template-columns: auto 1fr;
 }
 
+/* summary */
 
+#member-summary-line {
+    display: inline-flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+#expense-summary-title {
+    padding-top: 2rem;
+}
+
+#Subtotal {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    color: #005c8f;
+    padding: 10px 0;
+    border-bottom: 1px solid #d3d3d3;
+    border-top: 1px solid #d3d3d3;
+    margin-top: 12px;
+}
+
+#Total {
+    padding: 10px 0;
+    text-align: end;
+    color: #005c8f;
+    font-weight: bold;
+}
