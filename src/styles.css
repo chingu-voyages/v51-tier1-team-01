@@ -703,7 +703,7 @@ margin-bottom: 5px;
 }
 
 .balances-expenses-container {
-	display: none;
+	/* display: none; */
 	padding-top: 1rem;
 }
 

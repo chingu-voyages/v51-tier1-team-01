@@ -56,22 +56,23 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 
 document.querySelector("body")?.addEventListener("click", (event) => {
 
-	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") || event.target.matches("#summary") ||  event.target.matches("#toggle")) {
+	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") || event.target.matches("#summary") ||  event.target.matches(".toggle")) {
 
 
-        const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id || event.target.closest(".expense-item")?.id;
+        // const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
-        const selectedGroup = groupsArr.find(group => {
-            return group.id == selectedGroupId ? group : console.log("there's no group with same id in group array")
-        })
+        // const selectedGroup = groupsArr.find(group => {
+        //     return group.id == selectedGroupId ? group : console.log("there's no group with same id in group array")
+        // })
+
+		const selectedGroup = groupsArr[selectedGroupIndex] //instead of prev.code
 
         console.log(event.target)
-        console.log(selectedGroupId)
+        // console.log(selectedGroupId)
         console.log(selectedGroup)
 
         document.querySelector(".active")?.classList.remove("active")
         event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
-
 
         // const selectedGroupInfo = document.getElementById("group-info-container")
         // console.log(selectedGroupInfo === groupContainer)
@@ -90,17 +91,20 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupSummary(selectedGroup))
 			// const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id) 
 			// groupContainer.innerHTML = getGroupSummary(group);
-		} else if (event.target.matches("#toggle")) {
+		} else if (event.target.matches(".toggle")) {
 			const expenseId = event.target.closest(".expense-item").id
-			const group = groupsArr.find(group=> {
-				return group.expenses.find( expense=> expense.date === Number(expenseId))
-			})
-			console.log(expenseId)
-			const expense = group.expenses.find( expense => expense.date === Number(expenseId))
-			const member = expense.members.find(member => member.id === expenseId)
-			console.log(expense.members.map(member => console.log(member.name)))
-			console.log(expense.members)
-			console.log(member.name + " " + expense)
+			// const group = groupsArr.find(group=> {
+			// 	return group.expenses.find( expense=> expense.date === Number(expenseId))
+			// })
+			
+			const expense = selectedGroup.expenses.find( expense => expense.date === Number(expenseId))
+			const member = expense.members.find(member => Number(member.id) === Number(event.target.id))
+			console.log(member.name, expense)
+			toggleMemberStatus(expense, member)
+			console.log(event.target.parentNode.parentNode.parentNode.parentNode)
+			// event.target.parentNode.parentNode.parentNode.parentNode.display = "grid"
+			
+			renderSelectedGroupInfo(selectedGroup, listExpenses.innerHTML = getExpensesHTML(selectedGroup))
 
 		} else if (event.target.matches(".group-members")){
 			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupMembers(selectedGroup))
@@ -108,8 +112,6 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 			// listExpenses.display = "none"
             // groupContainer.innerHTML = getGroupMembers(selectedGroup)
         }
-
-
     } else {
         event.stopPropagation()
     }
@@ -150,6 +152,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
     } else {
         event.stopPropagation()
     }
+	
     if (event.target.matches("#edit-expense-btn")) {
         {
             event.stopPropagation()
@@ -275,8 +278,10 @@ function renderSelectedGroupInfo(group, content) {
 if(content) {
 	content
 } else {
+	// document.querySelector(".balances-expenses-container").display = "none"
 	groupContainer.innerHTML = ""
 	listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+	groupContainer.appendChild(listExpenses)
 }
 
 //    content ? groupContainer.innerHTML = content : listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
@@ -759,11 +764,23 @@ function renderExpenses(group) {
         })
 */
 
+function toggleMemberStatus(expense, member) {
+	console.log(expense.paid)
+	if(expense.paid.includes(member.name)){
+		const index = expense.paid.indexOf(member.name)
+		expense.paid.splice(index, 1)
+	} else {
+		expense.paid.push(member.name)
+	}
+	localStorage.setItem('groups', JSON.stringify(groupsArr))
+}
+
 function getExpensesHTML(group) {
     const groupTotalBlock = document.getElementById("group-total")
     groupTotalBlock.innerText = `Total Cost: $${totalCalc(group)}`
 	const {expenses} = group;
 	document.querySelector(".main-group-add-expense").display = "flex";
+	// document.querySelector(".balances-expenses-container").display = "none";
 	return `${
 				expenses.map(expense => {
 					return `
@@ -787,7 +804,7 @@ function getExpensesHTML(group) {
            							     					                    <span class="pen">🖋️</span>
 																				</div>
            							                                         <div id="badges">
-																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id="toggle" class="toggle toggle-${paidClass}">toggle</p>`}
+																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id=${member.id} class="toggle toggle-${paidClass}">toggle</p>`}
            							                                         </div>
 																			</div>
 																			<img class="balances-card-member-img ${paidClass}" src=${member.imgSrc} alt="Member icon">
