@@ -12,8 +12,8 @@ const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
 const groupContainer = document.getElementById("group-info-container")
-const groupsArr = JSON.parse(localStorage.getItem('groups'))||[];
-const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
+const groupsArr = JSON.parse(localStorage.getItem('groups')) || [];
+const friendsListStored = JSON.parse(localStorage.getItem('friends')) || [];
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
@@ -23,15 +23,15 @@ const btnAddExpense = document.getElementById("btn-add-expense");
 const formAddExpense = document.getElementById("form-add-expense");
 const listExpenses = document.getElementById("list-expenses");
 
-let selectedGroupIndex=-1; //just trying to fix the selectedGroupIndex is not defined
+let selectedGroupIndex = -1; //just trying to fix the selectedGroupIndex is not defined
 
 selectedGroup.classList.add("hidden");
 document.querySelector(".main-group-add-expense").display = "none";
 
-if(groupsArr.length!==0) {
-	hideForm()
-	renderSelectedGroupInfo(groupsArr[0]);
-	// renderSelectedGroupInfo(groupsArr[0])
+if (groupsArr.length !== 0) {
+    hideForm()
+    renderSelectedGroupInfo(groupsArr[0]);
+    // renderSelectedGroupInfo(groupsArr[0])
 } else {
     showForm();
 }
@@ -56,7 +56,7 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 
 document.querySelector("body")?.addEventListener("click", (event) => {
 
-	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") || event.target.matches("#summary")) {
+    if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") || event.target.matches("#summary")) {
 
         const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
@@ -67,13 +67,13 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         console.log(event.target)
         console.log(selectedGroupId)
         console.log(selectedGroup)
-		
+
         document.querySelector(".active")?.classList.remove("active")
         event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
-		
+
 
         // const selectedGroupInfo = document.getElementById("group-info-container")
-		// console.log(selectedGroupInfo === groupContainer)
+        // console.log(selectedGroupInfo === groupContainer)
 
         // groupContainer ? groupContainer.style.display = "block" : ""
 
@@ -94,55 +94,68 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 			// listExpenses.classList.add("hidden");
 			// listExpenses.display = "none"
             // groupContainer.innerHTML = getGroupMembers(selectedGroup)
-            
         }
 
-	} else {
+    } else {
         event.stopPropagation()
     }
 
-	if (event.target.matches("#show-expenses-members")) {
-		{
-			event.stopPropagation()
-			const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
-			return toggle.style.display ==="grid" ? toggle.style.display ="none" : toggle.style.display="grid";
-		}
-	} else {
+    if (event.target.matches("#show-expenses-members")) {
+        {
+            event.stopPropagation()
+            const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
+            return toggle.style.display === "grid" ? toggle.style.display = "none" : toggle.style.display = "grid";
+        }
+    } else {
         event.stopPropagation()
     }
 
-	if (event.target.matches("#add-expense-member")) {
-			event.stopPropagation()
-			// handleExpenseClick(event);
-			const groupId = document.querySelector(".section-main-group-info-nav-container").id
-			const group = groupsArr.find(group=> group.id === Number(groupId))
-			console.log(group)
-			const expenseId = Number(event.target.parentNode.id)
-			
-			addMembersToExpense(expenseId, group);
-	} else {
+    if (event.target.matches("#add-expense-member")) {
+        event.stopPropagation()
+        // handleExpenseClick(event);
+        const groupId = document.querySelector(".section-main-group-info-nav-container").id
+        const group = groupsArr.find(group => group.id === Number(groupId))
+        console.log(group)
+        const expenseId = Number(event.target.parentNode.id)
+
+        addMembersToExpense(expenseId, group);
+    } else {
         event.stopPropagation()
     }
+    // add member btn below members section
+    if (event.target.matches("#add-member-btn")) {
+        event.stopPropagation()
+        // handleExpenseClick(event);
+        console.log("Showing friends dialog")
+        // const groupId = document.querySelector(".section-main-group-info-nav-container").id
+        // const group = groupsArr.find(group=> group.id === Number(groupId))
+        // console.log(group)
+        // const expenseId = Number(event.target.parentNode.id)
+        addMembersToGroup(selectedGroupIndex);
+        // addMembersToExpense(expenseId, group);
+    } else {
+        event.stopPropagation()
+    }
+    if (event.target.matches("#edit-expense-btn")) {
+        {
+            event.stopPropagation()
+            // handleExpenseClick(event);
 
-	if (event.target.matches("#edit-expense-btn")) {
-		{
-			event.stopPropagation()
-			// handleExpenseClick(event);
-			
-			const expenseId = Number(event.target.parentNode.id)
-			const group = groupsArr.find(group=> {
-				return group.expenses.find( expense=> expense.date === Number(expenseId))
-			})
-			const expense = group.expenses.find( expense=> expense.date === Number(expenseId))
+            const expenseId = Number(event.target.parentNode.id)
+            const group = groupsArr.find(group => {
+                return group.expenses.find(expense => expense.date === Number(expenseId))
+            })
+            const expense = group.expenses.find(expense => expense.date === Number(expenseId))
 
-			console.log(expense)
-			editExpense(expense)
-		}
-	} else {
+            console.log(expense)
+            editExpense(expense)
+        }
+    } else {
         event.stopPropagation()
     }
 
     if (event.target.matches("#download-btn")) {
+
 					const group = groupsArr.find(group => group.id === Number(event.target.parentNode.id))
 					
 					groupContainer.innerHTML = getGroupSummary(group);
@@ -173,9 +186,8 @@ function getGroupMembers(selectedGroup) {
 	// document.querySelector(".main-group-add-expense").style.display = "none";
 	return `
 		<div class="balances-members-container">
-			${
-				selectedGroup.membersArr.map(member => {
-					return `
+			${selectedGroup.membersArr.map(member => {
+        return `
 						<div class = "balances-card-member">
 							<div>
 								<div>
@@ -190,8 +202,8 @@ function getGroupMembers(selectedGroup) {
 							<img class="balances-card-member-img ${memberTotal(member.name, selectedGroup) == 0 ? "paid" : "unpaid"}" src=${member.imgSrc} alt="Member icon">
 						</div>
 					`
-				}).join("")
-			}
+    }).join("")
+        }
 		</div>
 		<div class="balances-members-footer">
 			<button class="add-btn" id="add-member-btn"><span>+</span>Add member</button>
@@ -215,6 +227,7 @@ function getGroupMembers(selectedGroup) {
 // }
 
 
+
 function renderSelectedGroupInfo(group, content) {
 	if(groupsArr.length > 0) {
 		selectedGroup.classList.remove("hidden");
@@ -226,15 +239,15 @@ function renderSelectedGroupInfo(group, content) {
     document.querySelector(".section-main-group-info-nav-container").id = id;
 	console.log(document.querySelector(".section-main-group-info-nav-container").id)
     selectedGroupIndex = groupsArr.indexOf(group);
-    
-    renderSelectPayerOptions();
 
-    // getGroupBalances(groupsArr[selectedGroupIndex]);
-    let friendsImages = membersArr.map(member => {
-        return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
-    })
-	
-    header.innerHTML += `
+        renderSelectPayerOptions();
+
+        // getGroupBalances(groupsArr[selectedGroupIndex]);
+        let friendsImages = membersArr.map(member => {
+            return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
+        })
+
+        header.innerHTML += `
 				<div>
 					<div>
                         <h2 class="section-main-group-title editable" id=${id}>${titleCase(groupName)} </h2>
@@ -271,10 +284,15 @@ function createListItem(content) {
 }
 
 function titleCase(text) {
-    text = text.trim();
-    // console.log(text)
-    const words = text?.split(" ");
-    return words.map(word => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
+    if (text.length) {
+        text = text.trim();
+        // console.log(text)
+        const words = text?.split(" ");
+        return words.map(word => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
+    } else {
+        return "No name."
+    }
+   
 }
 
 function addImg(avatar) {
@@ -360,7 +378,7 @@ function isEmpty(value) {
 
 // friend object
 
-function createFriend(name, id = Date.now()+Math.floor(Math.random()*1000), imgSrc = 'src/img/person-icon.png') { // function to create friend object from input
+function createFriend(name, id = Date.now() + Math.floor(Math.random() * 1000), imgSrc = 'src/img/person-icon.png') { // function to create friend object from input
     return { name, id, imgSrc }
 
 }
@@ -386,15 +404,15 @@ function renderFriends() {
     friendsList.innerHTML = "";
     friendsListStored.forEach(friend => {
         const friendElement = createListItem(friend.name);
-		const friendImg = document.createElement("img");
+        const friendImg = document.createElement("img");
         const deleteIcon = document.createElement("span");
         // <span class="delete">&times</span>
         deleteIcon.classList.add("delete");
         deleteIcon.innerHTML = "&times";
-        friendElement.setAttribute('id',friend.id);
-		friendImg.setAttribute("src", friend.imgSrc);
-		friendImg.classList.add("group-icon");
-		friendElement.appendChild(friendImg);
+        friendElement.setAttribute('id', friend.id);
+        friendImg.setAttribute("src", friend.imgSrc);
+        friendImg.classList.add("group-icon");
+        friendElement.appendChild(friendImg);
         friendElement.appendChild(deleteIcon);
         friendsList.appendChild(friendElement);
         // return
@@ -424,18 +442,28 @@ function handleGroupCreation(e) {
     // let randomId = Date.now();
     // add existing friends
     const tempMemberArr = [];
-    const checkedOptions = [...document.querySelectorAll(".existing-friend")]
-    checkedOptions.forEach(option => {
-        if (option.checked) {
-            friendsListStored.forEach(friend=>{
-            // friendsArr.forEach(friend => {
-                if (option.id.toLowerCase() === friend.name.toLowerCase()) {
-                    console.log(friend)
-                    tempMemberArr.push(friend);
+    if (tempExistingFriendsIdsArr.length) {
+        tempExistingFriendsIdsArr.forEach(checkboxId => {
+            friendsListStored.forEach(friend => {
+                if (checkboxId.toLowerCase() === friend.name.toLowerCase()) {
+                    tempMemberArr.push(friend)
                 }
             })
-        }
-    })
+        })
+    }
+
+    // const checkedOptions = [...document.querySelectorAll(".existing-friend")]
+    // checkedOptions.forEach(option => {
+    //     if (option.checked) {
+    //         friendsListStored.forEach(friend => {
+    //             // friendsArr.forEach(friend => {
+    //             if (option.id.toLowerCase() === friend.name.toLowerCase()) {
+    //                 console.log(friend)
+    //                 tempMemberArr.push(friend);
+    //             }
+    //         })
+    //     }
+    // })
     if (!inputValidation(groupName, allMembersInput) && tempMemberArr.length < 2) {
         groupError.style.display = "block";
         // return;
@@ -518,18 +546,20 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     localStorage.setItem('friends', JSON.stringify(friendsListStored))
     inputFriendName.value = '';
     renderFriends();
-	formAddFriend.classList.remove("form-add-visible");
+    formAddFriend.classList.remove("form-add-visible");
 });
 
 // add existing friends to group
 
+const btnAddExistingFriend = document.getElementById("add-existing-friend");
+const dialogAddExistingFriend = document.getElementById("dialog-add-friend");
 const addExistingFriendContainer = document.getElementById("existing-friends-checkboxes");
 
 function renderExistingFriendsForGroupCreation() {
     addExistingFriendContainer.textContent = "";
     addExistingFriendContainer.childNodes.forEach(node => node.remove())
     friendsListStored.forEach(friend => {
-    // friendsArr.forEach(friend => {
+        // friendsArr.forEach(friend => {
         const checkbox = document.createElement("input");
         checkbox.setAttribute("type", "checkbox");
         checkbox.setAttribute("id", friend.name);
@@ -538,12 +568,54 @@ function renderExistingFriendsForGroupCreation() {
         label.setAttribute("for", friend.name);
         label.textContent = friend.name;
         const checkboxDiv = document.createElement("div");
-        checkboxDiv.classList.add("form-control-checkbox");
+        checkboxDiv.classList.add("form-control", "form-control-checkbox");
         checkboxDiv.appendChild(checkbox);
         checkboxDiv.appendChild(label);
         addExistingFriendContainer.appendChild(checkboxDiv);
     });
+    checkboxes = [...document.querySelectorAll(".existing-friend")];
 }
+
+
+btnAddExistingFriend.addEventListener("click", () => {
+    renderExistingFriendsForGroupCreation();
+    dialogAddExistingFriend.showModal();
+})
+
+const btnCloseAddExistingFriends = document.getElementById("close-add-existing-friends-to-group")
+
+const tempExistingFriendsIdsArr = [];
+function addExistingFriensOnGroupCreation(e) {
+    tempExistingFriendsIdsArr.length = 0;
+    e.preventDefault()
+    // handleGroupCreation(e);
+    // groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+    //     checkboxes.forEach(checkbox => {
+    //         if (checkbox.checked && checkbox.id.toLowerCase() === member.name.toLowerCase()) {
+    //             // console.log(groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex])
+    //             groupsArr[selectedGroupIndex].members.push(member)
+    //         }
+
+    //     })
+    // })
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            console.log("CHECKBOX: ")
+            console.log(checkbox)
+            tempExistingFriendsIdsArr.push(checkbox.id);
+            console.log(checkbox.id)
+        }
+    })
+    localStorage.setItem('groups', JSON.stringify(groupsArr));
+    dialogAddExistingFriend.close();
+    // getExpensesHTML(groupsArr[selectedGroupIndex]);
+    renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+    console.log("temp existing friends ids arr")
+    console.log(tempExistingFriendsIdsArr)
+    return tempExistingFriendsIdsArr;
+}
+
+btnCloseAddExistingFriends.addEventListener("click", addExistingFriensOnGroupCreation);
 
 // expense management
 
@@ -610,8 +682,8 @@ formAddExpense.addEventListener("submit", (e) => {
 
 const addMembersToExpenseDialog = document.getElementById("add-members-to-expense");
 
-if(listExpenses){
-listExpenses.addEventListener("click", handleExpenseClick)
+if (listExpenses) {
+    listExpenses.addEventListener("click", handleExpenseClick)
 }
 let selectedExpenseIndex;
 
@@ -706,11 +778,10 @@ function getExpensesHTML(group) {
 									<span class="delete">&times</span>
 								</div>
 								<div class="balances-expenses-container">
-       					 		${
-									expense.members.map(member => {
-										const status = memberStatus(member, expense)
-										const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
-										return `
+       					 		${expense.members.map(member => {
+            const status = memberStatus(member, expense)
+            const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
+            return `
 											<div class = "balances-card-member">
 												<div>
 													<div>
@@ -724,19 +795,19 @@ function getExpensesHTML(group) {
 												<img class="balances-card-member-img ${paidClass}" src=${member.imgSrc} alt="Member icon">
 											</div>
 										`
-									}).join("")
-								}
+        }).join("")
+            }
 									<div class="balances-members-footer" id=${expense.date.toString()}>
 										<button class="add-btn" id="add-expense-member"><span>+</span>Add member</button>
 										<button class="add-btn" id="edit-expense-btn"><span>+</span>Edit expense</button>
 										<span>Subtotal $${expense.cost}</span>
 									</div>
 								</div>
-								
+
 							</li>
 					`
-				}).join("")
-			}`
+    }).join("")
+        }`
 }
 
 
@@ -863,7 +934,7 @@ let checkboxes = [...document.querySelectorAll(".add-member-to-expense")];
 
 function addMembersToExpense(id, group) {
     console.log("Add members to expense called")
-	console.log(group)
+    console.log(group)
     otherMembersContainer.textContent = "";
     const expense = group.expenses.find(expense => expense.date === id);
     console.log(expense)
@@ -999,7 +1070,7 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
 // });
 
 // name editing
-selectedGroup.addEventListener('click', function(event) {
+selectedGroup.addEventListener('click', function (event) {
     if (event.target && event.target.classList.contains('pen')) {
         const editElement = event.target.closest('div').querySelector('.editable');
         // const editElement = event.target.closest('.section-main-group-info-nav-container').previousElementSibling.querySelector('.editable');
@@ -1015,43 +1086,42 @@ selectedGroup.addEventListener('click', function(event) {
         editElement.innerHTML = ""
         editElement.appendChild(input);
         input.focus();
-
-        input.addEventListener('keydown', function(e) {
+        input.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
                 const updatedName = input.value.trim();
                 console.log(updatedName);
                 if (updatedName) {
-                    if (elementType=='h2'){
+                    if (elementType == 'h2') {
                         const groupId = parseInt(editElement.getAttribute('id'));
                         // console.log(groupId);
                         const groupIndex = groupsArr.findIndex(group => group.id === groupId);
                         console.log(groupIndex);
-                            if (groupIndex !== -1) {
-                                console.log(groupsArr[groupIndex])
-                                groupsArr[groupIndex].groupName = updatedName;
-                                console.log(groupsArr);
-                                localStorage.setItem('groups', JSON.stringify(groupsArr));
+                        if (groupIndex !== -1) {
+                            console.log(groupsArr[groupIndex])
+                            groupsArr[groupIndex].groupName = updatedName;
+                            console.log(groupsArr);
+                            localStorage.setItem('groups', JSON.stringify(groupsArr));
 
-                                editElement.innerHTML = `${titleCase(updatedName)}`;
-                                renderSelectedGroupInfo(groupsArr[groupIndex]);
+                            editElement.innerHTML = `${titleCase(updatedName)}`;
+                            renderSelectedGroupInfo(groupsArr[groupIndex]);
 
-                                listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
-                            }
-                            console.log(groupsArr[groupIndex]);
+                            listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
+                        }
+                        console.log(groupsArr[groupIndex]);
                     }
-                    else if(elementType=='p'){
+                    else if (elementType == 'p') {
                         const memberId = parseInt(editElement.getAttribute('id'));
                         const groupId = parseInt(editElement.closest('.section-main-group').querySelector('.section-main-group-title').getAttribute('id'));
                         console.log(`This is group id: ${groupId}`);
                         const groupIndex = groupsArr.findIndex(group => group.id === groupId);
-                        if (groupIndex!=-1){
-                            const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member=>member.id===memberId);
-                            const friendIndex = friendsListStored.findIndex(friend=>friend.id ===memberId);
+                        if (groupIndex != -1) {
+                            const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member => member.id === memberId);
+                            const friendIndex = friendsListStored.findIndex(friend => friend.id === memberId);
                             // const expenseMemberIndex = groupsArr[groupIndex].expenses.members.findIndex(expenseMember=>expenseMember.id===memberId);
                             // const expenseMemberIndex = groupsArr[groupIndex].expenses
                             // console.log(`This is expensememberIndex`,expenseMemberIndex);
                             console.log(`This is member index ${memberIndex}`);
-                            if(memberIndex!=-1&&friendIndex!=-1){
+                            if (memberIndex != -1 && friendIndex != -1) {
                                 groupsArr[groupIndex].expenses.forEach(expense => {
                                     if (expense.payer.id === memberId) {
                                         expense.payer.name = updatedName;
@@ -1066,11 +1136,11 @@ selectedGroup.addEventListener('click', function(event) {
                                 groupsArr[groupIndex].membersArr[memberIndex].name = updatedName;
                                 // groupsArr[groupIndex].expenses[expenseMemberIndex].name = updatedName;
                                 friendsListStored[friendIndex].name = updatedName;
-                                localStorage.setItem('groups',JSON.stringify(groupsArr));
-                                localStorage.setItem('friends',JSON.stringify(friendsListStored));
+                                localStorage.setItem('groups', JSON.stringify(groupsArr));
+                                localStorage.setItem('friends', JSON.stringify(friendsListStored));
                                 editElement.innerHTML = `${titleCase(updatedName)}`;
-                                console.log(`This is the group`,groupsArr[groupIndex]);
-                                console.log(`This is the group with slected`,groupsArr[selectedGroupIndex]);
+                                console.log(`This is the group`, groupsArr[groupIndex]);
+                                console.log(`This is the group with slected`, groupsArr[selectedGroupIndex]);
                                 renderFriends();
                                 // getExpensesHTML(groupsArr[groupIndex]);
 
@@ -1079,14 +1149,14 @@ selectedGroup.addEventListener('click', function(event) {
                                 renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
                                 getGroupMembers(groupsArr[selectedGroupIndex]);
                                 // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
-                            }else{
+                            } else {
                                 console.log("Either memberIndex or friendIndex does not exist");
                             }
                         }
                         console.log(groupsArr[groupIndex])
                     }
 
-                }else{
+                } else {
                     editElement.innerHTML = `${titleCase(originalName)}`;
                     // console.log(h2);
                 }
@@ -1099,22 +1169,22 @@ selectedGroup.addEventListener('click', function(event) {
 });
 
 // group deletion
-document.getElementById('group-list').addEventListener('click',function(event){
-    if (event.target && event.target.classList.contains('delete')){
+document.getElementById('group-list').addEventListener('click', function (event) {
+    if (event.target && event.target.classList.contains('delete')) {
         const listItem = event.target.closest('li');
-        const groupContainer = listItem.querySelector('.group-link');
-        const groupName = groupContainer.childNodes[0].nodeValue.trim();
+        const groupCont = listItem.querySelector('.group-link');
+        const groupName = groupCont.childNodes[0].nodeValue.trim();
         // const groupName = listItem.querySelector('group-link').textContent.trim();
         console.log(`Deleting group name: ${groupName}`);
-        console.log(`This is group id ${groupContainer.id}`);
+        console.log(`This is group id ${groupCont.id}`);
         const confirmDelete = confirm(`Are you sure you want to delete ${groupName}`)
-        if (confirmDelete){
-            const groupIndex = groupsArr.findIndex(group =>group.id==groupContainer.id);
-            if (groupIndex!==-1){
+        if (confirmDelete) {
+            const groupIndex = groupsArr.findIndex(group => group.id == groupCont.id);
+            if (groupIndex !== -1) {
                 console.log(groupIndex);
-                groupsArr.splice(groupIndex,1);
-                localStorage.setItem('groups',JSON.stringify(groupsArr));
-				renderGroups()
+                groupsArr.splice(groupIndex, 1);
+                localStorage.setItem('groups', JSON.stringify(groupsArr));
+                renderGroups();
                 renderSelectedGroupInfo();
             }
         }
@@ -1123,7 +1193,7 @@ document.getElementById('group-list').addEventListener('click',function(event){
 })
 
 // friend deletion
-document.getElementById('friends-list').addEventListener('click', function(event) {
+document.getElementById('friends-list').addEventListener('click', function (event) {
     if (event.target && event.target.classList.contains('delete')) {
         console.log(event);
         const listItem = event.target.closest('li');
@@ -1131,24 +1201,24 @@ document.getElementById('friends-list').addEventListener('click', function(event
         console.log(`Deleting friend: ${friendName}`);
         console.log(`This is friend id: ${listItem.id}`);
         const confirmDelete = confirm(`Are you sure you want to delete  ${friendName}`)
-        if(confirmDelete){
+        if (confirmDelete) {
 
-            const friendIndex = friendsListStored.findIndex(friend=>friend.id==listItem.id);
+            const friendIndex = friendsListStored.findIndex(friend => friend.id == listItem.id);
             console.log(friendIndex);
-            if (friendIndex!==-1){
+            if (friendIndex !== -1) {
 
-                friendsListStored.splice(friendIndex,1);
-                localStorage.setItem('friends',JSON.stringify(friendsListStored));
+                friendsListStored.splice(friendIndex, 1);
+                localStorage.setItem('friends', JSON.stringify(friendsListStored));
                 renderFriends();
             }
-            groupsArr.forEach(group=>{
-                const memberIndex = group.membersArr.findIndex(member=>member.id==listItem.id);
+            groupsArr.forEach(group => {
+                const memberIndex = group.membersArr.findIndex(member => member.id == listItem.id);
                 console.log(`deleted the member at ${memberIndex}`);
-                if (memberIndex!==-1){
-                    group.membersArr.splice(memberIndex,1)
+                if (memberIndex !== -1) {
+                    group.membersArr.splice(memberIndex, 1)
                 }
             })
-            localStorage.setItem('groups',JSON.stringify(groupsArr));
+            localStorage.setItem('groups', JSON.stringify(groupsArr));
             renderSelectedGroupInfo();
             // renderFriends();
         }
@@ -1158,8 +1228,8 @@ document.getElementById('friends-list').addEventListener('click', function(event
 });
 
 // member deletion
-document.getElementById('selected-group').addEventListener('click',function(event){
-    if(event.target&&event.target.classList.contains('delete')){
+document.getElementById('selected-group').addEventListener('click', function (event) {
+    if (event.target && event.target.classList.contains('delete')) {
         // console.log('clicked');
         const memberContainer = event.target.closest('.balances-card-member');
 
@@ -1169,27 +1239,28 @@ document.getElementById('selected-group').addEventListener('click',function(even
             // console.log(memberNameText);
             console.log(`Trying to delete: ${memberNameText}, with ID: ${memberItem.id}`);
             const confirmDelete = confirm(`Are you sure, you want to delete: ${memberNameText}`);
-            if(confirmDelete){
+            if (confirmDelete) {
                 console.log("This is selected group array: ", groupsArr[selectedGroupIndex].membersArr);
-                const memberIndex = groupsArr[selectedGroupIndex].membersArr.findIndex(member=>member.id ==memberItem.id);
-                console.log('This is member index',memberIndex);
-                if(memberIndex!==-1){
-                    groupsArr[selectedGroupIndex].membersArr.splice(memberIndex,1);
-                    localStorage.setItem('groups',JSON.stringify(groupsArr));
+                const memberIndex = groupsArr[selectedGroupIndex].membersArr.findIndex(member => member.id == memberItem.id);
+                console.log('This is member index', memberIndex);
+                if (memberIndex !== -1) {
+                    groupsArr[selectedGroupIndex].membersArr.splice(memberIndex, 1);
+                    localStorage.setItem('groups', JSON.stringify(groupsArr));
                     renderGroups();
-                    renderFriends();
+                    // renderriends();
                     renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+                    groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex])
                 }
 
             }
-        }else{
+        } else {
             console.log('Not found')
         }
     }
 })
 
 // expense deletion
-if(listExpenses) {
+if (listExpenses) {
     listExpenses.addEventListener('click', function (event) {
         if (event.target && event.target.classList.contains('delete')) {
             // console.log("The expense delete btn was clicked")
@@ -1226,58 +1297,164 @@ if(listExpenses) {
         }
     });
 }
-selectedGroup.addEventListener('click',function(event){
-    if(event.target&&event.target.id==='add-member-btn')
-    {
-        console.log("add btn clicked");
-        const balancesMembersFooter = document.querySelector('.balances-members-footer');
-        const inputElement = document.createElement('input');
-        inputElement.setAttribute('type','text')
-        inputElement.setAttribute('required',true);
-        balancesMembersFooter.appendChild(inputElement);
-        inputElement.focus();
-        console.log(balancesMembersFooter);
-        inputElement.addEventListener('keydown',function(event){
-        const inputValue = inputElement.value.trim();
-        if (event.key==='Enter' &&!isEmpty(inputValue)){
-            if (!isEmpty(inputValue)) {
-                let inList = false;
-                friendsListStored.forEach(friend =>
-                {
-                    friend.name.toLowerCase() === inputValue.toLowerCase() ? inList = true : ""
-                })
-                groupsArr[selectedGroupIndex].membersArr.forEach(member => {
-                    if (member.name.toLowerCase() === inputValue.toLowerCase()) {
-                        inList = true;
+
+// add member btn under members section
+const addMembersToGroupDialog = document.getElementById('add-members-to-group-dialog');
+const otherFriendsContainer = document.getElementById('other-friends-container');
+const newMemberInput = document.getElementById('new-member-input');
+let friendCheckBoxes = [...document.querySelectorAll(".add-friend-to-group")]
+function addMembersToGroup(index) {
+    // console.log("Add friends to group called");
+    // console.log(group);
+    otherFriendsContainer.textContent = "";
+    const addSomeOtherPerson = document.getElementById('add-someother-person');
+    // const dialogBodyForm = document.querySelector('.dialog-body form');
+    addSomeOtherPerson.addEventListener('click', function (e) {
+        e.preventDefault();
+        newMemberInput.style.display = "block";
+        newMemberInput.focus();
+        newMemberInput.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const inputValue = newMemberInput.value.trim();
+                if (!isEmpty(inputValue)) {
+                    let inList = false;
+                    friendsListStored.forEach(friend => {
+                        friend.name.toLowerCase() === inputValue.toLowerCase() ? inList = true : ""
+                    })
+                    groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+                        if (member.name.toLowerCase() === inputValue.toLowerCase()) {
+                            inList = true;
+                        }
+                    });
+                    if (!inList) {
+                        const newFriend = createFriend(titleCase(inputValue));
+                        console.log(newFriend);
+                        console.log(selectedGroup)
+                        friendsListStored.push(newFriend);
+                        localStorage.setItem('friends', JSON.stringify(friendsListStored));
+                        groupsArr[selectedGroupIndex].membersArr.push(newFriend);
+                        localStorage.setItem('groups', JSON.stringify(groupsArr));
+                        addMembersToGroupDialog.close();
+                        // renderGroups();
+                        // renderFriends();
+                        // renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
                     }
-                });
-                if (!inList)
-                {
-                    const newFriend = createFriend(titleCase(inputValue));
-                    console.log(newFriend);
-                    console.log(selectedGroup)
-                    friendsListStored.push(newFriend);
-                    localStorage.setItem('friends', JSON.stringify(friendsListStored));
-                    groupsArr[selectedGroupIndex].membersArr.push(newFriend);
-                    localStorage.setItem('groups', JSON.stringify(groupsArr));
-                    renderGroups();
-                    renderFriends();
-                    renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+                    else {
+                        alert(`Friend ${inputValue} already exists, please enter another one, or choose ${inputValue} from existing friends.`)
+                    }
+                    groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
+                    clearInputField(newMemberInput);
+                    newMemberInput.style.display = "none";
+                    // balancesMembersFooter.removeChild(inputElement);
+                } else {
+                    console.log("Please enter a valid name")
                 }
-                else {
-                    alert(`Friend ${inputValue} already exists, please enter another one, or choose ${inputValue} from existing friends.`)
-                }
-                clearInputField(inputElement);
-                balancesMembersFooter.removeChild(inputElement);
-            }else
-            {
-                console.log("Please enter a valid name")
             }
+        })
+    })
+    friendsListStored.forEach(friend => {
+        const isFriendInGroup = groupsArr[index].membersArr.some(member => member.name === friend.name);
+        // const isFriendInGroup =groupsArr[selectedGroupIndex].membersArr.some(member=>member.name === friend.name);
+        // console.log(isFriendInGroup);
+        if (!(isFriendInGroup)) {
+            const listItem = document.createElement("li");
+            const checkbox = document.createElement("input");
+            checkbox.setAttribute("type", "checkbox");
+            checkbox.setAttribute("id", friend.name);
+            // console.log("friend to add")
+            // console.log(friend.name)
+            checkbox.classList.add("add-friend-to-group")
+            const label = document.createElement("label");
+            label.setAttribute("for", friend.name);
+            label.textContent = friend.name;
+            listItem.classList.add("form-control", "form-control-checkbox");
+            listItem.appendChild(checkbox);
+            listItem.appendChild(label);
+            otherFriendsContainer.appendChild(listItem);
+        }
+    })
+    friendCheckBoxes = [...document.querySelectorAll(".add-friend-to-group")]
+    addMembersToGroupDialog.showModal();
+}
+
+const btnCloseAddFriendsToGroup = document.getElementById('close-add-members-to-group');
+console.log(btnCloseAddFriendsToGroup);
+btnCloseAddFriendsToGroup.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log("closing friends dialog")
+    console.log(friendCheckBoxes);
+    // friendCheckBoxes = [...document.querySelectorAll(".add-friend-to-group")]
+    friendCheckBoxes.forEach(friendCheck => {
+        console.log(friendCheck)
+        if (friendCheck.checked) {
+            console.log('This friend was checked', friendCheck)
+            const friendToAdd = friendsListStored.find(friend => friend.name === friendCheck.id);
+            if (friendToAdd) {
+                groupsArr[selectedGroupIndex].membersArr.push(friendToAdd);
+
             }
-            })
-    }
-    else
-    {
-        console.log("No such btn");
-    }
+        }
+    })
+    localStorage.setItem('groups', JSON.stringify(groupsArr));
+    addMembersToGroupDialog.close();
+    renderGroups();
+    // renderFriends();
+    // renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+    groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
 })
+// selectedGroup.addEventListener('click',function(event){
+//     if(event.target&&event.target.id==='add-member-btn')
+//     {
+//         console.log("add btn clicked");
+//         const balancesMembersFooter = document.querySelector('.balances-members-footer');
+//         const inputElement = document.createElement('input');
+//         inputElement.setAttribute('type','text')
+//         inputElement.setAttribute('required',true);
+//         balancesMembersFooter.appendChild(inputElement);
+//         inputElement.focus();
+//         console.log(balancesMembersFooter);
+//         inputElement.addEventListener('keydown',function(event){
+//         const inputValue = inputElement.value.trim();
+//         if (event.key==='Enter' &&!isEmpty(inputValue)){
+//             if (!isEmpty(inputValue)) {
+//                 let inList = false;
+//                 friendsListStored.forEach(friend =>
+//                 {
+//                     friend.name.toLowerCase() === inputValue.toLowerCase() ? inList = true : ""
+//                 })
+//                 groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+//                     if (member.name.toLowerCase() === inputValue.toLowerCase()) {
+//                         inList = true;
+//                     }
+//                 });
+//                 if (!inList)
+//                 {
+//                     const newFriend = createFriend(titleCase(inputValue));
+//                     console.log(newFriend);
+//                     console.log(selectedGroup)
+//                     friendsListStored.push(newFriend);
+//                     localStorage.setItem('friends', JSON.stringify(friendsListStored));
+//                     groupsArr[selectedGroupIndex].membersArr.push(newFriend);
+//                     localStorage.setItem('groups', JSON.stringify(groupsArr));
+//                     renderGroups();
+//                     renderFriends();
+//                     renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+//                 }
+//                 else {
+//                     alert(`Friend ${inputValue} already exists, please enter another one, or choose ${inputValue} from existing friends.`)
+//                 }
+//                 clearInputField(inputElement);
+//                 balancesMembersFooter.removeChild(inputElement);
+//             }else
+//             {
+//                 console.log("Please enter a valid name")
+//             }
+//             }
+//             })
+//     }
+//     else
+//     {
+//         console.log("No such btn");
+//     }
+// })

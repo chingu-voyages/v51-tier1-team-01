@@ -63,11 +63,22 @@
                     <div class="group-form-buttons">
                         <button id="group-create-btn" type="submit">Create Group</button>
                         <button id="add-another-member" type="button">Add Member</button>
+                        <button id="add-existing-friend" type="button">Add friend</button>
                     </div>
                 </div>
                 <p id="group-error">Please enter a valid group name with at least two members</p>
             </form>
         </section>
+        <dialog id="dialog-add-friend">
+            <div class="dialog-body">
+                <form>
+                    <p>Add existing friends to group</p>
+                    <ul id="existing-friends-checkboxes">
+                    </ul>
+                    <button id="close-add-existing-friends-to-group">Close</button>
+                </form>
+            </div>
+        </dialog>
         <section class="section-main-group" id="selected-group">
 			<div class="section-main-group-header"></div>
 			<div class="section-main-group-info" >
@@ -85,7 +96,19 @@
 
 			</div>
         </section>
-
+        <!-- pop up for adding friends to members  -->
+        <dialog id="add-members-to-group-dialog">
+            <div class="dialog-body">
+                <form>
+                    <p>Friends you can add:</p>
+                    <ul id="other-friends-container">
+                    </ul>
+                    <button id="add-someother-person">Add someone else</button>
+                    <input type="text" id="new-member-input" placeholder="Enter new friend's name" style="display: none;">
+                    <button id="close-add-members-to-group">Close</button>
+                </form>
+            </div>
+        </dialog>
         <!-- added expenses section -->
         <section class="main-group-add-expense">
             <div id="expense-total-section">
