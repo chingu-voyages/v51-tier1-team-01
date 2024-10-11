@@ -26,7 +26,7 @@ const listExpenses = document.getElementById("list-expenses");
 let selectedGroupIndex = -1; //just trying to fix the selectedGroupIndex is not defined
 
 selectedGroup.classList.add("hidden");
-document.querySelector(".main-group-add-expense").classList.add("hidden");
+document.querySelector(".main-group-add-expense").display = "none";
 
 if (groupsArr.length !== 0) {
     hideForm()
@@ -52,7 +52,7 @@ addAnotherMember.addEventListener('click', addMemberInputField);
 
 
 //rendered group events: listen and render selected group on main section
-groupList.addEventListener("click", handleGroupClick)
+// groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event) => {
 
@@ -77,18 +77,23 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
         // groupContainer ? groupContainer.style.display = "block" : ""
 
-        if (event.target.matches(".group-balances")) {
-            listExpenses.innerHTML = getExpensesHTML(selectedGroup)
-            groupContainer.innerHTML = ""
-            groupContainer.appendChild(listExpenses)
-        } else if (event.target.matches("#summary")) {
-            const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id)
-            groupContainer.innerHTML = getGroupSummary(group);
-        } else {
-            // listExpenses.classList.add("hidden");
-            listExpenses.display = "none"
-            groupContainer.innerHTML = getGroupMembers(selectedGroup)
-
+		if (event.target.matches(".group-balances") || event.target.matches(".group-link")) {
+			listExpenses.innerHTML = getExpensesHTML(selectedGroup)
+			groupContainer.innerHTML = ""
+			document.querySelector(".group-balances").classList.add("active")
+			renderSelectedGroupInfo(selectedGroup, groupContainer.appendChild(listExpenses))
+			// listExpenses.innerHTML = getExpensesHTML(selectedGroup)
+			// groupContainer.innerHTML = ""
+			// groupContainer.appendChild(listExpenses)
+        } else if (event.target.matches("#summary")){
+			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupSummary(selectedGroup))
+			// const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id) 
+			// groupContainer.innerHTML = getGroupSummary(group);
+		} else {
+			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupMembers(selectedGroup))
+			// listExpenses.classList.add("hidden");
+			// listExpenses.display = "none"
+            // groupContainer.innerHTML = getGroupMembers(selectedGroup)
         }
 
     } else {
@@ -150,34 +155,36 @@ document.querySelector("body")?.addEventListener("click", (event) => {
     }
 
     if (event.target.matches("#download-btn")) {
-        const group = groupsArr.find(group => group.id === Number(event.target.parentNode.id))
 
-        groupContainer.innerHTML = getGroupSummary(group);
+					const group = groupsArr.find(group => group.id === Number(event.target.parentNode.id))
+					
+					groupContainer.innerHTML = getGroupSummary(group);
+					
+					summary.classList.add("active")
+					document.querySelector(".group-members").classList.remove("active")
+					document.querySelector(".group-balances").classList.remove("active")
 
-        summary.classList.add("active")
-        document.querySelector(".group-members").classList.remove("active")
-        document.querySelector(".group-balances").classList.remove("active")
-
-        console.log("Downloading PDF ...")
-        setTimeout(() => {
-            const pdfExp = document.querySelector("#group-info-container");
-            console.log(pdfExp);
-            var opt = {
-                margin: 1,
-                filename: `${group.groupName}-summary.pdf`,
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-            html2pdf(pdfExp, opt);
-        }, 2000)
-
+					console.log("Downloading PDF ...")
+					setTimeout(()=>{
+						if(confirm("Do you want to download your group's expense summary?")){
+						const pdfExp = document.querySelector("#group-info-container");
+						var opt = {
+							margin:       1,
+							filename:     `${group.groupName}-summary.pdf`,
+							jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+						  };
+						html2pdf(pdfExp, opt);
+						}
+					},1000)
+					
     } else {
         event.stopPropagation()
     }
 })
 
 function getGroupMembers(selectedGroup) {
-    document.querySelector(".main-group-add-expense").style.display = "none";
-    return `
+	// document.querySelector(".main-group-add-expense").style.display = "none";
+	return `
 		<div class="balances-members-container">
 			${selectedGroup.membersArr.map(member => {
         return `
@@ -204,35 +211,34 @@ function getGroupMembers(selectedGroup) {
 	`
 }
 
-function handleGroupClick(e) {
-    // console.log(e.target.id)
-    e.stopPropagation()
-    groupsArr.forEach(group => {
-        if (e.target.id == Number(group.id)) {
-            selectedGroupIndex = groupsArr.indexOf(group);
-            renderSelectedGroupInfo(group)
-        }
-        // const selectedGroupInfo = document.getElementById("group-info-container")
-        // selectedGroupInfo.innerHTML = getGroupBalances(groupsArr[selectedGroupIndex])
-        listExpenses?.classList.remove("hidden");
-        // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
-    })
-}
+// function handleGroupClick(e) {
+//     // console.log(e.target.id)
+//     e.stopPropagation()
+//     groupsArr.forEach(group => {
+//         if (e.target.id == Number(group.id)) {
+//             selectedGroupIndex = groupsArr.indexOf(group);
+//             renderSelectedGroupInfo(group)
+//         }
+//         // const selectedGroupInfo = document.getElementById("group-info-container")
+//         // selectedGroupInfo.innerHTML = getGroupBalances(groupsArr[selectedGroupIndex])
+//         listExpenses?.classList.remove("hidden");
+//         // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
+//     })
+// }
 
 
-function renderSelectedGroupInfo(group) {
-    if (groupsArr.length) {
-        selectedGroup.classList.remove("hidden");
-        document.querySelector(".main-group-add-expense").classList.remove("hidden");
 
-        console.log("Inside renderSelectedGroup function")
-        const { groupName, id, avatar, membersArr, expenses } = group;
-        const header = document.querySelector(".section-main-group-header")
-        header.innerHTML = "";
-        document.querySelector(".section-main-group-info-nav-container").id = id;
-        console.log(document.querySelector(".section-main-group-info-nav-container").id)
-        selectedGroupIndex = groupsArr.indexOf(group);
-
+function renderSelectedGroupInfo(group, content) {
+	if(groupsArr.length > 0) {
+		selectedGroup.classList.remove("hidden");
+		document.querySelector(".main-group-add-expense").display = "flex";
+	console.log(content)
+    const { groupName, id, avatar, membersArr, expenses } = group;
+	const header = document.querySelector(".section-main-group-header")
+    header.innerHTML = "";
+    document.querySelector(".section-main-group-info-nav-container").id = id;
+	console.log(document.querySelector(".section-main-group-info-nav-container").id)
+    selectedGroupIndex = groupsArr.indexOf(group);
 
         renderSelectPayerOptions();
 
@@ -252,12 +258,20 @@ function renderSelectedGroupInfo(group) {
 					<p class="badge badge-${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalOutstandingCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
-`
-        listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-    } else {
-        selectedGroup.classList.add("hidden");
-        document.querySelector(".main-group-add-expense").classList.add("hidden");
-    }
+` 
+if(content) {
+	content
+} else {
+	groupContainer.innerHTML = ""
+	listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+}
+
+//    content ? groupContainer.innerHTML = content : listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+
+} else {
+	selectedGroup.classList.add("hidden");
+	document.querySelector(".main-group-add-expense").display = "none";
+}
 }
 
 //creating html list templates
@@ -495,6 +509,7 @@ function handleGroupCreation(e) {
         }
         renderFriends();
         hideForm();
+		
         renderSelectedGroupInfo(groupsArr[selectedGroupIndex]); //render just added group
         tempMemberArr.length = 0;
         clearInputField(groupName);
@@ -751,10 +766,11 @@ function renderExpenses(group) {
 function getExpensesHTML(group) {
     const groupTotalBlock = document.getElementById("group-total")
     groupTotalBlock.innerText = `Total Cost: $${totalCalc(group)}`
-    const { expenses } = group;
-    document.querySelector(".main-group-add-expense").style.display = "block";
-    return `${expenses.map(expense => {
-        return `
+	const {expenses} = group;
+	document.querySelector(".main-group-add-expense").display = "flex";
+	return `${
+				expenses.map(expense => {
+					return `
 							<li class= "expense-item" id=${expense.date.toString()}>
 								<div class="balances-expenses-header" id="show-expenses-members">
 									<span>${titleCase(expense.name)}</span>
