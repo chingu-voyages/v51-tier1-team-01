@@ -1,5 +1,6 @@
 import { totalOutstandingCalc, memberStatus, memberTotal, totalCalc } from "./calcs.js";
-import {downloadPDF} from "./pdf.js";
+import { getGroupSummary } from "./summary.js";
+// import {downloadPDF} from "./pdf.js";
 
 const groupCreateBtn = document.getElementById('group-create-btn');
 const groupName = document.getElementById('group-name');
@@ -11,25 +12,26 @@ const fromUserInput = document.querySelector("#from-user input");
 const sidebarAddGroup = document.getElementById('sidebar-add-group');
 const selectedGroup = document.getElementById("selected-group");
 const groupContainer = document.getElementById("group-info-container")
-const groupsArr = JSON.parse(localStorage.getItem('groups'))||[];
-const friendsListStored = JSON.parse(localStorage.getItem('friends'))||[];
+const groupsArr = JSON.parse(localStorage.getItem('groups')) || [];
+const friendsListStored = JSON.parse(localStorage.getItem('friends')) || [];
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
 let memberInputs = document.getElementById('member-inputs');
+const summary = document.getElementById("summary")
 
 const btnAddExpense = document.getElementById("btn-add-expense");
 const formAddExpense = document.getElementById("form-add-expense");
 const listExpenses = document.getElementById("list-expenses");
 
-let selectedGroupIndex=-1; //just trying to fix the selectedGroupIndex is not defined
+let selectedGroupIndex = -1; //just trying to fix the selectedGroupIndex is not defined
 
 selectedGroup.classList.add("hidden");
-document.querySelector(".main-group-add-expense").classList.add("hidden");
+document.querySelector(".main-group-add-expense").display = "none";
 
-if(groupsArr.length!==0) {
-	hideForm()
-	renderSelectedGroupInfo(groupsArr[0]);
-	// renderSelectedGroupInfo(groupsArr[0])
+if (groupsArr.length !== 0) {
+    hideForm()
+    renderSelectedGroupInfo(groupsArr[0]);
+    // renderSelectedGroupInfo(groupsArr[0])
 } else {
     showForm();
 }
@@ -37,8 +39,6 @@ if(groupsArr.length!==0) {
 //rendering of existing data from localStorage on page load
 renderFriends();
 renderGroups();
-
-
 
 
 //events
@@ -50,12 +50,14 @@ groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 // for not overwriting groups present in local storage
 
+
 //rendered group events: listen and render selected group on main section
-groupList.addEventListener("click", handleGroupClick)
+// groupList.addEventListener("click", handleGroupClick)
 
 document.querySelector("body")?.addEventListener("click", (event) => {
 
-	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members")) {
+	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") || event.target.matches("#summary") ||  event.target.matches("#toggle")) {
+
 
         const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
@@ -70,46 +72,55 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         document.querySelector(".active")?.classList.remove("active")
         event.target.closest(".section-main-group-info-nav li")?.classList.add("active")
 
+
         // const selectedGroupInfo = document.getElementById("group-info-container")
-		// console.log(selectedGroupInfo === groupContainer)
+        // console.log(selectedGroupInfo === groupContainer)
 
         // groupContainer ? groupContainer.style.display = "block" : ""
 
-		if (event.target.matches(".group-balances")) {
+		if (event.target.matches(".group-balances") || event.target.matches(".group-link")) {
 			listExpenses.innerHTML = getExpensesHTML(selectedGroup)
 			groupContainer.innerHTML = ""
-			groupContainer.appendChild(listExpenses)
-        } else {
+			document.querySelector(".group-balances").classList.add("active")
+			renderSelectedGroupInfo(selectedGroup, groupContainer.appendChild(listExpenses))
+			// listExpenses.innerHTML = getExpensesHTML(selectedGroup)
+			// groupContainer.innerHTML = ""
+			// groupContainer.appendChild(listExpenses)
+        } else if (event.target.matches("#summary")){
+			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupSummary(selectedGroup))
+			// const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id)
+			// groupContainer.innerHTML = getGroupSummary(group);
+		} else {
+			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupMembers(selectedGroup))
 			// listExpenses.classList.add("hidden");
-			listExpenses.display = "none"
-            groupContainer.innerHTML = getGroupMembers(selectedGroup)
-
+			// listExpenses.display = "none"
+            // groupContainer.innerHTML = getGroupMembers(selectedGroup)
         }
 
-	} else {
+    } else {
         event.stopPropagation()
     }
 
-	if (event.target.matches("#show-expenses-members")) {
-		{
-			event.stopPropagation()
-			const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
-			return toggle.style.display ==="grid" ? toggle.style.display ="none" : toggle.style.display="grid";
-		}
-	} else {
+    if (event.target.matches("#show-expenses-members")) {
+        {
+            event.stopPropagation()
+            const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
+            return toggle.style.display === "grid" ? toggle.style.display = "none" : toggle.style.display = "grid";
+        }
+    } else {
         event.stopPropagation()
     }
 
-	if (event.target.matches("#add-expense-member")) {
-			event.stopPropagation()
-			// handleExpenseClick(event);
-			const groupId = document.querySelector(".section-main-group-info-nav-container").id
-			const group = groupsArr.find(group=> group.id === Number(groupId))
-			console.log(group)
-			const expenseId = Number(event.target.parentNode.id)
+    if (event.target.matches("#add-expense-member")) {
+        event.stopPropagation()
+        // handleExpenseClick(event);
+        const groupId = document.querySelector(".section-main-group-info-nav-container").id
+        const group = groupsArr.find(group => group.id === Number(groupId))
+        console.log(group)
+        const expenseId = Number(event.target.parentNode.id)
 
-			addMembersToExpense(expenseId, group);
-	} else {
+        addMembersToExpense(expenseId, group);
+    } else {
         event.stopPropagation()
     }
     // add member btn below members section
@@ -123,42 +134,78 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         // const expenseId = Number(event.target.parentNode.id)
         addMembersToGroup(selectedGroupIndex);
         // addMembersToExpense(expenseId, group);
-        } else {
+    } else {
+        event.stopPropagation()
+    }
+    if (event.target.matches("#edit-expense-btn")) {
+        {
             event.stopPropagation()
+            // handleExpenseClick(event);
+
+            const expenseId = Number(event.target.parentNode.id)
+            const group = groupsArr.find(group => {
+                return group.expenses.find(expense => expense.date === Number(expenseId))
+            })
+            const expense = group.expenses.find(expense => expense.date === Number(expenseId))
+
+            console.log(expense)
+            editExpense(expense)
         }
-	if (event.target.matches("#edit-expense-btn")) {
+    } else {
+        event.stopPropagation()
+    }
+
+    if (event.target.matches("#toggle")) {
 		{
 			event.stopPropagation()
-			// handleExpenseClick(event);
 
 			const expenseId = Number(event.target.parentNode.id)
 			const group = groupsArr.find(group=> {
 				return group.expenses.find( expense=> expense.date === Number(expenseId))
 			})
-			const expense = group.expenses.find( expense=> expense.date === Number(expenseId))
+			const expense = group.expenses.find( expense => expense.date === Number(expenseId))
+            const member = expense.members.find( member => member.id === event.id )
+            console.log(member.name + " " + expense)
 
-			console.log(expense)
-			editExpense(expense)
 		}
 	} else {
         event.stopPropagation()
     }
 
     if (event.target.matches("#download-btn")) {
+
+					const group = groupsArr.find(group => group.id === Number(event.target.parentNode.id))
+
+					groupContainer.innerHTML = getGroupSummary(group);
+
+					summary.classList.add("active")
+					document.querySelector(".group-members").classList.remove("active")
+					document.querySelector(".group-balances").classList.remove("active")
+
 					console.log("Downloading PDF ...")
-					downloadPDF(selectedGroup)
+					setTimeout(()=>{
+						if(confirm("Do you want to download your group's expense summary?")){
+						const pdfExp = document.querySelector("#group-info-container");
+						var opt = {
+							margin:       1,
+							filename:     `${group.groupName}-summary.pdf`,
+							jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+						  };
+						html2pdf(pdfExp, opt);
+						}
+					},1000)
+
     } else {
         event.stopPropagation()
     }
 })
 
 function getGroupMembers(selectedGroup) {
-	document.querySelector(".main-group-add-expense").style.display = "none";
+	// document.querySelector(".main-group-add-expense").style.display = "none";
 	return `
 		<div class="balances-members-container">
-			${
-				selectedGroup.membersArr.map(member => {
-					return `
+			${selectedGroup.membersArr.map(member => {
+        return `
 						<div class = "balances-card-member">
 							<div>
 								<div>
@@ -173,8 +220,8 @@ function getGroupMembers(selectedGroup) {
 							<img class="balances-card-member-img ${memberTotal(member.name, selectedGroup) == 0 ? "paid" : "unpaid"}" src=${member.imgSrc} alt="Member icon">
 						</div>
 					`
-				}).join("")
-			}
+    }).join("")
+        }
 		</div>
 		<div class="balances-members-footer">
 			<button class="add-btn" id="add-member-btn"><span>+</span>Add member</button>
@@ -182,28 +229,28 @@ function getGroupMembers(selectedGroup) {
 	`
 }
 
-function handleGroupClick(e) {
-    // console.log(e.target.id)
-    e.stopPropagation()
-    groupsArr.forEach(group => {
-        if (e.target.id == Number(group.id)) {
-            selectedGroupIndex = groupsArr.indexOf(group);
-            renderSelectedGroupInfo(group)
-        }
-        // const selectedGroupInfo = document.getElementById("group-info-container")
-        // selectedGroupInfo.innerHTML = getGroupBalances(groupsArr[selectedGroupIndex])
-        listExpenses?.classList.remove("hidden");
-        // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
-    })
-}
+// function handleGroupClick(e) {
+//     // console.log(e.target.id)
+//     e.stopPropagation()
+//     groupsArr.forEach(group => {
+//         if (e.target.id == Number(group.id)) {
+//             selectedGroupIndex = groupsArr.indexOf(group);
+//             renderSelectedGroupInfo(group)
+//         }
+//         // const selectedGroupInfo = document.getElementById("group-info-container")
+//         // selectedGroupInfo.innerHTML = getGroupBalances(groupsArr[selectedGroupIndex])
+//         listExpenses?.classList.remove("hidden");
+//         // return Number(e.target.id) === Number(group.id) ? renderSelectedGroupInfo(group) : ""
+//     })
+// }
 
 
-function renderSelectedGroupInfo(group) {
-	if(groupsArr.length) {
+
+function renderSelectedGroupInfo(group, content) {
+	if(groupsArr.length > 0) {
 		selectedGroup.classList.remove("hidden");
-		document.querySelector(".main-group-add-expense").classList.remove("hidden");
-
-    console.log("Inside renderSelectedGroup function")
+		document.querySelector(".main-group-add-expense").display = "flex";
+	console.log(content)
     const { groupName, id, avatar, membersArr, expenses } = group;
 	const header = document.querySelector(".section-main-group-header")
     header.innerHTML = "";
@@ -211,15 +258,14 @@ function renderSelectedGroupInfo(group) {
 	console.log(document.querySelector(".section-main-group-info-nav-container").id)
     selectedGroupIndex = groupsArr.indexOf(group);
 
+        renderSelectPayerOptions();
 
-    renderSelectPayerOptions();
+        // getGroupBalances(groupsArr[selectedGroupIndex]);
+        let friendsImages = membersArr.map(member => {
+            return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
+        })
 
-    // getGroupBalances(groupsArr[selectedGroupIndex]);
-    let friendsImages = membersArr.map(member => {
-        return `<img src=${member.imgSrc} alt="Friend icon" class="group-title-friends-img">`
-    })
-
-    header.innerHTML += `
+        header.innerHTML += `
 				<div>
 					<div>
                         <h2 class="section-main-group-title editable" id=${id}>${titleCase(groupName)} </h2>
@@ -231,10 +277,18 @@ function renderSelectedGroupInfo(group) {
 			    </div>
 				<img src=${avatar} alt="Group icon">
 `
-   listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+if(content) {
+	content
+} else {
+	groupContainer.innerHTML = ""
+	listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+}
+
+//    content ? groupContainer.innerHTML = content : listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+
 } else {
 	selectedGroup.classList.add("hidden");
-	document.querySelector(".main-group-add-expense").classList.add("hidden");
+	document.querySelector(".main-group-add-expense").display = "none";
 }
 }
 
@@ -248,10 +302,15 @@ function createListItem(content) {
 }
 
 function titleCase(text) {
-    text = text.trim();
-    // console.log(text)
-    const words = text?.split(" ");
-    return words.map(word => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
+    if (text.length) {
+        text = text.trim();
+        // console.log(text)
+        const words = text?.split(" ");
+        return words.map(word => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(" ")
+    } else {
+        return "No name"
+    }
+
 }
 
 function addImg(avatar) {
@@ -327,7 +386,7 @@ function inputValidation(groupName, groupMembers) {
     } else {
         defaultBorder(groupName.id);
     }
-    return (isEmpty(groupName.value) || membersFilled < 2) ? false : true;
+    return (isEmpty(groupName.value) || membersFilled < 2 && !tempExistingFriendsIdsArr.length) ? false : true;
 }
 
 
@@ -337,7 +396,7 @@ function isEmpty(value) {
 
 // friend object
 
-function createFriend(name, id = Date.now()+Math.floor(Math.random()*1000), imgSrc = 'src/img/person-icon.png') { // function to create friend object from input
+function createFriend(name, id = Date.now() + Math.floor(Math.random() * 1000), imgSrc = 'src/img/person-icon.png') { // function to create friend object from input
     return { name, id, imgSrc }
 
 }
@@ -363,15 +422,15 @@ function renderFriends() {
     friendsList.innerHTML = "";
     friendsListStored.forEach(friend => {
         const friendElement = createListItem(friend.name);
-		const friendImg = document.createElement("img");
+        const friendImg = document.createElement("img");
         const deleteIcon = document.createElement("span");
         // <span class="delete">&times</span>
         deleteIcon.classList.add("delete");
         deleteIcon.innerHTML = "&times";
-        friendElement.setAttribute('id',friend.id);
-		friendImg.setAttribute("src", friend.imgSrc);
-		friendImg.classList.add("group-icon");
-		friendElement.appendChild(friendImg);
+        friendElement.setAttribute('id', friend.id);
+        friendImg.setAttribute("src", friend.imgSrc);
+        friendImg.classList.add("group-icon");
+        friendElement.appendChild(friendImg);
         friendElement.appendChild(deleteIcon);
         friendsList.appendChild(friendElement);
         // return
@@ -398,24 +457,21 @@ function handleGroupCreation(e) {
     console.log("Handle group creation is called...")
     e.preventDefault();
     let allMembersInput = document.querySelectorAll('.group-member');
-    // let randomId = Date.now();
     // add existing friends
     const tempMemberArr = [];
-    const checkedOptions = [...document.querySelectorAll(".existing-friend")]
-    checkedOptions.forEach(option => {
-        if (option.checked) {
-            friendsListStored.forEach(friend=>{
-            // friendsArr.forEach(friend => {
-                if (option.id.toLowerCase() === friend.name.toLowerCase()) {
-                    console.log(friend)
-                    tempMemberArr.push(friend);
+    if (tempExistingFriendsIdsArr.length) {
+        tempExistingFriendsIdsArr.forEach(checkboxId => {
+            friendsListStored.forEach(friend => {
+                if (checkboxId.toLowerCase() === friend.name.toLowerCase()) {
+                    tempMemberArr.push(friend)
                 }
             })
-        }
-    })
+        })
+        console.log("temp member arr after checking existing friends: ")
+        console.log(tempMemberArr)
+    }
     if (!inputValidation(groupName, allMembersInput) && tempMemberArr.length < 2) {
         groupError.style.display = "block";
-        // return;
     }
     else {
         groupError.style.display = "none";
@@ -426,9 +482,6 @@ function handleGroupCreation(e) {
                 friendsListStored.forEach(friend => {
                     friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
                 })
-                // friendsArr.forEach(friend => {
-                //     friend.name.toLowerCase() === input.value.toLowerCase() ? inList = true : ""
-                // })
                 if (!inList) {
                     const newFriend = createFriend(titleCase(input.value));
                     // friendsArr.push(newFriend);
@@ -446,7 +499,6 @@ function handleGroupCreation(e) {
             selectedGroupIndex = groupsArr.length - 1 // just added group
             tempMemberArr.forEach(member => {
                 newGroup.membersArr.push(member);
-                // friendsArr.push(member);
                 if (!friendsListStored.includes(member)) {
                     friendsListStored.push(member);
                 }
@@ -458,6 +510,7 @@ function handleGroupCreation(e) {
         }
         renderFriends();
         hideForm();
+
         renderSelectedGroupInfo(groupsArr[selectedGroupIndex]); //render just added group
         tempMemberArr.length = 0;
         clearInputField(groupName);
@@ -494,18 +547,20 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     localStorage.setItem('friends', JSON.stringify(friendsListStored))
     inputFriendName.value = '';
     renderFriends();
-	formAddFriend.classList.remove("form-add-visible");
+    formAddFriend.classList.remove("form-add-visible");
 });
 
 // add existing friends to group
 
+const btnAddExistingFriend = document.getElementById("add-existing-friend");
+const dialogAddExistingFriend = document.getElementById("dialog-add-friend");
 const addExistingFriendContainer = document.getElementById("existing-friends-checkboxes");
 
 function renderExistingFriendsForGroupCreation() {
     addExistingFriendContainer.textContent = "";
     addExistingFriendContainer.childNodes.forEach(node => node.remove())
     friendsListStored.forEach(friend => {
-    // friendsArr.forEach(friend => {
+        // friendsArr.forEach(friend => {
         const checkbox = document.createElement("input");
         checkbox.setAttribute("type", "checkbox");
         checkbox.setAttribute("id", friend.name);
@@ -514,12 +569,54 @@ function renderExistingFriendsForGroupCreation() {
         label.setAttribute("for", friend.name);
         label.textContent = friend.name;
         const checkboxDiv = document.createElement("div");
-        checkboxDiv.classList.add("form-control-checkbox");
+        checkboxDiv.classList.add("form-control", "form-control-checkbox");
         checkboxDiv.appendChild(checkbox);
         checkboxDiv.appendChild(label);
         addExistingFriendContainer.appendChild(checkboxDiv);
     });
+    checkboxes = [...document.querySelectorAll(".existing-friend")];
 }
+
+
+btnAddExistingFriend.addEventListener("click", () => {
+    renderExistingFriendsForGroupCreation();
+    dialogAddExistingFriend.showModal();
+})
+
+const btnCloseAddExistingFriends = document.getElementById("close-add-existing-friends-to-group")
+
+const tempExistingFriendsIdsArr = [];
+function addExistingFriensOnGroupCreation(e) {
+    tempExistingFriendsIdsArr.length = 0;
+    e.preventDefault()
+    // handleGroupCreation(e);
+    // groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+    //     checkboxes.forEach(checkbox => {
+    //         if (checkbox.checked && checkbox.id.toLowerCase() === member.name.toLowerCase()) {
+    //             // console.log(groupsArr[selectedGroupIndex].expenses[selectedExpenseIndex])
+    //             groupsArr[selectedGroupIndex].members.push(member)
+    //         }
+
+    //     })
+    // })
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            console.log("CHECKBOX: ")
+            console.log(checkbox)
+            tempExistingFriendsIdsArr.push(checkbox.id);
+            console.log(checkbox.id)
+        }
+    })
+    localStorage.setItem('groups', JSON.stringify(groupsArr));
+    dialogAddExistingFriend.close();
+    // getExpensesHTML(groupsArr[selectedGroupIndex]);
+    renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+    console.log("temp existing friends ids arr")
+    console.log(tempExistingFriendsIdsArr)
+    return tempExistingFriendsIdsArr;
+}
+
+btnCloseAddExistingFriends.addEventListener("click", addExistingFriensOnGroupCreation);
 
 // expense management
 
@@ -586,8 +683,8 @@ formAddExpense.addEventListener("submit", (e) => {
 
 const addMembersToExpenseDialog = document.getElementById("add-members-to-expense");
 
-if(listExpenses){
-listExpenses.addEventListener("click", handleExpenseClick)
+if (listExpenses) {
+    listExpenses.addEventListener("click", handleExpenseClick)
 }
 let selectedExpenseIndex;
 
@@ -671,7 +768,7 @@ function getExpensesHTML(group) {
     const groupTotalBlock = document.getElementById("group-total")
     groupTotalBlock.innerText = `Total Cost: $${totalCalc(group)}`
 	const {expenses} = group;
-	document.querySelector(".main-group-add-expense").style.display = "block";
+	document.querySelector(".main-group-add-expense").display = "flex";
 	return `${
 				expenses.map(expense => {
 					return `
@@ -682,11 +779,10 @@ function getExpensesHTML(group) {
 									<span class="delete">&times</span>
 								</div>
 								<div class="balances-expenses-container">
-       					 		${
-									expense.members.map(member => {
-										const status = memberStatus(member, expense)
-										const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
-										return `
+       					 		${expense.members.map(member => {
+            const status = memberStatus(member, expense)
+            const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
+            return `
 											<div class = "balances-card-member">
 												<div>
 													<div>
@@ -695,13 +791,15 @@ function getExpensesHTML(group) {
 													    </p>
                 					                    <span class="pen">🖋️</span>
 													</div>
-														<p class="badge badge-${paidClass}">${status}</p>
+                                                    <div id="badges">
+														<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id="toggle" class="toggle toggle-${paidClass}">toggle</p>`}
+                                                    </div>
 												</div>
 												<img class="balances-card-member-img ${paidClass}" src=${member.imgSrc} alt="Member icon">
 											</div>
 										`
-									}).join("")
-								}
+        }).join("")
+            }
 									<div class="balances-members-footer" id=${expense.date.toString()}>
 										<button class="add-btn" id="add-expense-member"><span>+</span>Add member</button>
 										<button class="add-btn" id="edit-expense-btn"><span>+</span>Edit expense</button>
@@ -711,10 +809,9 @@ function getExpensesHTML(group) {
 
 							</li>
 					`
-				}).join("")
-			}`
+    }).join("")
+        }`
 }
-
 
 // !!! ---- currently getExpensesHTML is used wherever renderEsxenses used to be ---- !!!
 
@@ -839,7 +936,7 @@ let checkboxes = [...document.querySelectorAll(".add-member-to-expense")];
 
 function addMembersToExpense(id, group) {
     console.log("Add members to expense called")
-	console.log(group)
+    console.log(group)
     otherMembersContainer.textContent = "";
     const expense = group.expenses.find(expense => expense.date === id);
     console.log(expense)
@@ -975,7 +1072,7 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
 // });
 
 // name editing
-selectedGroup.addEventListener('click', function(event) {
+selectedGroup.addEventListener('click', function (event) {
     if (event.target && event.target.classList.contains('pen')) {
         const editElement = event.target.closest('div').querySelector('.editable');
         // const editElement = event.target.closest('.section-main-group-info-nav-container').previousElementSibling.querySelector('.editable');
@@ -991,42 +1088,42 @@ selectedGroup.addEventListener('click', function(event) {
         editElement.innerHTML = ""
         editElement.appendChild(input);
         input.focus();
-        input.addEventListener('keydown', function(e) {
+        input.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
                 const updatedName = input.value.trim();
                 console.log(updatedName);
                 if (updatedName) {
-                    if (elementType=='h2'){
+                    if (elementType == 'h2') {
                         const groupId = parseInt(editElement.getAttribute('id'));
                         // console.log(groupId);
                         const groupIndex = groupsArr.findIndex(group => group.id === groupId);
                         console.log(groupIndex);
-                            if (groupIndex !== -1) {
-                                console.log(groupsArr[groupIndex])
-                                groupsArr[groupIndex].groupName = updatedName;
-                                console.log(groupsArr);
-                                localStorage.setItem('groups', JSON.stringify(groupsArr));
+                        if (groupIndex !== -1) {
+                            console.log(groupsArr[groupIndex])
+                            groupsArr[groupIndex].groupName = updatedName;
+                            console.log(groupsArr);
+                            localStorage.setItem('groups', JSON.stringify(groupsArr));
 
-                                editElement.innerHTML = `${titleCase(updatedName)}`;
-                                renderSelectedGroupInfo(groupsArr[groupIndex]);
+                            editElement.innerHTML = `${titleCase(updatedName)}`;
+                            renderSelectedGroupInfo(groupsArr[groupIndex]);
 
-                                listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
-                            }
-                            console.log(groupsArr[groupIndex]);
+                            listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
+                        }
+                        console.log(groupsArr[groupIndex]);
                     }
-                    else if(elementType=='p'){
+                    else if (elementType == 'p') {
                         const memberId = parseInt(editElement.getAttribute('id'));
                         const groupId = parseInt(editElement.closest('.section-main-group').querySelector('.section-main-group-title').getAttribute('id'));
                         console.log(`This is group id: ${groupId}`);
                         const groupIndex = groupsArr.findIndex(group => group.id === groupId);
-                        if (groupIndex!=-1){
-                            const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member=>member.id===memberId);
-                            const friendIndex = friendsListStored.findIndex(friend=>friend.id ===memberId);
+                        if (groupIndex != -1) {
+                            const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member => member.id === memberId);
+                            const friendIndex = friendsListStored.findIndex(friend => friend.id === memberId);
                             // const expenseMemberIndex = groupsArr[groupIndex].expenses.members.findIndex(expenseMember=>expenseMember.id===memberId);
                             // const expenseMemberIndex = groupsArr[groupIndex].expenses
                             // console.log(`This is expensememberIndex`,expenseMemberIndex);
                             console.log(`This is member index ${memberIndex}`);
-                            if(memberIndex!=-1&&friendIndex!=-1){
+                            if (memberIndex != -1 && friendIndex != -1) {
                                 groupsArr[groupIndex].expenses.forEach(expense => {
                                     if (parseInt(expense.payer.id) === memberId) {
                                         expense.payer.name = updatedName;
@@ -1041,11 +1138,11 @@ selectedGroup.addEventListener('click', function(event) {
                                 groupsArr[groupIndex].membersArr[memberIndex].name = updatedName;
                                 // groupsArr[groupIndex].expenses[expenseMemberIndex].name = updatedName;
                                 friendsListStored[friendIndex].name = updatedName;
-                                localStorage.setItem('groups',JSON.stringify(groupsArr));
-                                localStorage.setItem('friends',JSON.stringify(friendsListStored));
+                                localStorage.setItem('groups', JSON.stringify(groupsArr));
+                                localStorage.setItem('friends', JSON.stringify(friendsListStored));
                                 editElement.innerHTML = `${titleCase(updatedName)}`;
-                                console.log(`This is the group`,groupsArr[groupIndex]);
-                                console.log(`This is the group with slected`,groupsArr[selectedGroupIndex]);
+                                console.log(`This is the group`, groupsArr[groupIndex]);
+                                console.log(`This is the group with slected`, groupsArr[selectedGroupIndex]);
                                 renderFriends();
                                 // getExpensesHTML(groupsArr[groupIndex]);
 
@@ -1054,14 +1151,14 @@ selectedGroup.addEventListener('click', function(event) {
                                 renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
                                 getGroupMembers(groupsArr[selectedGroupIndex]);
                                 // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
-                            }else{
+                            } else {
                                 console.log("Either memberIndex or friendIndex does not exist");
                             }
                         }
                         console.log(groupsArr[groupIndex])
                     }
 
-                }else{
+                } else {
                     editElement.innerHTML = `${titleCase(originalName)}`;
                     // console.log(h2);
                 }
@@ -1074,8 +1171,8 @@ selectedGroup.addEventListener('click', function(event) {
 });
 
 // group deletion
-document.getElementById('group-list').addEventListener('click',function(event){
-    if (event.target && event.target.classList.contains('delete')){
+document.getElementById('group-list').addEventListener('click', function (event) {
+    if (event.target && event.target.classList.contains('delete')) {
         const listItem = event.target.closest('li');
         const groupCont = listItem.querySelector('.group-link');
         const groupName = groupCont.childNodes[0].nodeValue.trim();
@@ -1083,13 +1180,13 @@ document.getElementById('group-list').addEventListener('click',function(event){
         console.log(`Deleting group name: ${groupName}`);
         console.log(`This is group id ${groupCont.id}`);
         const confirmDelete = confirm(`Are you sure you want to delete ${groupName}`)
-        if (confirmDelete){
-            const groupIndex = groupsArr.findIndex(group =>group.id==groupCont.id);
-            if (groupIndex!==-1){
+        if (confirmDelete) {
+            const groupIndex = groupsArr.findIndex(group => group.id == groupCont.id);
+            if (groupIndex !== -1) {
                 console.log(groupIndex);
-                groupsArr.splice(groupIndex,1);
-                localStorage.setItem('groups',JSON.stringify(groupsArr));
-				renderGroups();
+                groupsArr.splice(groupIndex, 1);
+                localStorage.setItem('groups', JSON.stringify(groupsArr));
+                renderGroups();
                 renderSelectedGroupInfo();
             }
         }
@@ -1098,7 +1195,7 @@ document.getElementById('group-list').addEventListener('click',function(event){
 })
 
 // friend deletion
-document.getElementById('friends-list').addEventListener('click', function(event) {
+document.getElementById('friends-list').addEventListener('click', function (event) {
     if (event.target && event.target.classList.contains('delete')) {
         console.log(event);
         const listItem = event.target.closest('li');
@@ -1106,24 +1203,24 @@ document.getElementById('friends-list').addEventListener('click', function(event
         console.log(`Deleting friend: ${friendName}`);
         console.log(`This is friend id: ${listItem.id}`);
         const confirmDelete = confirm(`Are you sure you want to delete  ${friendName}`)
-        if(confirmDelete){
+        if (confirmDelete) {
 
-            const friendIndex = friendsListStored.findIndex(friend=>friend.id==listItem.id);
+            const friendIndex = friendsListStored.findIndex(friend => friend.id == listItem.id);
             console.log(friendIndex);
-            if (friendIndex!==-1){
+            if (friendIndex !== -1) {
 
-                friendsListStored.splice(friendIndex,1);
-                localStorage.setItem('friends',JSON.stringify(friendsListStored));
+                friendsListStored.splice(friendIndex, 1);
+                localStorage.setItem('friends', JSON.stringify(friendsListStored));
                 renderFriends();
             }
-            groupsArr.forEach(group=>{
-                const memberIndex = group.membersArr.findIndex(member=>member.id==listItem.id);
+            groupsArr.forEach(group => {
+                const memberIndex = group.membersArr.findIndex(member => member.id == listItem.id);
                 console.log(`deleted the member at ${memberIndex}`);
-                if (memberIndex!==-1){
-                    group.membersArr.splice(memberIndex,1)
+                if (memberIndex !== -1) {
+                    group.membersArr.splice(memberIndex, 1)
                 }
             })
-            localStorage.setItem('groups',JSON.stringify(groupsArr));
+            localStorage.setItem('groups', JSON.stringify(groupsArr));
             renderSelectedGroupInfo();
             groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
             // renderFriends();
@@ -1134,8 +1231,8 @@ document.getElementById('friends-list').addEventListener('click', function(event
 });
 
 // member deletion
-document.getElementById('selected-group').addEventListener('click',function(event){
-    if(event.target&&event.target.classList.contains('delete')){
+document.getElementById('selected-group').addEventListener('click', function (event) {
+    if (event.target && event.target.classList.contains('delete')) {
         // console.log('clicked');
         const memberContainer = event.target.closest('.balances-card-member');
 
@@ -1145,13 +1242,13 @@ document.getElementById('selected-group').addEventListener('click',function(even
             // console.log(memberNameText);
             console.log(`Trying to delete: ${memberNameText}, with ID: ${memberItem.id}`);
             const confirmDelete = confirm(`Are you sure, you want to delete: ${memberNameText}`);
-            if(confirmDelete){
+            if (confirmDelete) {
                 console.log("This is selected group array: ", groupsArr[selectedGroupIndex].membersArr);
-                const memberIndex = groupsArr[selectedGroupIndex].membersArr.findIndex(member=>member.id ==memberItem.id);
-                console.log('This is member index',memberIndex);
-                if(memberIndex!==-1){
-                    groupsArr[selectedGroupIndex].membersArr.splice(memberIndex,1);
-                    localStorage.setItem('groups',JSON.stringify(groupsArr));
+                const memberIndex = groupsArr[selectedGroupIndex].membersArr.findIndex(member => member.id == memberItem.id);
+                console.log('This is member index', memberIndex);
+                if (memberIndex !== -1) {
+                    groupsArr[selectedGroupIndex].membersArr.splice(memberIndex, 1);
+                    localStorage.setItem('groups', JSON.stringify(groupsArr));
                     renderGroups();
                     // renderriends();
                     renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
@@ -1159,14 +1256,14 @@ document.getElementById('selected-group').addEventListener('click',function(even
                 }
 
             }
-        }else{
+        } else {
             console.log('Not found')
         }
     }
 })
 
 // expense deletion
-if(listExpenses) {
+if (listExpenses) {
     listExpenses.addEventListener('click', function (event) {
         if (event.target && event.target.classList.contains('delete')) {
             // console.log("The expense delete btn was clicked")

@@ -321,6 +321,11 @@ ul {
 	background-color: #005B8E;
 }
 
+.main-group-add-expense {
+	display: flex;
+	justify-content: space-between;
+}
+
 
 /* forms */
 
@@ -354,14 +359,22 @@ ul {
 	outline: none;
 }
 
-#from-user, #form-add-expense{
+#from-user {
 	max-width: 50%;
+}
+
+#from-user, #form-add-expense{
     display: flex;
     flex-direction: column ;
     justify-content: center;
     gap:1rem;
 	margin: 1rem 0;
 }
+
+.add-expense-form-wrapper{
+	width: 50%;
+}
+
 
 @media  (max-width: 991px) {
 	#form-add-expense {
@@ -673,6 +686,13 @@ margin-bottom: 5px;
 
 /* balances */
 
+.toggle {
+    background: #dcdcdc;
+    border-radius: 25px;
+    padding: 0 10px;
+    margin-left: 10px;
+}
+
 .balances-members-container, 
 .balances-expenses-container {
 	display: grid;
@@ -688,7 +708,7 @@ margin-bottom: 5px;
 }
 
 #list-expenses {
-	padding-top: 3rem;
+	padding-top: 2rem;
 }
 
 .expense-item {
@@ -761,6 +781,7 @@ margin-bottom: 5px;
 .pen {
     cursor: pointer;
     margin-left: 8px;}
+
  /* footer */
 
 footer {
@@ -782,13 +803,17 @@ footer {
 
 @media (min-width: 993px) {
     body {
-        grid-template-rows: auto 1fr auto;
+        grid-template-rows: auto 50px;
         grid-template-columns: minmax(20%,22%) auto;
     }
 
     header {
         grid-column: 1 / span 2;
     }
+
+	footer {
+		grid-row: 2/3;
+	}
 
 }
 
@@ -889,4 +914,36 @@ dialog::backdrop {
 	grid-template-columns: auto 1fr;
 }
 
+/* summary */
 
+#member-summary-line {
+    display: inline-flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+#expense-summary-title {
+    padding-top: 2rem;
+}
+
+#Subtotal {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    color: #005c8f;
+    padding: 10px 0;
+    border-bottom: 1px solid #d3d3d3;
+    border-top: 1px solid #d3d3d3;
+    margin-top: 12px;
+}
+
+#Total {
+    padding: 10px 0;
+    text-align: end;
+    color: #005c8f;
+    font-weight: bold;
+}
+
+main-group-add
