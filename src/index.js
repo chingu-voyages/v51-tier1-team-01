@@ -26,7 +26,7 @@ const listExpenses = document.getElementById("list-expenses");
 let selectedGroupIndex=-1; //just trying to fix the selectedGroupIndex is not defined
 
 selectedGroup.classList.add("hidden");
-document.querySelector(".main-group-add-expense").classList.add("hidden");
+document.querySelector(".main-group-add-expense").display = "none";
 
 if(groupsArr.length!==0) {
 	hideForm()
@@ -218,7 +218,7 @@ function getGroupMembers(selectedGroup) {
 function renderSelectedGroupInfo(group, content) {
 	if(groupsArr.length > 0) {
 		selectedGroup.classList.remove("hidden");
-		document.querySelector(".main-group-add-expense").classList.remove("hidden");
+		document.querySelector(".main-group-add-expense").display = "flex";
 	console.log(content)
     const { groupName, id, avatar, membersArr, expenses } = group;
 	const header = document.querySelector(".section-main-group-header")
@@ -257,7 +257,7 @@ if(content) {
 
 } else {
 	selectedGroup.classList.add("hidden");
-	document.querySelector(".main-group-add-expense").classList.add("hidden");
+	document.querySelector(".main-group-add-expense").display = "none";
 }
 }
 
@@ -481,6 +481,7 @@ function handleGroupCreation(e) {
         }
         renderFriends();
         hideForm();
+		
         renderSelectedGroupInfo(groupsArr[selectedGroupIndex]); //render just added group
         tempMemberArr.length = 0;
         clearInputField(groupName);
@@ -694,7 +695,7 @@ function getExpensesHTML(group) {
     const groupTotalBlock = document.getElementById("group-total")
     groupTotalBlock.innerText = `Total Cost: $${totalCalc(group)}`
 	const {expenses} = group;
-	document.querySelector(".main-group-add-expense").style.display = "block";
+	document.querySelector(".main-group-add-expense").display = "flex";
 	return `${
 				expenses.map(expense => {
 					return `

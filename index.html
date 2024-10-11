@@ -89,18 +89,22 @@
         <!-- added expenses section -->
         <section class="main-group-add-expense">
             <div id="expense-total-section">
-                <button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
+				<div class="add-expense-form-wrapper">
+					<button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
+					<form action="" id="form-add-expense" class="hidden">
+                	<input type="text" id="input-expense" placeholder="Name of expense" required>
+                	<input type="number" id="input-amount" placeholder="Amount" required>
+                	<label for="select-payer"></label>
+                	<select name="payer" id="select-payer"></select>
+                	<!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
+                	<button>Submit expense</button>
+            </form>
+				</div>
+                
                 <div id="group-total"></div>
             </div>
             <!-- <button id="btn-add-expense">Show the add expense form</button> -->
-            <form action="" id="form-add-expense" class="hidden">
-                <input type="text" id="input-expense" placeholder="Name of expense" required>
-                <input type="number" id="input-amount" placeholder="Amount" required>
-                <label for="select-payer"></label>
-                <select name="payer" id="select-payer"></select>
-                <!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
-                <button>Submit expense</button>
-            </form>
+           
 
         </section>
         <dialog id="add-members-to-expense">

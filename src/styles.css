@@ -326,10 +326,6 @@ ul {
 	justify-content: space-between;
 }
 
-#summary {
-	float: right;
-}
-
 
 /* forms */
 
@@ -363,14 +359,22 @@ ul {
 	outline: none;
 }
 
-#from-user, #form-add-expense{
+#from-user {
 	max-width: 50%;
+}
+
+#from-user, #form-add-expense{
     display: flex;
     flex-direction: column ;
     justify-content: center;
     gap:1rem;
 	margin: 1rem 0;
 }
+
+.add-expense-form-wrapper{
+	width: 50%;
+}
+
 
 @media  (max-width: 991px) {
 	#form-add-expense {
@@ -934,3 +938,5 @@ dialog::backdrop {
     color: #005c8f;
     font-weight: bold;
 }
+
+main-group-add
