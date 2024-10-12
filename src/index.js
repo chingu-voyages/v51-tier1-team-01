@@ -25,14 +25,15 @@ const listExpenses = document.getElementById("list-expenses");
 
 let selectedGroupIndex = -1; //just trying to fix the selectedGroupIndex is not defined
 
-selectedGroup.classList.add("hidden");
-document.querySelector(".main-group-add-expense").display = "none";
+// selectedGroup.classList.add("hidden");
+// document.querySelector(".main-group-add-expense").display = "none";
 
 if (groupsArr.length !== 0) {
     hideForm()
     renderSelectedGroupInfo(groupsArr[0]);
     // renderSelectedGroupInfo(groupsArr[0])
 } else {
+	document.querySelector(".main-group-add-expense").classList.remove("show");
     showForm();
 }
 
@@ -59,13 +60,11 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 	if (event.target.matches(".group-link") || event.target.matches(".group-balances") || event.target.matches(".group-members") || event.target.matches("#summary") ||  event.target.matches(".toggle")) {
 
 
-        // const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
+        const selectedGroupId = event.target.closest(".group-link")?.id || event.target.closest(".section-main-group-info-nav-container")?.id;
 
-        // const selectedGroup = groupsArr.find(group => {
-        //     return group.id == selectedGroupId ? group : console.log("there's no group with same id in group array")
-        // })
-
-		const selectedGroup = groupsArr[selectedGroupIndex] //instead of prev.code
+        const selectedGroup = groupsArr.find(group => {
+            return group.id == selectedGroupId ? group : console.log("there's no group with same id in group array")
+        })
 
         console.log(event.target)
         // console.log(selectedGroupId)
@@ -80,38 +79,42 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         // groupContainer ? groupContainer.style.display = "block" : ""
 
 		if (event.target.matches(".group-balances") || event.target.matches(".group-link")) {
+
 			listExpenses.innerHTML = getExpensesHTML(selectedGroup)
 			groupContainer.innerHTML = ""
 			document.querySelector(".group-balances").classList.add("active")
+			document.querySelector(".main-group-add-expense").classList.add("show");
+			console.log("group",selectedGroup)
 			renderSelectedGroupInfo(selectedGroup, groupContainer.appendChild(listExpenses))
-			// listExpenses.innerHTML = getExpensesHTML(selectedGroup)
-			// groupContainer.innerHTML = ""
-			// groupContainer.appendChild(listExpenses)
+
         } else if (event.target.matches("#summary")){
-			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupSummary(selectedGroup))
-			// const group = groupsArr.find(group => group.id == document.querySelector(".section-main-group-info-nav-container").id) 
-			// groupContainer.innerHTML = getGroupSummary(group);
+
+			groupContainer.innerHTML = getGroupSummary(selectedGroup)
+			document.querySelector(".main-group-add-expense").classList.remove("show");
+			renderSelectedGroupInfo(selectedGroup, groupContainer)
+
 		} else if (event.target.matches(".toggle")) {
+
 			const expenseId = event.target.closest(".expense-item").id
-			// const group = groupsArr.find(group=> {
-			// 	return group.expenses.find( expense=> expense.date === Number(expenseId))
-			// })
-			
-			const expense = selectedGroup.expenses.find( expense => expense.date === Number(expenseId))
+			const expense = groupsArr[selectedGroupIndex].expenses.find( expense => expense.date === Number(expenseId))
 			const member = expense.members.find(member => Number(member.id) === Number(event.target.id))
 			console.log(member.name, expense)
 			toggleMemberStatus(expense, member)
-			console.log(event.target.parentNode.parentNode.parentNode.parentNode)
-			// event.target.parentNode.parentNode.parentNode.parentNode.display = "grid"
-			
-			renderSelectedGroupInfo(selectedGroup, listExpenses.innerHTML = getExpensesHTML(selectedGroup))
+			listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+			// event.target.parentNode.parentNode.parentNode.parentNode.classList.add("show")
+			document.querySelector(".balances-expenses-container")?.classList.add("show")
+			console.log(listExpenses)
+			renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
 
 		} else if (event.target.matches(".group-members")){
-			renderSelectedGroupInfo(selectedGroup, groupContainer.innerHTML = getGroupMembers(selectedGroup))
-			// listExpenses.classList.add("hidden");
-			// listExpenses.display = "none"
-            // groupContainer.innerHTML = getGroupMembers(selectedGroup)
+
+			groupContainer.innerHTML = getGroupMembers(selectedGroup)
+			document.querySelector(".main-group-add-expense").classList.remove("show");
+			renderSelectedGroupInfo(selectedGroup, groupContainer)
+
         }
+
+
     } else {
         event.stopPropagation()
     }
@@ -120,7 +123,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         {
             event.stopPropagation()
             const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
-            return toggle.style.display === "grid" ? toggle.style.display = "none" : toggle.style.display = "grid";
+            return toggle.classList.contains("show") ? toggle.classList.remove("show") : toggle.classList.add("show");
         }
     } else {
         event.stopPropagation()
@@ -200,7 +203,6 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 })
 
 function getGroupMembers(selectedGroup) {
-	// document.querySelector(".main-group-add-expense").style.display = "none";
 	return `
 		<div class="balances-members-container">
 			${selectedGroup.membersArr.map(member => {
@@ -248,7 +250,8 @@ function getGroupMembers(selectedGroup) {
 function renderSelectedGroupInfo(group, content) {
 	if(groupsArr.length > 0) {
 		selectedGroup.classList.remove("hidden");
-		document.querySelector(".main-group-add-expense").display = "flex";
+		console.log(group,content)
+		// document.querySelector(".main-group-add-expense").display = "flex";
     const { groupName, id, avatar, membersArr, expenses } = group;
 	const header = document.querySelector(".section-main-group-header")
     header.innerHTML = "";
@@ -275,21 +278,18 @@ function renderSelectedGroupInfo(group, content) {
 			    </div>
 				<img src=${avatar} alt="Group icon">
 ` 
-if(content) {
-	content
-} else {
-	// document.querySelector(".balances-expenses-container").display = "none"
-	groupContainer.innerHTML = ""
-	listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-	groupContainer.appendChild(listExpenses)
-}
+		if(content) {
+			content
+		} else {
+			groupContainer.innerHTML = ""
+			listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+			groupContainer.appendChild(listExpenses)
+		}
 
-//    content ? groupContainer.innerHTML = content : listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
 
-} else {
-	selectedGroup.classList.add("hidden");
-	document.querySelector(".main-group-add-expense").display = "none";
-}
+	} else {
+		selectedGroup.classList.add("hidden");
+	}
 }
 
 //creating html list templates
@@ -510,7 +510,7 @@ function handleGroupCreation(e) {
         }
         renderFriends();
         hideForm();
-		
+		document.querySelector(".main-group-add-expense").classList.add("show");
         renderSelectedGroupInfo(groupsArr[selectedGroupIndex]); //render just added group
         tempMemberArr.length = 0;
         clearInputField(groupName);
@@ -779,7 +779,7 @@ function getExpensesHTML(group) {
     const groupTotalBlock = document.getElementById("group-total")
     groupTotalBlock.innerText = `Total Cost: $${totalCalc(group)}`
 	const {expenses} = group;
-	document.querySelector(".main-group-add-expense").display = "flex";
+	// document.querySelector(".main-group-add-expense").display = "flex";
 	// document.querySelector(".balances-expenses-container").display = "none";
 	return `${
 				expenses.map(expense => {
@@ -813,7 +813,7 @@ function getExpensesHTML(group) {
         							}).join("")
         						}
 									<div class="balances-members-footer" id=${expense.date.toString()}>
-										<button class="add-btn" id="add-expense-member"><span>+</span>Add member</button>
+										<button class="add-btn" id="add-expense-member" title="Select expense members"><span>+</span>Add members</button>
 										<button class="add-btn" id="edit-expense-btn"><span>+</span>Edit expense</button>
 										<span>Subtotal $${expense.cost}</span>
 									</div>
@@ -1199,6 +1199,7 @@ document.getElementById('group-list').addEventListener('click', function (event)
                 groupsArr.splice(groupIndex, 1);
                 localStorage.setItem('groups', JSON.stringify(groupsArr));
                 renderGroups();
+				document.querySelector(".main-group-add-expense").classList.remove("show");
                 renderSelectedGroupInfo();
             }
         }
