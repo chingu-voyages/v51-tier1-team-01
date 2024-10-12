@@ -550,6 +550,16 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     formAddFriend.classList.remove("form-add-visible");
 });
 
+// close dialogs
+
+const btnsCancelDialog = document.querySelectorAll(".btn-cancel-dialog");
+btnsCancelDialog.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log(e.target.closest("dialog"))
+    })
+})
+
 // add existing friends to group
 
 const btnAddExistingFriend = document.getElementById("add-existing-friend");
