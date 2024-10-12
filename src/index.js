@@ -830,7 +830,7 @@ function getExpensesHTML(group) {
 																				    <p class="balances-card-member-name editable" id=${member.id}>
 																				    ${member.name}
 																				    </p>
-           							     					                    <span class="pen">🖋️</span>
+           							     					                    <span class="pen"></span>
 																				</div>
            							                                         <div id="badges">
 																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id=${member.id} class="toggle toggle-${paidClass}"></p>`}
