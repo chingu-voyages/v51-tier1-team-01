@@ -340,13 +340,14 @@ function hideForm() {
 //manage fields
 function addMemberInputField() {
 	const fields = Array.from(document.querySelectorAll(".group-member"))
-	if (fields.length > 4) {
-		alert("Fill in previous fields please")
-	} else {
+	const notFilled = fields.find(field => !field.value)
+	if (fields.length < 5 || (fields.length > 4 && !notFilled)) {
 		const newMemberInput = document.createElement('input');
 		newMemberInput.className = 'group-member';
 		newMemberInput.placeholder = 'Add Member';
 		memberInputs.appendChild(newMemberInput);
+	} else {
+		alert("Fill in previous fields please")
 	}
 }
 
