@@ -155,7 +155,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
     } else {
         event.stopPropagation()
     }
-	
+
     if (event.target.matches("#edit-expense-btn")) {
         {
             event.stopPropagation()
@@ -277,7 +277,7 @@ function renderSelectedGroupInfo(group, content) {
 					<p class="badge badge-${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalOutstandingCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
-` 
+`
 		if(content) {
 			content
 		} else {
@@ -830,10 +830,10 @@ function getExpensesHTML(group) {
 																				    <p class="balances-card-member-name editable" id=${member.id}>
 																				    ${member.name}
 																				    </p>
-           							     					                    <span class="pen">🖋️</span>
+           							     					                    <span class="pen"></span>
 																				</div>
            							                                         <div id="badges">
-																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id=${member.id} class="toggle toggle-${paidClass}">toggle</p>`}
+																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id=${member.id} class="toggle toggle-${paidClass}"></p>`}
            							                                         </div>
 																			</div>
 																			<img class="balances-card-member-img ${paidClass}" src=${member.imgSrc} alt="Member icon">
@@ -1118,6 +1118,8 @@ selectedGroup.addEventListener('click', function (event) {
     if (event.target && event.target.classList.contains('pen')) {
         const editElement = event.target.closest('div').querySelector('.editable');
         // const editElement = event.target.closest('.section-main-group-info-nav-container').previousElementSibling.querySelector('.editable');
+        const superDuperParentElement =editElement.parentNode.parentNode.parentNode.parentNode.parentNode;
+        console.log(`Edit element parent node`,editElement.parentNode.parentNode.parentNode.parentNode.parentNode.id);
         console.log(`This is value of editelement: ${editElement}`);
         // to check if it is h2(group name) or p (member name)
         const elementType = editElement.tagName.toLowerCase();
@@ -1188,11 +1190,18 @@ selectedGroup.addEventListener('click', function (event) {
                                 renderFriends();
                                 // getExpensesHTML(groupsArr[groupIndex]);
 
-                                listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+                                // listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
 
                                 renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
-                                getGroupMembers(groupsArr[selectedGroupIndex]);
+                                // getGroupMembers(groupsArr[selectedGroupIndex]);
+                                // groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
                                 // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
+                                if(superDuperParentElement.id=='group-info-container'){
+                                    groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
+                                }else{
+                                listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+
+                                }
                             } else {
                                 console.log("Either memberIndex or friendIndex does not exist");
                             }
@@ -1351,6 +1360,81 @@ const addMemberBtnInsideDialog= document.getElementById('add-member-btn-inside-d
 const newMemberInput = document.getElementById('new-member-input');
 let friendCheckBoxes = [...document.querySelectorAll(".add-friend-to-group")]
 
+
+function enterDown(e){
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        addMembers(true);
+    }
+}
+
+function clickedOn(e){
+    e.preventDefault();
+    addMembers(true);
+}
+
+function clickedClose(e){
+    e.preventDefault();
+    console.log("Closing friends dialog");
+    addMembers(false);
+}
+
+function addMembers(includeInput = true) {
+    if (includeInput) {
+        const inputValue = newMemberInput.value.trim();
+        console.log(`This is isnput value`,inputValue);
+        let inList = false;
+
+        if (!isEmpty(inputValue)) {
+            friendsListStored.forEach(friend => {
+                if (friend.name.toLowerCase() === inputValue.toLowerCase()) {
+                    inList = true;
+                }
+            });
+            groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+                if (member.name.toLowerCase() === inputValue.toLowerCase()) {
+                    inList = true;
+                }
+            });
+            if (!inList) {
+                const newFriend = createFriend(titleCase(inputValue));
+                friendsListStored.push(newFriend);
+                groupsArr[selectedGroupIndex].membersArr.push(newFriend);
+                clearInputField(newMemberInput);
+                newMemberInput.style.display = "none";
+                addMemberBtnInsideDialog.style.display = "none";
+                newMemberInput.value="";
+            } else {
+                alert(`Friend ${inputValue} already exists, please enter another one, or choose ${inputValue} from existing friends.`);
+                newMemberInput.value = "";
+                newMemberInput.focus();
+                return false;
+            }
+        }else{
+            alert("Empty values are not allowed");
+            newMemberInput.focus();
+            return false;
+        }
+    }
+
+    friendCheckBoxes.forEach(friendCheck=>{
+        if(friendCheck.checked){
+            const friendToAdd = friendsListStored.find(friend => friend.name === friendCheck.id);
+            if(friendToAdd){
+                groupsArr[selectedGroupIndex].membersArr.push(friendToAdd);
+
+            }
+        }
+    })
+    localStorage.setItem('friends', JSON.stringify(friendsListStored));
+    localStorage.setItem('groups', JSON.stringify(groupsArr));
+    groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
+    addMembersToGroupDialog.close();
+    newMemberInput.value="";
+    newMemberInput.style.display = "none";
+    addMemberBtnInsideDialog.style.display = "none"
+}
+
 function addMembersToGroup(index) {
     otherFriendsContainer.textContent = "";
     const addSomeOtherPerson = document.getElementById('add-someother-person');
@@ -1360,79 +1444,18 @@ function addMembersToGroup(index) {
         addMemberBtnInsideDialog.style.display = "block";
         newMemberInput.focus();
     });
-    function addMembers(includeInput = true) {
-        // let inputValid = true;
-        if (includeInput) {
-            const inputValue = newMemberInput.value.trim();
-            let inList = false;
 
-            if (!isEmpty(inputValue)) {
-                friendsListStored.forEach(friend => {
-                    if (friend.name.toLowerCase() === inputValue.toLowerCase()) {
-                        inList = true;
-                    }
-                });
-                groupsArr[selectedGroupIndex].membersArr.forEach(member => {
-                    if (member.name.toLowerCase() === inputValue.toLowerCase()) {
-                        inList = true;
-                    }
-                });
-                if (!inList) {
-                    const newFriend = createFriend(titleCase(inputValue));
-                    friendsListStored.push(newFriend);
-                    groupsArr[selectedGroupIndex].membersArr.push(newFriend);
-                    clearInputField(newMemberInput);
-                    newMemberInput.style.display = "none";
-                    addMemberBtnInsideDialog.style.display = "none";
-                } else {
-                    alert(`Friend ${inputValue} already exists, please enter another one, or choose ${inputValue} from existing friends.`);
-                    newMemberInput.value = "";
-                    newMemberInput.focus();
-                    // inputValid = false;
-                    // if (event)
-                    // event.preventDefault();
-                    return false;;
-                }
-            }else{
-                alert("Empty values are not allowed");
-                newMemberInput.focus();
-                // if (event)
-                // event.preventDefault();
-                // inputValid = false;
-                return false;
-            }
-        }
+    newMemberInput.removeEventListener('keydown',enterDown);
+    addMemberBtnInsideDialog.removeEventListener('click',clickedOn);
+    const btnCloseAddFriendsToGroup = document.getElementById('close-add-members-to-group');
+    btnCloseAddFriendsToGroup.removeEventListener('click',clickedClose)
 
-        friendCheckBoxes.forEach(friendCheck=>{
-            if(friendCheck.checked){
-                const friendToAdd = friendsListStored.find(friend => friend.name === friendCheck.id);
-                if(friendToAdd){
-                    groupsArr[selectedGroupIndex].membersArr.push(friendToAdd);
+    newMemberInput.addEventListener('keydown',enterDown);
+    addMemberBtnInsideDialog.addEventListener('click',clickedOn);
+    btnCloseAddFriendsToGroup.addEventListener('click',clickedClose)
 
-                }
-            }
-        })
-        localStorage.setItem('friends', JSON.stringify(friendsListStored));
-        localStorage.setItem('groups', JSON.stringify(groupsArr));
-        groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
-        // if (inputValid || !includeInput) {
-        //     addMembersToGroupDialog.close();
-        // }
-        addMembersToGroupDialog.close();
-        newMemberInput.value="";
-        newMemberInput.style.display = "none";
-        addMemberBtnInsideDialog.style.display = "none"
-    }
-    newMemberInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            addMembers(true);
-        }
-    });
-    addMemberBtnInsideDialog.addEventListener('click', function(e) {
-        e.preventDefault();
-        addMembers(true);
-    });
+    newMemberInput.addEventListener('keydown',enterDown);
+    addMemberBtnInsideDialog.addEventListener('click',clickedOn);
     friendsListStored.forEach(friend => {
         const isFriendInGroup = groupsArr[index].membersArr.some(member => member.name === friend.name);
         if (!isFriendInGroup) {
@@ -1452,10 +1475,4 @@ function addMembersToGroup(index) {
     });
     friendCheckBoxes = [...document.querySelectorAll(".add-friend-to-group")];
     addMembersToGroupDialog.showModal();
-    const btnCloseAddFriendsToGroup = document.getElementById('close-add-members-to-group');
-    btnCloseAddFriendsToGroup.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log("Closing friends dialog");
-        addMembers(false);
-    });
 }
