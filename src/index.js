@@ -556,9 +556,28 @@ const btnsCancelDialog = document.querySelectorAll(".btn-cancel-dialog");
 btnsCancelDialog.forEach(btn => {
     btn.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log(e.target.closest("dialog"))
+        document.querySelector(e.target.closest("dialog").close())
+    })
+});
+
+const dialogs = document.querySelectorAll("dialog");
+dialogs.forEach(dialog => {
+    dialog.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("dialog-body")) {
+            dialog.close();
+        }
     })
 })
+
+
+
+// dialog.addEventListener('click', (event) => {
+//     if (event.target.id !== 'my-div') {
+//         dialog.close();
+//     }
+// });
+
+
 
 // add existing friends to group
 
