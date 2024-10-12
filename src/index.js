@@ -1309,6 +1309,81 @@ const addMemberBtnInsideDialog= document.getElementById('add-member-btn-inside-d
 const newMemberInput = document.getElementById('new-member-input');
 let friendCheckBoxes = [...document.querySelectorAll(".add-friend-to-group")]
 
+
+function enterDown(e){
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        addMembers(true);
+    }
+}
+
+function clickedOn(e){
+    e.preventDefault();
+    addMembers(true);
+}
+
+function clickedClose(e){
+    e.preventDefault();
+    console.log("Closing friends dialog");
+    addMembers(false);
+}
+
+function addMembers(includeInput = true) {
+    igit f (includeInput) {
+        const inputValue = newMemberInput.value.trim();
+        console.log(`This is isnput value`,inputValue);
+        let inList = false;
+
+        if (!isEmpty(inputValue)) {
+            friendsListStored.forEach(friend => {
+                if (friend.name.toLowerCase() === inputValue.toLowerCase()) {
+                    inList = true;
+                }
+            });
+            groupsArr[selectedGroupIndex].membersArr.forEach(member => {
+                if (member.name.toLowerCase() === inputValue.toLowerCase()) {
+                    inList = true;
+                }
+            });
+            if (!inList) {
+                const newFriend = createFriend(titleCase(inputValue));
+                friendsListStored.push(newFriend);
+                groupsArr[selectedGroupIndex].membersArr.push(newFriend);
+                clearInputField(newMemberInput);
+                newMemberInput.style.display = "none";
+                addMemberBtnInsideDialog.style.display = "none";
+                newMemberInput.value="";
+            } else {
+                alert(`Friend ${inputValue} already exists, please enter another one, or choose ${inputValue} from existing friends.`);
+                newMemberInput.value = "";
+                newMemberInput.focus();
+                return false;;
+            }
+        }else{
+            alert("Empty values are not allowed");
+            newMemberInput.focus();
+            return false;
+        }
+    }
+
+    friendCheckBoxes.forEach(friendCheck=>{
+        if(friendCheck.checked){
+            const friendToAdd = friendsListStored.find(friend => friend.name === friendCheck.id);
+            if(friendToAdd){
+                groupsArr[selectedGroupIndex].membersArr.push(friendToAdd);
+
+            }
+        }
+    })
+    localStorage.setItem('friends', JSON.stringify(friendsListStored));
+    localStorage.setItem('groups', JSON.stringify(groupsArr));
+    groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
+    addMembersToGroupDialog.close();
+    newMemberInput.value="";
+    newMemberInput.style.display = "none";
+    addMemberBtnInsideDialog.style.display = "none"
+}
+
 function addMembersToGroup(index) {
     otherFriendsContainer.textContent = "";
     const addSomeOtherPerson = document.getElementById('add-someother-person');
@@ -1318,79 +1393,18 @@ function addMembersToGroup(index) {
         addMemberBtnInsideDialog.style.display = "block";
         newMemberInput.focus();
     });
-    function addMembers(includeInput = true) {
-        // let inputValid = true;
-        if (includeInput) {
-            const inputValue = newMemberInput.value.trim();
-            let inList = false;
 
-            if (!isEmpty(inputValue)) {
-                friendsListStored.forEach(friend => {
-                    if (friend.name.toLowerCase() === inputValue.toLowerCase()) {
-                        inList = true;
-                    }
-                });
-                groupsArr[selectedGroupIndex].membersArr.forEach(member => {
-                    if (member.name.toLowerCase() === inputValue.toLowerCase()) {
-                        inList = true;
-                    }
-                });
-                if (!inList) {
-                    const newFriend = createFriend(titleCase(inputValue));
-                    friendsListStored.push(newFriend);
-                    groupsArr[selectedGroupIndex].membersArr.push(newFriend);
-                    clearInputField(newMemberInput);
-                    newMemberInput.style.display = "none";
-                    addMemberBtnInsideDialog.style.display = "none";
-                } else {
-                    alert(`Friend ${inputValue} already exists, please enter another one, or choose ${inputValue} from existing friends.`);
-                    newMemberInput.value = "";
-                    newMemberInput.focus();
-                    // inputValid = false;
-                    // if (event)
-                    // event.preventDefault();
-                    return false;;
-                }
-            }else{
-                alert("Empty values are not allowed");
-                newMemberInput.focus();
-                // if (event)
-                // event.preventDefault();
-                // inputValid = false;
-                return false;
-            }
-        }
+    newMemberInput.removeEventListener('keydown',enterDown);
+    addMemberBtnInsideDialog.removeEventListener('click',clickedOn);
+    const btnCloseAddFriendsToGroup = document.getElementById('close-add-members-to-group');
+    btnCloseAddFriendsToGroup.removeEventListener('click',clickedClose)
 
-        friendCheckBoxes.forEach(friendCheck=>{
-            if(friendCheck.checked){
-                const friendToAdd = friendsListStored.find(friend => friend.name === friendCheck.id);
-                if(friendToAdd){
-                    groupsArr[selectedGroupIndex].membersArr.push(friendToAdd);
+    newMemberInput.addEventListener('keydown',enterDown);
+    addMemberBtnInsideDialog.addEventListener('click',clickedOn);
+    btnCloseAddFriendsToGroup.addEventListener('click',clickedClose)
 
-                }
-            }
-        })
-        localStorage.setItem('friends', JSON.stringify(friendsListStored));
-        localStorage.setItem('groups', JSON.stringify(groupsArr));
-        groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
-        // if (inputValid || !includeInput) {
-        //     addMembersToGroupDialog.close();
-        // }
-        addMembersToGroupDialog.close();
-        newMemberInput.value="";
-        newMemberInput.style.display = "none";
-        addMemberBtnInsideDialog.style.display = "none"
-    }
-    newMemberInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            addMembers(true);
-        }
-    });
-    addMemberBtnInsideDialog.addEventListener('click', function(e) {
-        e.preventDefault();
-        addMembers(true);
-    });
+    newMemberInput.addEventListener('keydown',enterDown);
+    addMemberBtnInsideDialog.addEventListener('click',clickedOn);
     friendsListStored.forEach(friend => {
         const isFriendInGroup = groupsArr[index].membersArr.some(member => member.name === friend.name);
         if (!isFriendInGroup) {
@@ -1410,10 +1424,4 @@ function addMembersToGroup(index) {
     });
     friendCheckBoxes = [...document.querySelectorAll(".add-friend-to-group")];
     addMembersToGroupDialog.showModal();
-    const btnCloseAddFriendsToGroup = document.getElementById('close-add-members-to-group');
-    btnCloseAddFriendsToGroup.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log("Closing friends dialog");
-        addMembers(false);
-    });
 }
