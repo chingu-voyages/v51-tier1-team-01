@@ -322,6 +322,10 @@ ul {
 }
 
 .main-group-add-expense {
+	display: none;
+}
+
+.main-group-add-expense.show {
 	display: flex;
 	justify-content: space-between;
 }
@@ -485,6 +489,10 @@ input, select {
 }
 
 /* main section, group info*/
+
+#selected-group.hidden {
+	display: none;
+}
 
 .section-main-group-header {
 	display: flex;
@@ -721,6 +729,10 @@ margin-bottom: 5px;
 .balances-expenses-container {
 	display: none;
 	padding-top: 1rem;
+}
+
+.balances-expenses-container.show {
+	display: grid;
 }
 
 #list-expenses {
@@ -986,3 +998,4 @@ dialog::backdrop {
     font-weight: bold;
     padding-right: 10px;
 }
+
