@@ -563,8 +563,8 @@ btnsCancelDialog.forEach(btn => {
 const dialogs = document.querySelectorAll("dialog");
 dialogs.forEach(dialog => {
     dialog.addEventListener("click", (e) => {
-        if (!e.target.classList.contains("dialog-body")) {
-            dialog.close();
+        if (e.target.children[0].classList.contains("dialog-body")) {
+        dialog.close();
         }
     })
 })
