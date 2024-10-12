@@ -322,6 +322,10 @@ ul {
 }
 
 .main-group-add-expense {
+	display: none;
+}
+
+.main-group-add-expense.show {
 	display: flex;
 	justify-content: space-between;
 }
@@ -485,6 +489,10 @@ input, select {
 }
 
 /* main section, group info*/
+
+#selected-group.hidden {
+	display: none;
+}
 
 .section-main-group-header {
 	display: flex;
@@ -689,8 +697,24 @@ margin-bottom: 5px;
 .toggle {
     background: #dcdcdc;
     border-radius: 25px;
-    padding: 0 10px;
-    margin-left: 10px;
+    padding: 14px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+
+.toggle:hover { 
+	background-color: #44b4fe;
+}
+
+.toggle-paid {
+	background-image: url('./img/cross.png');
+	background-position: center center;
+}
+
+.toggle-unpaid {
+	background-image: url('./img/check-mark.png');
+	background-position: center center;
 }
 
 .balances-members-container, 
@@ -707,6 +731,10 @@ margin-bottom: 5px;
 	padding-top: 1rem;
 }
 
+.balances-expenses-container.show {
+	display: grid;
+}
+
 #list-expenses {
 	padding-top: 2rem;
 }
@@ -715,14 +743,34 @@ margin-bottom: 5px;
 	margin-bottom: 1rem;
 }
 
-.balances-members-header,
+.section-main-group-header > div > div > .pen {
+    background-image: url(./img/pen-blue.png);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    margin-bottom: 5px;
+}
+
+.balances-card-member > div > div > .pen {
+    background-image: url(./img/pen.png);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    margin-bottom: 7px;
+}
+
+.balances-members-header, 
 .balances-expenses-header {
-	display: flex;
-	justify-content: space-between;
-	padding: 1rem;
-	color: hsl(0deg 0% 99.61%);
-	background-color: hsl(201.4deg 100% 28.04%);
-	border-radius: 50px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1.5rem;
+    color: hsl(0deg 0% 99.61%);
+    background-color: hsl(201.4deg 100% 28.04%);
+    border-radius: 50px;
 }
 
 .balances-expenses-header .date {
@@ -766,7 +814,7 @@ margin-bottom: 5px;
 	display: flex;
 	grid-column: 1/-1;
 	justify-content: space-between;
-	padding: .5rem 0 .5rem 0;
+	padding: .5rem 30px .5rem 0;
 }
 
 /* editing name */
@@ -775,9 +823,12 @@ margin-bottom: 5px;
     /* flex-direction: column; */
     align-items: center;
 }
-.balances-card-member div div{
+
+.balances-card-member div div {
     display: flex;
+    align-items: center;
 }
+
 .pen {
     cursor: pointer;
     margin-left: 8px;}
@@ -921,7 +972,7 @@ dialog::backdrop {
     width: 100%;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 10px;
+    padding: 10px 10px 0 0;
 }
 
 #expense-summary-title {
@@ -937,6 +988,7 @@ dialog::backdrop {
     border-bottom: 1px solid #d3d3d3;
     border-top: 1px solid #d3d3d3;
     margin-top: 12px;
+    padding-right: 10px;
 }
 
 #Total {
@@ -944,6 +996,6 @@ dialog::backdrop {
     text-align: end;
     color: #005c8f;
     font-weight: bold;
+    padding-right: 10px;
 }
 
-main-group-add
