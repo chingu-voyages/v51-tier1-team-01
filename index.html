@@ -80,7 +80,7 @@
                 </form>
             </div>
         </dialog>
-        <section class="section-main-group" id="selected-group">
+        <section class="section-main-group hidden" id="selected-group">
 			<div class="section-main-group-header"></div>
 			<div class="section-main-group-info" >
 				<div class="section-main-group-info-nav-container">
@@ -113,14 +113,14 @@
             </div>
         </dialog>
         <!-- added expenses section -->
-        <section class="main-group-add-expense">
+        <section class="main-group-add-expense show">
             <div id="expense-total-section">
 				<div class="add-expense-form-wrapper">
 					<button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
 					<form action="" id="form-add-expense" class="hidden">
                 	<input type="text" id="input-expense" placeholder="Name of expense" required>
                 	<input type="number" id="input-amount" placeholder="Amount" required>
-                	<label for="select-payer"></label>
+                	<label for="select-payer">Select payer: </label>
                 	<select name="payer" id="select-payer"></select>
                 	<!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
                 	<button>Submit expense</button>
@@ -140,7 +140,7 @@
                     <ul id="other-members-container">
                     </ul>
                     <button class="btn-cancel-dialog">Cancel</button>
-                    <button id="close-add-members-to-expense">Add members</button>
+                    <button id="close-add-members-to-expense">Save changes</button>
                 </form>
             </div>
         </dialog>
