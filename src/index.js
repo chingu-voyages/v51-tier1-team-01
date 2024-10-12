@@ -550,6 +550,35 @@ formAddFriend.addEventListener("submit", (e) => { // function to create friend f
     formAddFriend.classList.remove("form-add-visible");
 });
 
+// close dialogs
+
+const btnsCancelDialog = document.querySelectorAll(".btn-cancel-dialog");
+btnsCancelDialog.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        document.querySelector(e.target.closest("dialog").close())
+    })
+});
+
+const dialogs = document.querySelectorAll("dialog");
+dialogs.forEach(dialog => {
+    dialog.addEventListener("click", (e) => {
+        if (e.target.children[0].classList.contains("dialog-body")) {
+        dialog.close();
+        }
+    })
+})
+
+
+
+// dialog.addEventListener('click', (event) => {
+//     if (event.target.id !== 'my-div') {
+//         dialog.close();
+//     }
+// });
+
+
+
 // add existing friends to group
 
 const btnAddExistingFriend = document.getElementById("add-existing-friend");

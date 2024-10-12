@@ -75,7 +75,8 @@
                     <p>Add existing friends to group</p>
                     <ul id="existing-friends-checkboxes">
                     </ul>
-                    <button id="close-add-existing-friends-to-group">Close</button>
+                    <button class="btn-cancel-dialog">Cancel</button>
+                    <button id="close-add-existing-friends-to-group">Add friends</button>
                 </form>
             </div>
         </dialog>
@@ -106,6 +107,7 @@
                     <button id="add-someother-person">Add someone else</button>
                     <input type="text" id="new-member-input" placeholder="Enter new friend's name" style="display: none;">
                     <button id="add-member-btn-inside-dialog" style="display: none;">Add member</button>
+                    <!-- <button class="btn-cancel-dialog">Cancel</button> -->
                     <button id="close-add-members-to-group">Close</button>
                 </form>
             </div>
@@ -137,6 +139,7 @@
                     <p>Other group members:</p>
                     <ul id="other-members-container">
                     </ul>
+                    <button class="btn-cancel-dialog">Cancel</button>
                     <button id="close-add-members-to-expense">Save changes</button>
                 </form>
             </div>
@@ -147,6 +150,7 @@
                         <label for="edit-name" class="form-control">Name: <input type="text" id="edit-name"></label>
                         <label for="edit-cost" class="form-control">Amount: <input type="number" id="edit-cost"></label>
                         <div>
+                            <button class="btn-cancel-dialog">Cancel</button>
                             <button type="submit">Edit expense</button>
                         </div>
                     </form>
