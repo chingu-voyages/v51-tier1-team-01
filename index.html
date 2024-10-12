@@ -63,12 +63,24 @@
                     <div class="group-form-buttons">
                         <button id="group-create-btn" type="submit">Create Group</button>
                         <button id="add-another-member" type="button">Add Member</button>
+                        <button id="add-existing-friend" type="button">Add friend</button>
                     </div>
                 </div>
                 <p id="group-error">Please enter a valid group name with at least two members</p>
             </form>
         </section>
-        <section class="section-main-group" id="selected-group">
+        <dialog id="dialog-add-friend">
+            <div class="dialog-body">
+                <form>
+                    <p>Add existing friends to group</p>
+                    <ul id="existing-friends-checkboxes">
+                    </ul>
+                    <button class="btn-cancel-dialog">Cancel</button>
+                    <button id="close-add-existing-friends-to-group">Add friends</button>
+                </form>
+            </div>
+        </dialog>
+        <section class="section-main-group hidden" id="selected-group">
 			<div class="section-main-group-header"></div>
 			<div class="section-main-group-info" >
 				<div class="section-main-group-info-nav-container">
@@ -94,25 +106,31 @@
                     </ul>
                     <button id="add-someother-person">Add someone else</button>
                     <input type="text" id="new-member-input" placeholder="Enter new friend's name" style="display: none;">
+                    <button id="add-member-btn-inside-dialog" style="display: none;">Add member</button>
+                    <!-- <button class="btn-cancel-dialog">Cancel</button> -->
                     <button id="close-add-members-to-group">Close</button>
                 </form>
             </div>
         </dialog>
         <!-- added expenses section -->
-        <section class="main-group-add-expense">
+        <section class="main-group-add-expense show">
             <div id="expense-total-section">
-                <button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
+				<div class="add-expense-form-wrapper">
+					<button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
+					<form action="" id="form-add-expense" class="hidden">
+                	<input type="text" id="input-expense" placeholder="Name of expense" required>
+                	<input type="number" id="input-amount" placeholder="Amount" required>
+                	<label for="select-payer">Select payer: </label>
+                	<select name="payer" id="select-payer"></select>
+                	<!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
+                	<button>Submit expense</button>
+            </form>
+				</div>
+                
                 <div id="group-total"></div>
             </div>
             <!-- <button id="btn-add-expense">Show the add expense form</button> -->
-            <form action="" id="form-add-expense" class="hidden">
-                <input type="text" id="input-expense" placeholder="Name of expense" required>
-                <input type="number" id="input-amount" placeholder="Amount" required>
-                <label for="select-payer"></label>
-                <select name="payer" id="select-payer"></select>
-                <!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
-                <button>Submit expense</button>
-            </form>
+           
 
         </section>
         <dialog id="add-members-to-expense">
@@ -121,7 +139,8 @@
                     <p>Other group members:</p>
                     <ul id="other-members-container">
                     </ul>
-                    <button id="close-add-members-to-expense">Close</button>
+                    <button class="btn-cancel-dialog">Cancel</button>
+                    <button id="close-add-members-to-expense">Save changes</button>
                 </form>
             </div>
         </dialog>
@@ -131,6 +150,7 @@
                         <label for="edit-name" class="form-control">Name: <input type="text" id="edit-name"></label>
                         <label for="edit-cost" class="form-control">Amount: <input type="number" id="edit-cost"></label>
                         <div>
+                            <button class="btn-cancel-dialog">Cancel</button>
                             <button type="submit">Edit expense</button>
                         </div>
                     </form>
