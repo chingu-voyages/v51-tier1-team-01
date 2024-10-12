@@ -801,7 +801,7 @@ function getExpensesHTML(group) {
 																				    <p class="balances-card-member-name editable" id=${member.id}>
 																				    ${member.name}
 																				    </p>
-           							     					                    // <span class="pen">🖋️</span>
+           							     					                    <span class="pen">🖋️</span>
 																				</div>
            							                                         <div id="badges">
 																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id=${member.id} class="toggle toggle-${paidClass}"></p>`}
@@ -1089,6 +1089,8 @@ selectedGroup.addEventListener('click', function (event) {
     if (event.target && event.target.classList.contains('pen')) {
         const editElement = event.target.closest('div').querySelector('.editable');
         // const editElement = event.target.closest('.section-main-group-info-nav-container').previousElementSibling.querySelector('.editable');
+        const superDuperParentElement =editElement.parentNode.parentNode.parentNode.parentNode.parentNode;
+        console.log(`Edit element parent node`,editElement.parentNode.parentNode.parentNode.parentNode.parentNode.id);
         console.log(`This is value of editelement: ${editElement}`);
         // to check if it is h2(group name) or p (member name)
         const elementType = editElement.tagName.toLowerCase();
@@ -1159,12 +1161,18 @@ selectedGroup.addEventListener('click', function (event) {
                                 renderFriends();
                                 // getExpensesHTML(groupsArr[groupIndex]);
 
-                                listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+                                // listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
 
                                 renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
                                 // getGroupMembers(groupsArr[selectedGroupIndex]);
-                                groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
+                                // groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
                                 // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
+                                if(superDuperParentElement.id=='group-info-container'){
+                                    groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
+                                }else{
+                                listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+
+                                }
                             } else {
                                 console.log("Either memberIndex or friendIndex does not exist");
                             }
