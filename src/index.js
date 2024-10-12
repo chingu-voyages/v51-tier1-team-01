@@ -155,7 +155,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
     } else {
         event.stopPropagation()
     }
-	
+
     if (event.target.matches("#edit-expense-btn")) {
         {
             event.stopPropagation()
@@ -277,7 +277,7 @@ function renderSelectedGroupInfo(group, content) {
 					<p class="badge badge-${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalOutstandingCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
 				<img src=${avatar} alt="Group icon">
-` 
+`
 		if(content) {
 			content
 		} else {
@@ -801,10 +801,10 @@ function getExpensesHTML(group) {
 																				    <p class="balances-card-member-name editable" id=${member.id}>
 																				    ${member.name}
 																				    </p>
-           							     					                    <span class="pen">🖋️</span>
+           							     					                    // <span class="pen">🖋️</span>
 																				</div>
            							                                         <div id="badges">
-																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id=${member.id} class="toggle toggle-${paidClass}">toggle</p>`}
+																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id=${member.id} class="toggle toggle-${paidClass}"></p>`}
            							                                         </div>
 																			</div>
 																			<img class="balances-card-member-img ${paidClass}" src=${member.imgSrc} alt="Member icon">
