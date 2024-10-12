@@ -1329,7 +1329,7 @@ function clickedClose(e){
 }
 
 function addMembers(includeInput = true) {
-    igit f (includeInput) {
+    if (includeInput) {
         const inputValue = newMemberInput.value.trim();
         console.log(`This is isnput value`,inputValue);
         let inList = false;
@@ -1357,7 +1357,7 @@ function addMembers(includeInput = true) {
                 alert(`Friend ${inputValue} already exists, please enter another one, or choose ${inputValue} from existing friends.`);
                 newMemberInput.value = "";
                 newMemberInput.focus();
-                return false;;
+                return false;
             }
         }else{
             alert("Empty values are not allowed");
