@@ -1149,7 +1149,8 @@ selectedGroup.addEventListener('click', function (event) {
                                 listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
 
                                 renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
-                                getGroupMembers(groupsArr[selectedGroupIndex]);
+                                // getGroupMembers(groupsArr[selectedGroupIndex]);
+                                groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
                                 // renderExistingFriendsForGroupCreation(groupsArr[selectedGroupIndex]);
                             } else {
                                 console.log("Either memberIndex or friendIndex does not exist");
