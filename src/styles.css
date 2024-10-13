@@ -452,6 +452,52 @@ input, select {
     font-size : 1.2rem
 }
 
+#member-inputs {
+	position: relative;
+}
+
+.suggestions-container {
+	display: none;
+	background-color: #d3d3d3;
+	position: absolute;
+	width: 80%;
+	top: 50%;
+	right: 0;
+	transform: translateY(-50%);
+	border-radius: 4px;
+	cursor: pointer;
+	color:#232323;
+	background-color: #f9f9f9;
+	box-shadow: 12px 12px 12px rgba(0, 0, 0, .1);
+}
+
+.suggestions-container.show {
+	display: block;
+}
+
+.suggestions li {
+	padding: 10px 30px;
+	transition: all .2s linear;
+}
+
+.suggestions li:hover {
+	background-color: #def2fe;
+} 
+
+#close-suggestion {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color:#d3d3d3;
+	font-size: 1rem;
+	padding: 0 .5rem;
+	transition: all .2s linear;
+}
+
+#close-suggestion:hover {
+	color: #8d8d8d;
+}
+
 @media (max-width:992px) {
 
 	.section-aside {
@@ -998,4 +1044,5 @@ dialog::backdrop {
     font-weight: bold;
     padding-right: 10px;
 }
+
 

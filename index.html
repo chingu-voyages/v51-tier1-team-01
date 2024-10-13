@@ -48,7 +48,7 @@
     </section>
     <section class="section-main">
         <section id="new-group">
-            <form id="group-form">
+            <form id="group-form" autocomplete="off">
                 <div class="new-group-header">
                     <h2>Create New Group</h2>
                     <button type="button" id="close-group-form" title="Close form"
@@ -59,12 +59,18 @@
                     <div id="member-inputs">
                         <input type="text" id="member-one" class="default group-member" placeholder="Member 1">
                         <input type="text" id="member-two" class="default group-member" placeholder="Member 2">
+						<div class="suggestions-container">
+							<ul class="suggestions">
+							</ul>
+							<span id="close-suggestion">x</span>
+						</div>
                     </div>
                     <div class="group-form-buttons">
                         <button id="group-create-btn" type="submit">Create Group</button>
                         <button id="add-another-member" type="button">Add Member</button>
-                        <button id="add-existing-friend" type="button">Add friend</button>
+                        <!-- <button id="add-existing-friend" type="button">Add friend</button> -->
                     </div>
+					
                 </div>
                 <p id="group-error">Please enter a valid group name with at least two members</p>
             </form>
