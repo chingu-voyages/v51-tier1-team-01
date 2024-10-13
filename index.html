@@ -39,7 +39,6 @@
             <button id="add-btn" class="add-btn"><span>+</span>Add friend</button>
             <form id="form-add-friend" action="" class="form-add">
                 <div class="form-control">
-                    <!-- <label for="friend-first-name">First name: </label> -->
                     <input id="friend-first-name" type="text" placeholder="Friend's Name" required>
                 </div>
                 <button>Submit</button>
@@ -68,7 +67,6 @@
                     <div class="group-form-buttons">
                         <button id="group-create-btn" type="submit">Create Group</button>
                         <button id="add-another-member" type="button">Add Member</button>
-                        <!-- <button id="add-existing-friend" type="button">Add friend</button> -->
                     </div>
 					
                 </div>
@@ -103,7 +101,6 @@
 
 			</div>
         </section>
-        <!-- pop up for adding friends to members  -->
         <dialog id="add-members-to-group-dialog">
             <div class="dialog-body">
                 <form>
@@ -117,7 +114,6 @@
                 </form>
             </div>
         </dialog>
-        <!-- added expenses section -->
         <section class="main-group-add-expense show">
             <div id="expense-total-section">
 				<div class="add-expense-form-wrapper">
@@ -127,15 +123,12 @@
                 	<input type="number" min='1' id="input-amount" placeholder="Amount" required>
                 	<label for="select-payer">Select payer: </label>
                 	<select name="payer" id="select-payer"></select>
-                	<!-- <input type="text" id="input-participant" placeholder="Participant name" required> -->
                 	<button>Submit expense</button>
             </form>
 				</div>
 
                 <div id="group-total"></div>
             </div>
-            <!-- <button id="btn-add-expense">Show the add expense form</button> -->
-
 
         </section>
         <dialog id="add-members-to-expense">

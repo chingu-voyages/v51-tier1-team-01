@@ -112,7 +112,6 @@ textarea:not([rows]) {
 * {
     margin: 0;
     padding: 0;
-    /* outline: 1px solid tomato; */
 }
 
 *:focus-visible,
@@ -387,7 +386,6 @@ ul {
 }
 
 input, select {
-/* #from-user input, .form-add input, #form-add-expense input, #form-add-expense select{ */
     padding: 0.5rem;
 	line-height: 1.7;
     border: 1px solid #006091;
@@ -418,19 +416,16 @@ input, select {
 
 #from-user .group-form-buttons{
     display: flex;
-    /* justify-content: space-between; */
 	gap: 1rem;
 }
 
 #from-user button, .form-add button, #form-add-expense button{
     background-color:#5783db;
     color:white;
-    /* border:2px solid #006091; */
 	border: none;
 	outline: 1px solid #006091;
     padding:0.5rem 1rem;
 	flex: 1;
-    /* width: 49%; */
     border-radius: 5px;
     font-weight: bold;
 	transition: all 200ms ease-in-out;
@@ -866,7 +861,6 @@ margin-bottom: 5px;
 /* editing name */
 .section-main-group-header div div{
     display: flex;
-    /* flex-direction: column; */
     align-items: center;
 }
 
@@ -918,9 +912,6 @@ footer {
 
 .form-add {
     display: none;
-    /* place-items: center; */
-    /* padding: 1rem;
-    gap: 1rem; */
 }
 
 .form-add-visible {
@@ -950,18 +941,6 @@ footer {
 .form-add input {
 	margin: .5rem 0 .5rem 0;
 }
-
-/* expenses temporary */
-
-/* .expense-item {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    padding: 1rem;
-    gap: 1rem;
-    border-bottom: 1px dotted lightblue;
-    text-align: center;
-    justify-items: start;
-} */
 
 .delete{
     cursor: pointer;
