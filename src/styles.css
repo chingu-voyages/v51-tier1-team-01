@@ -379,13 +379,6 @@ ul {
 	width: 50%;
 }
 
-
-@media  (max-width: 991px) {
-	#form-add-expense {
-		max-width: 500px;
-	}
-}
-
 input, select {
 /* #from-user input, .form-add input, #form-add-expense input, #form-add-expense select{ */
     padding: 0.5rem;
@@ -509,11 +502,13 @@ input, select {
 		top:50%;
 		right:50%;
 		transform: translate(50%, -50%);
-		width:80%;
+		width: 100%;
+		text-align: center;
 		background-color: #fff;
-		padding: 1rem;
+		padding: 2rem;
 		margin: 0 auto;
 		border: 1px solid #006091;
+		z-index: 1;
 	}
 
 	#from-user, .new-group-header {
@@ -610,6 +605,24 @@ section.main-group-add-expense {
 	margin-left: -15px;
 }
 
+@media(max-width: 768px) {
+	#expense-total-section {
+		flex-direction: column-reverse;
+	}
+
+	#group-total{
+		align-self: flex-end;
+	}
+
+	.add-expense-form-wrapper{
+		width: 100%;
+	}
+
+	#form-add-expense {
+		width: 100%;
+	}
+}
+
 /* main section, group info navigation*/
 
 .section-main-group-info-nav-container {
@@ -632,6 +645,9 @@ section.main-group-add-expense {
 	}
 	.section-main-group-info-nav {
 		width: 55%;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.3rem;
 	}
 
 }
@@ -818,6 +834,29 @@ margin-bottom: 5px;
     background-color: hsl(201.4deg 100% 28.04%);
     border-radius: 50px;
 }
+
+/* apply these styles when expenses updating fixed */
+
+/* .balances-members-header, 
+.balances-expenses-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+	cursor: pointer;
+	color:#5783db;
+	background-color: #ffffff;
+	box-shadow: 2px 1px 3px #8d8d8d;
+	transition: all 200ms ease-in-out;
+}
+
+.balances-expenses-header:hover,
+.balances-expenses-header.show {
+	background-color:#006091;
+    color:white;
+	border: none;
+	
+} */
 
 .balances-expenses-header .date {
 	margin: 0 1rem 0 auto;
