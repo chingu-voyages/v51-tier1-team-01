@@ -1148,9 +1148,9 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     })
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
-    listExpenses.innerHTML = getExpensesHTML(group)
+    listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
 	document.querySelector(".balances-expenses-container")?.classList.add("show")
-	renderSelectedGroupInfo(group, listExpenses)
+	renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
 });
 
 // console.log(selectedGroupIndex);
