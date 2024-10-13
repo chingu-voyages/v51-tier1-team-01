@@ -83,13 +83,15 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
         } else if (event.target.matches(".toggle")) {
 
-            const expenseId = event.target.closest(".expense-item").id
-            const expense = groupsArr[selectedGroupIndex].expenses.find(expense => expense.date === Number(expenseId))
-            const member = expense.members.find(member => Number(member.id) === Number(event.target.id))
-            toggleMemberStatus(expense, member)
-            listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-            document.querySelector(".balances-expenses-container")?.classList.add("show")
-            renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
+			const expenseId = event.target.closest(".expense-item").id
+			const expense = groupsArr[selectedGroupIndex].expenses.find( expense => expense.date === Number(expenseId))
+			const member = expense.members.find(member => Number(member.id) === Number(event.target.id))
+			toggleMemberStatus(expense, member)
+			listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+			// event.target.parentNode.parentNode.parentNode.parentNode.classList.add("show")
+			document.querySelector(".balances-expenses-container")?.classList.add("show")
+			document.querySelector(".balances-expenses-header")?.classList.add("show")
+			renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
 
         } else if (event.target.matches(".group-members")) {
 
@@ -108,7 +110,9 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         {
             event.stopPropagation()
             const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
-            return toggle.classList.contains("show") ? toggle.classList.remove("show") : toggle.classList.add("show");
+            toggle.classList.contains("show") ? toggle.classList.remove("show") : toggle.classList.add("show");
+			toggle.classList.contains("show") ? document.querySelector(".balances-expenses-header")?.classList.add("show") : document.querySelector(".balances-expenses-header")?.classList.remove("show")
+			return
         }
     } else {
         event.stopPropagation()
@@ -780,8 +784,9 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
     listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-    document.querySelector(".balances-expenses-container")?.classList.add("show")
-    renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
+	  document.querySelector(".balances-expenses-container")?.classList.add("show")
+	  document.querySelector(".balances-expenses-header")?.classList.add("show")
+	  renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
 });
 
 // name editing
