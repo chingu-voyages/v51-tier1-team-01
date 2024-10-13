@@ -463,6 +463,10 @@ function renderGroups() {
 
 memberInputs.addEventListener("keyup", suggestedFriend)
 
+document.getElementById("close-suggestion").addEventListener("click", () => {
+	suggestionsContainer.classList.remove("show");
+})
+
 suggestionsList.addEventListener("click", (event)=>{
 	const userInput = event.target.closest("li").textContent
 	const inputsArr = Array.from(document.querySelectorAll(".group-member"))
@@ -471,14 +475,11 @@ suggestionsList.addEventListener("click", (event)=>{
 			input.value = userInput
 			suggestionsContainer.classList.remove("show")
 			input.classList.remove("current-input")
-			// console.log(event.target.closest("li").textContent)
-			// return event.target.closest("li").textContent	
 		}
 	})
 })
 	
 function showSuggestions(list) {
-	if(!list.length) {suggestionsContainer.classList.remove("show")}
 	suggestionsContainer.classList.add("show")
 	suggestionsList.innerHTML = ""
 	list.map(item => {
@@ -494,13 +495,15 @@ function suggestedFriend() {
 		if(document.activeElement === input) {
 			console.log(document.querySelector(".group-member") == input)
 			input.classList.add("current-input")
-			// if(document.querySelector(".group-member") == input) {document.querySelector(".group-member").classList.add("current-input")}  
 			const searchValue = input.value
 			let suggestions = []
 			if(searchValue.length) {
 				suggestions = friendsListStored.filter(friend => friend.name.toLowerCase().includes(searchValue.toLowerCase()))
 			}
-			showSuggestions(suggestions)
+			suggestions.length ? showSuggestions(suggestions) : suggestionsContainer.classList.remove("show")
+			suggestions.forEach(sugg => {
+				if(searchValue.toLowerCase() === sugg.name.toLowerCase()) {suggestionsContainer.classList.remove("show")}
+			})
 		} else {
 			input.classList.remove("current-input")
 		}
@@ -1055,27 +1058,55 @@ function addMembersToExpense(id, group) {
     console.log(group)
     otherMembersContainer.textContent = "";
     const expense = group.expenses.find(expense => expense.date === id);
-    console.log(expense)
-    console.log(group.expense)
-    group.expense
-    group.membersArr.forEach(member => {
-        if (!expense.members.includes(member)) {
+    console.log("this is expense members",expense.members);
+    // console.log(group.membersArr);
+    // console.log("this is group.expense",group.expense) // giving undefined
+    // group.expense
+    group.membersArr.forEach(groupMember => {
+        const isMemberInExpense = expense.members.some(expenseMember => expenseMember.name === groupMember.name)
+        if(!isMemberInExpense){
             const listItem = document.createElement("li");
             const checkbox = document.createElement("input");
             checkbox.setAttribute("type", "checkbox");
-            checkbox.setAttribute("id", member.name);
-            console.log("Member to add")
-            console.log(member.name)
+            checkbox.setAttribute("id", groupMember.name);
+            // console.log("Member to add")
+            // console.log(member.name)
             checkbox.classList.add("add-member-to-expense")
             const label = document.createElement("label");
-            label.setAttribute("for", member.name);
-            label.textContent = member.name;
+            label.setAttribute("for", groupMember.name);
+            label.textContent = groupMember.name;
             listItem.classList.add("form-control", "form-control-checkbox");
             listItem.appendChild(checkbox);
             listItem.appendChild(label);
             otherMembersContainer.appendChild(listItem)
         }
+
+
     })
+    // group.membersArr.forEach(member=>{
+    //     if (expense.members.includes(member)){
+    //         const isMemberInExpense = group.membersArr.some(member => member.name === friend.name);
+    //         console.log("is friend in group",isMemberInExpense);
+    //     }
+    // })
+    // group.membersArr.forEach(member => {
+    //     if (!expense.members.includes(member)) {
+    //         const listItem = document.createElement("li");
+    //         const checkbox = document.createElement("input");
+    //         checkbox.setAttribute("type", "checkbox");
+    //         checkbox.setAttribute("id", member.name);
+    //         // console.log("Member to add")
+    //         // console.log(member.name)
+    //         checkbox.classList.add("add-member-to-expense")
+    //         const label = document.createElement("label");
+    //         label.setAttribute("for", member.name);
+    //         label.textContent = member.name;
+    //         listItem.classList.add("form-control", "form-control-checkbox");
+    //         listItem.appendChild(checkbox);
+    //         listItem.appendChild(label);
+    //         otherMembersContainer.appendChild(listItem)
+    //     }
+    // })
     checkboxes = [...document.querySelectorAll(".add-member-to-expense")]
     addMembersToExpenseDialog.showModal();
 }
@@ -1103,8 +1134,6 @@ function addMembersToExpense(id, group) {
 //     addMembersToExpenseDialog.showModal();
 // }
 
-
-
 const btnCloseAddMembersToExpense = document.getElementById("close-add-members-to-expense")
 
 btnCloseAddMembersToExpense.addEventListener("click", (e) => {
@@ -1120,9 +1149,9 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     })
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
-    listExpenses.innerHTML = getExpensesHTML(group)
-	document.querySelector(".balances-expenses-container")?.classList.add("show")
-	renderSelectedGroupInfo(group, listExpenses)
+    listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
+	  document.querySelector(".balances-expenses-container")?.classList.add("show")
+	  renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
 });
 
 // console.log(selectedGroupIndex);
