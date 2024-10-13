@@ -1055,27 +1055,55 @@ function addMembersToExpense(id, group) {
     console.log(group)
     otherMembersContainer.textContent = "";
     const expense = group.expenses.find(expense => expense.date === id);
-    console.log(expense)
-    console.log(group.expense)
-    group.expense
-    group.membersArr.forEach(member => {
-        if (!expense.members.includes(member)) {
+    console.log("this is expense members",expense.members);
+    // console.log(group.membersArr);
+    // console.log("this is group.expense",group.expense) // giving undefined
+    // group.expense
+    group.membersArr.forEach(groupMember => {
+        const isMemberInExpense = expense.members.some(expenseMember => expenseMember.name === groupMember.name)
+        if(!isMemberInExpense){
             const listItem = document.createElement("li");
             const checkbox = document.createElement("input");
             checkbox.setAttribute("type", "checkbox");
-            checkbox.setAttribute("id", member.name);
-            console.log("Member to add")
-            console.log(member.name)
+            checkbox.setAttribute("id", groupMember.name);
+            // console.log("Member to add")
+            // console.log(member.name)
             checkbox.classList.add("add-member-to-expense")
             const label = document.createElement("label");
-            label.setAttribute("for", member.name);
-            label.textContent = member.name;
+            label.setAttribute("for", groupMember.name);
+            label.textContent = groupMember.name;
             listItem.classList.add("form-control", "form-control-checkbox");
             listItem.appendChild(checkbox);
             listItem.appendChild(label);
             otherMembersContainer.appendChild(listItem)
         }
+
+
     })
+    // group.membersArr.forEach(member=>{
+    //     if (expense.members.includes(member)){
+    //         const isMemberInExpense = group.membersArr.some(member => member.name === friend.name);
+    //         console.log("is friend in group",isMemberInExpense);
+    //     }
+    // })
+    // group.membersArr.forEach(member => {
+    //     if (!expense.members.includes(member)) {
+    //         const listItem = document.createElement("li");
+    //         const checkbox = document.createElement("input");
+    //         checkbox.setAttribute("type", "checkbox");
+    //         checkbox.setAttribute("id", member.name);
+    //         // console.log("Member to add")
+    //         // console.log(member.name)
+    //         checkbox.classList.add("add-member-to-expense")
+    //         const label = document.createElement("label");
+    //         label.setAttribute("for", member.name);
+    //         label.textContent = member.name;
+    //         listItem.classList.add("form-control", "form-control-checkbox");
+    //         listItem.appendChild(checkbox);
+    //         listItem.appendChild(label);
+    //         otherMembersContainer.appendChild(listItem)
+    //     }
+    // })
     checkboxes = [...document.querySelectorAll(".add-member-to-expense")]
     addMembersToExpenseDialog.showModal();
 }
@@ -1102,8 +1130,6 @@ function addMembersToExpense(id, group) {
 //     checkboxes = [...document.querySelectorAll(".add-member-to-expense")]
 //     addMembersToExpenseDialog.showModal();
 // }
-
-
 
 const btnCloseAddMembersToExpense = document.getElementById("close-add-members-to-expense")
 
