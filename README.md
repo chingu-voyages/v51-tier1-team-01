@@ -48,13 +48,14 @@ See live page [HERE](https://chingu-voyages.github.io/v51-tier1-team-01/)
 
 ## Credits
 
+- Icons from [ICONS8](https://icons8.com/icons/set/free-icons)
 - [html2pdf.js](https://ekoopmans.github.io/html2pdf.js/)
 - [A (more) Modern CSS Reset by Andy Bell](https://piccalil.li/blog/a-more-modern-css-reset/)
 
 ## Our Team - TEAM 1
 
-- Product Owner: Tushar Parihar (links...)
-- Scrum Master: Julia Hosking (links...)
+- Product Owner: Tushar Parihar 
+- Scrum Master: Julia Hosking 
 
 - Developer #1: Balaji Mahendra - [GitHub](https://github.com/NameRectified)
 - Developer #2: Warren Bosse - [GitHub](https://github.com/PsYk3s)
