@@ -407,6 +407,7 @@ function renderGroups() {
 //group form autocomplete
 
 memberInputs.addEventListener("keyup", suggestedFriend)
+
 document.getElementById("close-suggestion").addEventListener("click", () => {
     suggestionsContainer.classList.remove("show");
 })
