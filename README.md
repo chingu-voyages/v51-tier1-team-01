@@ -67,7 +67,7 @@ See live page [HERE](https://chingu-voyages.github.io/v51-tier1-team-01/)
 
 ## Our Team - TEAM 1
 
-- Product Owner: Tushar Parihar 
+- Product Owner: Tushar Parihar [LinkedIn](https://www.linkedin.com/in/tushar-parihar-39702a1bb/)
 - Scrum Master: Julia Hosking [GitHub](https://github.com/CyberJulia-H) / [LinkedIn](hTTPS://www.linkedin.com/in/julia-hosking-1381ab226/)
 
 - Developer #1: Balaji Mahendra - [GitHub](https://github.com/NameRectified)
