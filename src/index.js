@@ -462,6 +462,7 @@ function renderGroups() {
 //group form autocomplete
 
 memberInputs.addEventListener("keyup", suggestedFriend)
+
 document.getElementById("close-suggestion").addEventListener("click", () => {
 	suggestionsContainer.classList.remove("show");
 })
@@ -1149,8 +1150,8 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
     listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-	document.querySelector(".balances-expenses-container")?.classList.add("show")
-	renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
+	  document.querySelector(".balances-expenses-container")?.classList.add("show")
+	  renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
 });
 
 // console.log(selectedGroupIndex);
