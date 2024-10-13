@@ -484,6 +484,20 @@ input, select {
 	background-color: #def2fe;
 } 
 
+#close-suggestion {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color:#d3d3d3;
+	font-size: 1rem;
+	padding: 0 .5rem;
+	transition: all .2s linear;
+}
+
+#close-suggestion:hover {
+	color: #8d8d8d;
+}
+
 @media (max-width:992px) {
 
 	.section-aside {
