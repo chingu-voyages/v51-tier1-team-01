@@ -512,7 +512,19 @@ function handleGroupCreation(e) {
     console.log("Handle group creation is called...")
     e.preventDefault();
     let allMembersInput = document.querySelectorAll('.group-member');
-    // add existing friends
+    // // console.log('This is all member inputs',Array.from(allMembersInput));
+    // let inputMemberNames = Array.from(allMembersInput).map(input=>input.value.trim().toLowerCase());
+    // console.log("This is input memebr names",inputMemberNames);
+    if (allMembersInput.length > 0) {
+        let inputMemberNames = Array.from(allMembersInput).map(input => input.value.trim().toLowerCase());
+        // console.log("This is input member names:", inputMemberNames);
+        if (new Set(inputMemberNames).size !== inputMemberNames.length) {
+            alert("Duplicate name");
+            return false;
+        }
+    } else {
+        console.log("allMembersInput is empty");
+    }
     const tempMemberArr = [];
     if (tempExistingFriendsIdsArr.length) {
         tempExistingFriendsIdsArr.forEach(checkboxId => {
