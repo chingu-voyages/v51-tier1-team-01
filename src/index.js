@@ -462,6 +462,9 @@ function renderGroups() {
 //group form autocomplete
 
 memberInputs.addEventListener("keyup", suggestedFriend)
+document.getElementById("close-suggestion").addEventListener("click", () => {
+	suggestionsContainer.classList.remove("show");
+})
 
 suggestionsList.addEventListener("click", (event)=>{
 	const userInput = event.target.closest("li").textContent
@@ -471,14 +474,11 @@ suggestionsList.addEventListener("click", (event)=>{
 			input.value = userInput
 			suggestionsContainer.classList.remove("show")
 			input.classList.remove("current-input")
-			// console.log(event.target.closest("li").textContent)
-			// return event.target.closest("li").textContent	
 		}
 	})
 })
 	
 function showSuggestions(list) {
-	if(!list.length) {suggestionsContainer.classList.remove("show")}
 	suggestionsContainer.classList.add("show")
 	suggestionsList.innerHTML = ""
 	list.map(item => {
@@ -494,13 +494,15 @@ function suggestedFriend() {
 		if(document.activeElement === input) {
 			console.log(document.querySelector(".group-member") == input)
 			input.classList.add("current-input")
-			// if(document.querySelector(".group-member") == input) {document.querySelector(".group-member").classList.add("current-input")}  
 			const searchValue = input.value
 			let suggestions = []
 			if(searchValue.length) {
 				suggestions = friendsListStored.filter(friend => friend.name.toLowerCase().includes(searchValue.toLowerCase()))
 			}
-			showSuggestions(suggestions)
+			suggestions.length ? showSuggestions(suggestions) : suggestionsContainer.classList.remove("show")
+			suggestions.forEach(sugg => {
+				if(searchValue.toLowerCase() === sugg.name.toLowerCase()) {suggestionsContainer.classList.remove("show")}
+			})
 		} else {
 			input.classList.remove("current-input")
 		}
