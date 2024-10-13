@@ -1,42 +1,63 @@
-# voyage-tasks
+# Splitzy - Group Expense Splitter
 
-Your project's `readme` is as important to success as your code. For
-this reason you should put as much care into its creation and maintenance
-as you would any other component of the application.
+A single-page application (SPA) designed to simplify the process of managing and splitting group expenses within groups of friends. This frontend-only project allows users to create expense groups, manage participants, track expenses, and calculate individual balances in real-time.
 
-If you are unsure of what should go into the `readme` let this article,
-written by an experienced Chingu, be your starting point -
-[Keys to a well written README](https://tinyurl.com/yk3wubft).
+This is a [Chingu](https://www.chingu.io/) Tier 1 Team Project. Chingu connects learners of all skill levels and provides them with real world experience, helping accelerate learning through collaboration and project-building.
 
-And before we go there's "one more thing"! Once you decide what to include
-in your `readme` feel free to replace the text we've provided here.
+## Overview
 
-> Own it & Make it your Own!
+Splitzy enables users to split expenses among participants within an expense group. It includes features like adding, updating, and deleting expenses, and it automatically calculates balances for each participant. The application is built using vanilla frontend technologies and is entirely browser-based, leveraging local storage for data persistence.
 
-## Team Documents
+Splitzy aims to provide an intuitive, responsive, and seamless user experience for managing group expenses on multiple devices.
 
-You may find these helpful as you work together to organize your project.
+## Preview
 
-- [Team Project Ideas](./docs/team_project_ideas.md)
-- [Team Decision Log](./docs/team_decision_log.md)
+![](/screenshot.PNG)
 
-Meeting Agenda templates (located in the `/docs` directory in this repo):
+## Live Page
 
-- Meeting - Voyage Kickoff --> ./docs/meeting-voyage_kickoff.docx
-- Meeting - App Vision & Feature Planning --> ./docs/meeting-vision_and_feature_planning.docx
-- Meeting - Sprint Retrospective, Review, and Planning --> ./docs/meeting-sprint_retrospective_review_and_planning.docx
-- Meeting - Sprint Open Topic Session --> ./docs/meeting-sprint_open_topic_session.docx
+See live page [HERE](https://chingu-voyages.github.io/v51-tier1-team-01/)
 
-## Our Team
+## Technologies used
 
-Everyone on your team should add their name along with a link to their GitHub
-& optionally their LinkedIn profiles below. Do this in Sprint #1 to validate
-your repo access and to practice PR'ing with your team _before_ you start
-coding!
+- JavaScript
+- CSS
+- HTML
 
-- Teammate name #1: Aakash Peshavaria [GitHub](https://github.com/aakash-webdev) / [LinkedIn](https://www.linkedin.com/in/aakash-peshavaria/)
-- Teammate name #2: Balaji Mahendra [GitHub](https://github.com/NameRectified)
-- Teammate name #3: Warren Bosse [GitHub](https://github.com/PsYk3s)
-- Teammate name #4: Jelena Jovicic [GitHub](https://github.com/je-jo) / [LinkedIn](https://www.linkedin.com/in/jelena-jovicic/)
-- Teammate name #5: Maryna Pastukhova [GitHub](https://github.com/maryurpast) / [LinkedIn](https://www.linkedin.com/in/maryna-pastukhova-front-end/)
-- Teammate name #6: Julia Hosking [GitHub](https://github.com/CyberJulia-H) / [LinkedIn](hTTPS://www.linkedin.com/in/julia-hosking-1381ab226/)
+## Design
+
+- Warren Bosse - [GitHub](https://github.com/PsYk3s)
+
+## Features
+
+- Group Management - Create groups of friends; Add, remove or edit friends from within a group.
+- Expense Management - Add expenses within a group, manage participants of the expense, edit or delete expenses.
+- Real-Time Calculations - Automatically calculate and display who owes whom within the group; Update calculations in real-time as expenses are added, edited, or deleted.
+- Summary - Provide a summary of the total expenses for the group.
+- Data Persistence - Use local storage to persist expense group data across browser sessions.
+- User Interface and Experience - Intuitive UI/UX elements for easy navigation; Responsive design to ensure functionality on different devices and screen sizes.
+
+## Usage
+
+- Start by creating a group
+- Add, update or remove participants from a group
+- Add expenses - Input expense name and amount and assign it to a payer. The date is automatically captured.
+- Track Balances - View the real-time calculation of who owes whom, along with individual balances.
+- View Summary: Get a complete summary of group expenses and individual contributions.
+- Export Data: Export the group expense data as PDF, Excel, or visual charts.
+
+## Credits
+
+- Icons from [ICONS8](https://icons8.com/icons/set/free-icons)
+- [html2pdf.js](https://ekoopmans.github.io/html2pdf.js/)
+- [A (more) Modern CSS Reset by Andy Bell](https://piccalil.li/blog/a-more-modern-css-reset/)
+
+## Our Team - TEAM 1
+
+- Product Owner: Tushar Parihar 
+- Scrum Master: Julia Hosking [GitHub](https://github.com/CyberJulia-H) / [LinkedIn](hTTPS://www.linkedin.com/in/julia-hosking-1381ab226/)
+
+- Developer #1: Balaji Mahendra - [GitHub](https://github.com/NameRectified)
+- Developer #2: Warren Bosse - [GitHub](https://github.com/PsYk3s)
+- Developer #3: Jelena Jovicic - [GitHub](https://github.com/je-jo) / [LinkedIn](https://www.linkedin.com/in/jelena-jovicic/)
+- Developer #4: Maryna Pastukhova - [GitHub](https://github.com/maryurpast) / [LinkedIn](https://www.linkedin.com/in/maryna-pastukhova-front-end/)
