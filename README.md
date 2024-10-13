@@ -39,4 +39,4 @@ coding!
 - Teammate name #3: Warren Bosse [GitHub](https://github.com/PsYk3s)
 - Teammate name #4: Jelena Jovicic [GitHub](https://github.com/je-jo) / [LinkedIn](https://www.linkedin.com/in/jelena-jovicic/)
 - Teammate name #5: Maryna Pastukhova [GitHub](https://github.com/maryurpast) / [LinkedIn](https://www.linkedin.com/in/maryna-pastukhova-front-end/)
-- Teammate name #6: Julia Hosking [GitHub](Https://https://github.com/CyberJulia-H) / [LinkedIn](hTTPS://www.linkedin.com/in/julia-hosking-1381ab226/)
+- Teammate name #6: Julia Hosking [GitHub](https://github.com/CyberJulia-H) / [LinkedIn](hTTPS://www.linkedin.com/in/julia-hosking-1381ab226/)
