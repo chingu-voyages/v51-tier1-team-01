@@ -26,6 +26,7 @@ const suggestionsList = document.querySelector(".suggestions")
 const suggestionsContainer = document.querySelector(".suggestions-container")
 
 let selectedGroupIndex = -1;
+const selectedExpensesArr = [];
 
 if (groupsArr.length !== 0) {
     hideForm()
@@ -38,7 +39,6 @@ if (groupsArr.length !== 0) {
 //rendering of existing data from localStorage on page load
 renderFriends();
 renderGroups();
-
 
 //events
 //form events
@@ -83,24 +83,19 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
         } else if (event.target.matches(".toggle")) {
 
+			event.stopPropagation()
 			const expenseId = event.target.closest(".expense-item").id
 			const expense = groupsArr[selectedGroupIndex].expenses.find( expense => expense.date === Number(expenseId))
 			const member = expense.members.find(member => Number(member.id) === Number(event.target.id))
-			toggleMemberStatus(expense, member)
+			toggleMemberStatus(expense, member)	
 			listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-			// event.target.parentNode.parentNode.parentNode.parentNode.classList.add("show")
-			document.querySelector(".balances-expenses-container")?.classList.add("show")
-			document.querySelector(".balances-expenses-header")?.classList.add("show")
-			renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
 
         } else if (event.target.matches(".group-members")) {
 
             groupContainer.innerHTML = getGroupMembers(selectedGroup)
             document.querySelector(".main-group-add-expense").classList.remove("show");
             renderSelectedGroupInfo(selectedGroup, groupContainer)
-
         }
-
 
     } else {
         event.stopPropagation()
@@ -109,10 +104,14 @@ document.querySelector("body")?.addEventListener("click", (event) => {
     if (event.target.matches("#show-expenses-members")) {
         {
             event.stopPropagation()
-            const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
-            toggle.classList.contains("show") ? toggle.classList.remove("show") : toggle.classList.add("show");
-			toggle.classList.contains("show") ? document.querySelector(".balances-expenses-header")?.classList.add("show") : document.querySelector(".balances-expenses-header")?.classList.remove("show")
-			return
+			const expenseId = Number(event.target.parentNode.id)
+			if(!selectedExpensesArr.includes(expenseId)) {
+				selectedExpensesArr.push(expenseId)
+			} else {
+				const index = selectedExpensesArr.indexOf(expenseId)
+				selectedExpensesArr.splice(index, 1)
+			}
+			listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
         }
     } else {
         event.stopPropagation()
@@ -123,11 +122,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         const groupId = document.querySelector(".section-main-group-info-nav-container").id
         const group = groupsArr.find(group => group.id === Number(groupId))
         const expenseId = Number(event.target.parentNode.id)
-
         addMembersToExpense(expenseId, group);
-        listExpenses.innerHTML = getExpensesHTML(group)
-        document.querySelector(".balances-expenses-container")?.classList.add("show")
-        renderSelectedGroupInfo(group, listExpenses)
     } else {
         event.stopPropagation()
     }
@@ -164,17 +159,21 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         document.querySelector(".group-members").classList.remove("active")
         document.querySelector(".group-balances").classList.remove("active")
 
-        setTimeout(() => {
-            if (confirm("Do you want to download your group's expense summary?")) {
-                const pdfExp = document.querySelector("#group-info-container");
-                var opt = {
-                    margin: 1,
-                    filename: `${group.groupName}-summary.pdf`,
-                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-                html2pdf(pdfExp, opt);
-            }
-        }, 1000)
+		if(group.expenses.length){
+        	setTimeout(() => {
+        	    if (confirm("Do you want to download your group's expense summary?")) {
+        	        const pdfExp = document.querySelector("#group-info-container");
+        	        var opt = {
+        	            margin: 1,
+        	            filename: `${group.groupName}-summary.pdf`,
+        	            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        	        };
+        	        html2pdf(pdfExp, opt);
+        	    }
+        	}, 1000)
+		} else {
+			alert("This group has no expenses yet")
+		}
 
     } else {
         event.stopPropagation()
@@ -217,6 +216,8 @@ function renderSelectedGroupInfo(group, content) {
         header.innerHTML = "";
         document.querySelector(".section-main-group-info-nav-container").id = id;
         selectedGroupIndex = groupsArr.indexOf(group);
+		//clear expenses if group has no members
+		!group.membersArr.length && (group.expenses = []) 
 
         renderSelectPayerOptions();
 
@@ -230,7 +231,7 @@ function renderSelectedGroupInfo(group, content) {
                         <h2 class="section-main-group-title editable" id=${id}>${titleCase(groupName)} </h2>
                                             <span class="pen"> </span>
                     </div>
-					<p class="text-small">${membersArr.map(member => member.name).join(", ")}</p>
+					<p class="text-small">${membersArr.map(member => member.name).join(", ") || `<span style='display: inline-block; padding-bottom: 1.5rem;'>No members</span>`}</p>
 					${friendsImages.join(" ")}
 					<p class="badge badge-${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalOutstandingCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
@@ -577,7 +578,7 @@ btnsCancelDialog.forEach(btn => {
 const dialogs = document.querySelectorAll("dialog");
 dialogs.forEach(dialog => {
     dialog.addEventListener("click", (e) => {
-        if (e.target.children[0].classList.contains("dialog-body")) {
+        if (e.target.children[0]?.classList.contains("dialog-body")) {
             dialog.close();
         }
     })
@@ -610,8 +611,13 @@ function renderSelectPayerOptions() {
 }
 
 btnAddExpense.addEventListener("click", () => {
-    renderSelectPayerOptions();
-    formAddExpense.classList.toggle("hidden");
+	if(groupsArr[selectedGroupIndex].membersArr.length > 1) {
+		renderSelectPayerOptions();
+    	formAddExpense.classList.toggle("hidden");
+	} else {
+		alert("Add at least 2 members to your group first")
+	}
+    
 });
 
 formAddExpense.addEventListener("submit", (e) => {
@@ -673,14 +679,15 @@ function getExpensesHTML(group) {
     groupTotalBlock.innerText = `Total Cost: $${totalCalc(group)}`
     const { expenses } = group;
     return `${expenses.map(expense => {
+		const showExpenseClass = selectedExpensesArr.includes(expense.date) ? 'show' : ''
         return `
 							<li class= "expense-item" id=${expense.date.toString()}>
-								<div class="balances-expenses-header" id="show-expenses-members">
-									<span>${titleCase(expense.name)}</span>
+								<div class="balances-expenses-header ${showExpenseClass}" id="show-expenses-members">
+									<span class="expense-name">${titleCase(expense.name)}</span>
 									<span class="date">${new Date(expense.date).toLocaleDateString()}</span>
 									<span class="delete">&times</span>
 								</div>
-								<div class="balances-expenses-container">
+								<div class="balances-expenses-container ${showExpenseClass}">
        					 		${expense.members.map(member => {
             const status = memberStatus(member, expense)
             const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
@@ -692,6 +699,8 @@ function getExpensesHTML(group) {
 																				    ${member.name}
 																				    </p>
            							     					                    <span class="pen"></span>
+																				<!--doesn't function correctly for now-->
+																				<!--<span class="delete">&times;</span>-->
 																				</div>
            							                                         <div id="badges">
 																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id=${member.id} class="toggle toggle-${paidClass}"></p>`}
@@ -784,9 +793,6 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
     listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-	  document.querySelector(".balances-expenses-container")?.classList.add("show")
-	  document.querySelector(".balances-expenses-header")?.classList.add("show")
-	  renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
 });
 
 // name editing

@@ -1,8 +1,10 @@
 import { memberStatus, totalCalc } from "./calcs.js";
 
 export const getGroupSummary = (group) => {
-	const { expenses } = group;
 
+	const { expenses } = group;
+	
+	if(expenses.length){
 	return `<div id="summary-overview-section">
 
 	${expenses.map(expense => {
@@ -36,5 +38,12 @@ export const getGroupSummary = (group) => {
 
 	<div id="Total">Total cost: $${totalCalc(group)}</div>
 	</div>`
+} else {
+	return `
+		<div id="expense-summary-title">
+			<p>Group has no expenses yet</p>
+		</div>
+	`
+}
 }
 
