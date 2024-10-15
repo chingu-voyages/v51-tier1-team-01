@@ -497,8 +497,8 @@ input, select {
 		top:50%;
 		right:50%;
 		transform: translate(50%, -50%);
-		width: 100%;
-		text-align: center;
+		width: 100vw;
+		height: 100vh;
 		background-color: #fff;
 		padding: 2rem;
 		margin: 0 auto;
@@ -508,10 +508,8 @@ input, select {
 
 	#from-user, .new-group-header {
 	max-width: 100%;
-	}
-
-	#from-user, .new-group-header {
-	max-width: 100%;
+	margin: 0 auto;
+	
 	}
 
 	#form-add-expense select {
@@ -603,6 +601,7 @@ section.main-group-add-expense {
 @media(max-width: 768px) {
 	#expense-total-section {
 		flex-direction: column-reverse;
+		padding-right: 0;
 	}
 
 	#group-total{
@@ -825,18 +824,6 @@ margin-bottom: 5px;
     display: flex;
     justify-content: space-between;
     padding: 0.5rem 1.5rem;
-    color: hsl(0deg 0% 99.61%);
-    background-color: hsl(201.4deg 100% 28.04%);
-    border-radius: 50px;
-}
-
-/* apply these styles when expenses updating fixed */
-
-/* .balances-members-header, 
-.balances-expenses-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 1.5rem;
     border-radius: 50px;
 	cursor: pointer;
 	color:#5783db;
@@ -851,7 +838,7 @@ margin-bottom: 5px;
     color:white;
 	border: none;
 	
-} */
+}
 
 .balances-expenses-header .date {
 	margin: 0 1rem 0 auto;

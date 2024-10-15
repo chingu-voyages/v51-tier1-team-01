@@ -26,6 +26,7 @@ const suggestionsList = document.querySelector(".suggestions")
 const suggestionsContainer = document.querySelector(".suggestions-container")
 
 let selectedGroupIndex = -1;
+const selectedExpensesArr = [];
 
 if (groupsArr.length !== 0) {
     hideForm()
@@ -83,22 +84,18 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 
         } else if (event.target.matches(".toggle")) {
 
+			event.stopPropagation()
 			const expenseId = event.target.closest(".expense-item").id
 			const expense = groupsArr[selectedGroupIndex].expenses.find( expense => expense.date === Number(expenseId))
 			const member = expense.members.find(member => Number(member.id) === Number(event.target.id))
-			toggleMemberStatus(expense, member)
+			toggleMemberStatus(expense, member)	
 			listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-			// event.target.parentNode.parentNode.parentNode.parentNode.classList.add("show")
-			document.querySelector(".balances-expenses-container")?.classList.add("show")
-			document.querySelector(".balances-expenses-header")?.classList.add("show")
-			renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
-
+			
         } else if (event.target.matches(".group-members")) {
 
             groupContainer.innerHTML = getGroupMembers(selectedGroup)
             document.querySelector(".main-group-add-expense").classList.remove("show");
             renderSelectedGroupInfo(selectedGroup, groupContainer)
-
         }
 
 
@@ -106,13 +103,21 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         event.stopPropagation()
     }
 
+	// function showExpenseInfo(element) {
+
+	// }
+
     if (event.target.matches("#show-expenses-members")) {
         {
             event.stopPropagation()
-            const toggle = event.target.parentNode.querySelector(".balances-expenses-container")
-            toggle.classList.contains("show") ? toggle.classList.remove("show") : toggle.classList.add("show");
-			toggle.classList.contains("show") ? document.querySelector(".balances-expenses-header")?.classList.add("show") : document.querySelector(".balances-expenses-header")?.classList.remove("show")
-			return
+			const expenseId = Number(event.target.parentNode.id)
+			if(!selectedExpensesArr.includes(expenseId)) {
+				selectedExpensesArr.push(expenseId)
+			} else {
+				const index = selectedExpensesArr.indexOf(expenseId)
+				selectedExpensesArr.splice(index, 1)
+			}
+			listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
         }
     } else {
         event.stopPropagation()
@@ -123,11 +128,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         const groupId = document.querySelector(".section-main-group-info-nav-container").id
         const group = groupsArr.find(group => group.id === Number(groupId))
         const expenseId = Number(event.target.parentNode.id)
-
         addMembersToExpense(expenseId, group);
-        listExpenses.innerHTML = getExpensesHTML(group)
-        document.querySelector(".balances-expenses-container")?.classList.add("show")
-        renderSelectedGroupInfo(group, listExpenses)
     } else {
         event.stopPropagation()
     }
@@ -673,14 +674,15 @@ function getExpensesHTML(group) {
     groupTotalBlock.innerText = `Total Cost: $${totalCalc(group)}`
     const { expenses } = group;
     return `${expenses.map(expense => {
+		const showExpenseClass = selectedExpensesArr.includes(expense.date) ? 'show' : ''
         return `
 							<li class= "expense-item" id=${expense.date.toString()}>
-								<div class="balances-expenses-header" id="show-expenses-members">
+								<div class="balances-expenses-header ${showExpenseClass}" id="show-expenses-members">
 									<span>${titleCase(expense.name)}</span>
 									<span class="date">${new Date(expense.date).toLocaleDateString()}</span>
 									<span class="delete">&times</span>
 								</div>
-								<div class="balances-expenses-container">
+								<div class="balances-expenses-container ${showExpenseClass}">
        					 		${expense.members.map(member => {
             const status = memberStatus(member, expense)
             const paidClass = status == "Paid the bill" ? 'payer' : status == "Paid" ? 'paid' : 'unpaid'
@@ -784,9 +786,6 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
     listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-	  document.querySelector(".balances-expenses-container")?.classList.add("show")
-	  document.querySelector(".balances-expenses-header")?.classList.add("show")
-	  renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
 });
 
 // name editing
