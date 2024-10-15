@@ -40,7 +40,6 @@ if (groupsArr.length !== 0) {
 renderFriends();
 renderGroups();
 
-
 //events
 //form events
 groupForm.addEventListener('submit', handleGroupCreation);
@@ -90,7 +89,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 			const member = expense.members.find(member => Number(member.id) === Number(event.target.id))
 			toggleMemberStatus(expense, member)	
 			listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-			
+
         } else if (event.target.matches(".group-members")) {
 
             groupContainer.innerHTML = getGroupMembers(selectedGroup)
@@ -98,14 +97,9 @@ document.querySelector("body")?.addEventListener("click", (event) => {
             renderSelectedGroupInfo(selectedGroup, groupContainer)
         }
 
-
     } else {
         event.stopPropagation()
     }
-
-	// function showExpenseInfo(element) {
-
-	// }
 
     if (event.target.matches("#show-expenses-members")) {
         {
@@ -165,17 +159,21 @@ document.querySelector("body")?.addEventListener("click", (event) => {
         document.querySelector(".group-members").classList.remove("active")
         document.querySelector(".group-balances").classList.remove("active")
 
-        setTimeout(() => {
-            if (confirm("Do you want to download your group's expense summary?")) {
-                const pdfExp = document.querySelector("#group-info-container");
-                var opt = {
-                    margin: 1,
-                    filename: `${group.groupName}-summary.pdf`,
-                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-                html2pdf(pdfExp, opt);
-            }
-        }, 1000)
+		if(group.expenses.length){
+        	setTimeout(() => {
+        	    if (confirm("Do you want to download your group's expense summary?")) {
+        	        const pdfExp = document.querySelector("#group-info-container");
+        	        var opt = {
+        	            margin: 1,
+        	            filename: `${group.groupName}-summary.pdf`,
+        	            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        	        };
+        	        html2pdf(pdfExp, opt);
+        	    }
+        	}, 1000)
+		} else {
+			alert("This group has no expenses yet")
+		}
 
     } else {
         event.stopPropagation()
@@ -578,7 +576,7 @@ btnsCancelDialog.forEach(btn => {
 const dialogs = document.querySelectorAll("dialog");
 dialogs.forEach(dialog => {
     dialog.addEventListener("click", (e) => {
-        if (e.target.children[0].classList.contains("dialog-body")) {
+        if (e.target.children[0]?.classList.contains("dialog-body")) {
             dialog.close();
         }
     })
@@ -678,7 +676,7 @@ function getExpensesHTML(group) {
         return `
 							<li class= "expense-item" id=${expense.date.toString()}>
 								<div class="balances-expenses-header ${showExpenseClass}" id="show-expenses-members">
-									<span>${titleCase(expense.name)}</span>
+									<span class="expense-name">${titleCase(expense.name)}</span>
 									<span class="date">${new Date(expense.date).toLocaleDateString()}</span>
 									<span class="delete">&times</span>
 								</div>
@@ -694,6 +692,8 @@ function getExpensesHTML(group) {
 																				    ${member.name}
 																				    </p>
            							     					                    <span class="pen"></span>
+																				<!--doesn't function correctly for now-->
+																				<!--<span class="delete">&times;</span>-->
 																				</div>
            							                                         <div id="badges">
 																					<p class="badge badge-${paidClass}">${status}</p> ${status == "Paid the bill" ? "" : `<p id=${member.id} class="toggle toggle-${paidClass}"></p>`}
