@@ -2,7 +2,6 @@ export const totalOutstandingCalc = (group) => {
     let total = 0
     group.expenses.forEach(expense => { 
         let split = (expense.cost / expense.members.length)
-        // console.log(split)
         total += split * (expense.members.length - 1 - expense.paid.length)
     });
     return total.toFixed(2)

@@ -6,11 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Splitter App Tier 1</title>
     <link rel="stylesheet" href="src/styles.css">
+	<link rel="icon" type="image/x-icon" href="src/img/Splitzy-icon.png">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-	<!-- <script src="https://unpkg.com/pdf-lib@1.4.0"></script>
-    <script src="https://unpkg.com/downloadjs@1.4.7"></script> -->
 </head>
 
 <body>
@@ -51,7 +48,7 @@
                 <div class="new-group-header">
                     <h2>Create New Group</h2>
                     <button type="button" id="close-group-form" title="Close form"
-                        aria-label="Close group creation form">x</button>
+                        aria-label="Close group creation form">&times;</button>
                 </div>
                 <div id="from-user">
                     <input id="group-name" type="text" placeholder="Group Name">
@@ -61,7 +58,7 @@
 						<div class="suggestions-container">
 							<ul class="suggestions">
 							</ul>
-							<span id="close-suggestion">x</span>
+							<span id="close-suggestion">&times;</span>
 						</div>
                     </div>
                     <div class="group-form-buttons">
@@ -73,17 +70,7 @@
                 <p id="group-error">Please enter a valid group name with at least two members</p>
             </form>
         </section>
-        <dialog id="dialog-add-friend">
-            <div class="dialog-body">
-                <form>
-                    <p>Add existing friends to group</p>
-                    <ul id="existing-friends-checkboxes">
-                    </ul>
-                    <button class="btn-cancel-dialog">Cancel</button>
-                    <button id="close-add-existing-friends-to-group">Add friends</button>
-                </form>
-            </div>
-        </dialog>
+        
         <section class="section-main-group hidden" id="selected-group">
 			<div class="section-main-group-header"></div>
 			<div class="section-main-group-info" >

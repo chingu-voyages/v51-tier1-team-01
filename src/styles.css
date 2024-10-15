@@ -522,6 +522,44 @@ input, select {
 
 }
 
+/* dialog styles */
+
+dialog {
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 4px;
+    transition: ease all 0.2s;
+}
+
+.dialog-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin: auto;
+    padding: 1.5rem;
+}
+
+.dialog-body>form {
+	display: grid;
+	gap: 0.8rem;
+}
+
+dialog::backdrop {
+    background: hsla(0, 0%, 100%, 0.8);
+}
+
+.form-control {
+	display: grid;
+	margin-bottom: 0.5rem;
+	gap: 0.25rem;
+	justify-items: start;
+}
+
+.form-control-checkbox {
+	grid-template-columns: auto 1fr;
+}
+
+
 /* main section, group info*/
 
 #selected-group.hidden {
@@ -534,9 +572,25 @@ input, select {
 	gap: 50px;
 	background-color: #fff;
 	border: 1px solid #d3d3d3;
-	border-top-left-radius: 20% 100%;
-	border-bottom-left-radius: 20% 100%;
+	border-top-left-radius: 22% 100%;
+	border-bottom-left-radius: 22% 100%;
 	padding: 2rem;
+}
+
+.section-main-group-header img {
+	order:-1;
+}
+
+.section-main-group-title {
+	font-size: 1.5rem;
+	text-transform: none;
+	margin-bottom: 5px;
+}
+
+section.main-group-add-expense {
+    padding: 10px 0;
+    border-bottom: 1px solid #d3d3d3;
+    border-top: 1px solid #d3d3d3;
 }
 
 @media (max-width: 768px) {
@@ -554,25 +608,14 @@ input, select {
 
 @media (max-width: 540px) {
 	.section-main-group-header {
-	border-top-left-radius: 37% 100%;
-	border-bottom-left-radius: 37% 100%;
+	border-top-left-radius: 35% 100%;
+	border-bottom-left-radius: 35% 100%;
+	padding: 1rem 1rem 1rem 2rem;
 	}
-}
 
-.section-main-group-header img {
-	order:-1;
-}
-
-.section-main-group-title {
-	font-size: 1.5rem;
-	text-transform: none;
-	margin-bottom: 5px;
-}
-
-section.main-group-add-expense {
-    padding: 10px 0;
-    border-bottom: 1px solid #d3d3d3;
-    border-top: 1px solid #d3d3d3;
+	.section-main-group-title {
+		font-size: 1.25rem;
+	}
 }
 
 #group-total {
@@ -822,7 +865,7 @@ margin-bottom: 5px;
 .balances-members-header, 
 .balances-expenses-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 0.5rem 1.5rem;
     border-radius: 50px;
 	cursor: pointer;
@@ -840,8 +883,17 @@ margin-bottom: 5px;
 	
 }
 
-.balances-expenses-header .date {
-	margin: 0 1rem 0 auto;
+.balances-expenses-header .expense-name {
+	margin-right: auto;
+}
+
+.balances-expenses-header .delete {
+	padding-left: 1rem;
+	color: #d3d3d3;
+}
+
+.balances-expenses-header:hover .delete{
+	color: #fff;
 }
 
 .balances-card-member {
@@ -853,6 +905,7 @@ margin-bottom: 5px;
 	border-top-right-radius:20% 100%;
 	border-bottom-right-radius: 20% 100%;
 	padding: 1rem 1rem 1rem 1.5rem;
+	position: relative;
 }
 
 .balances-card-member-name {
@@ -893,6 +946,10 @@ margin-bottom: 5px;
 .balances-card-member div div {
     display: flex;
     align-items: center;
+}
+
+.balances-card-member .editable input {
+	outline: none;
 }
 
 .pen {
@@ -941,24 +998,28 @@ footer {
 }
 
 .form-add-visible {
-    display: grid;
+    display: flex;
+	flex-direction: column;
 }
+
+#friend-first-name{
+	width: 100%;}
 
 @media screen and (max-width: 992px) {
 
 	.form-add-visible {
-		display: flex;
+		flex-direction: row;
 		max-width: 500px;
-		gap: .5rem;
+		gap: 0.5rem;
 		margin-top: 0.5rem;
 	}
-
+	
 	.form-control {
+		margin-bottom: 0;
 		width: 70%;
 	}
 
 	#friend-first-name{
-		width: 100%;
 		margin: 0;
 	}
 
@@ -968,52 +1029,39 @@ footer {
 	margin: .5rem 0 .5rem 0;
 }
 
-.delete{
-    cursor: pointer;
-    color: red;
-    display: none;
-
-}
-#group-list li:hover .delete,#friends-list li:hover .delete,#list-expenses li:hover .delete,
-.balances-card-member div div:hover .delete{
-    display: inline-block;
+#group-list .delete, #friends-list li .delete {
+	display: none;
 }
 
-/* dialog styles */
-
-dialog {
-    margin: auto;
-    border: 1px solid black;
-    border-radius: 4px;
-    transition: ease all 0.2s;
+#group-list li:hover .delete, #friends-list li:hover .delete {
+	display: inline-block;
+	color: #d3d3d3;
+	cursor: pointer;
 }
 
-.dialog-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    margin: auto;
-    padding: 1.5rem;
+#group-list li:hover .delete:hover, #friends-list li:hover .delete:hover {
+	color: #8d8d8d;
+	cursor: pointer;
 }
 
-.dialog-body>form {
-	display: grid;
-	gap: 0.8rem;
+
+.balances-card-member .delete{
+ position: absolute;
+ top: 0;
+ left: 0;
+ transform: translate(20%, -20%);
+ color: #d3d3d3;
+ font-size: 1.25rem;
+ display: none;
+ cursor: pointer;
 }
 
-dialog::backdrop {
-    background: hsla(0, 0%, 100%, 0.8);
+.balances-card-member:hover .delete{
+	display: block;
 }
 
-.form-control {
-	display: grid;
-	margin-bottom: 0.5rem;
-	gap: 0.25rem;
-	justify-items: start;
-}
-
-.form-control-checkbox {
-	grid-template-columns: auto 1fr;
+.balances-card-member:hover .delete:hover{
+	color: #8d8d8d;
 }
 
 /* summary */
@@ -1023,7 +1071,7 @@ dialog::backdrop {
     width: 100%;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 10px 0 0;
+    padding: 15px 10px 0 0;
 }
 
 #expense-summary-title {
