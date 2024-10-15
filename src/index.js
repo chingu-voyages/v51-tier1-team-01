@@ -216,6 +216,8 @@ function renderSelectedGroupInfo(group, content) {
         header.innerHTML = "";
         document.querySelector(".section-main-group-info-nav-container").id = id;
         selectedGroupIndex = groupsArr.indexOf(group);
+		//clear expenses if group has no members
+		!group.membersArr.length && (group.expenses = []) 
 
         renderSelectPayerOptions();
 
@@ -229,7 +231,7 @@ function renderSelectedGroupInfo(group, content) {
                         <h2 class="section-main-group-title editable" id=${id}>${titleCase(groupName)} </h2>
                                             <span class="pen"> </span>
                     </div>
-					<p class="text-small">${membersArr.map(member => member.name).join(", ")}</p>
+					<p class="text-small">${membersArr.map(member => member.name).join(", ") || `<span style='display: inline-block; padding-bottom: 1.5rem;'>No members</span>`}</p>
 					${friendsImages.join(" ")}
 					<p class="badge badge-${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? 'unpaid' : 'paid'}">${totalOutstandingCalc(groupsArr[selectedGroupIndex]) > 0 ? '$' + totalOutstandingCalc(groupsArr[selectedGroupIndex]) + ' outstanding' : "Nothing owed"}</p>
 			    </div>
@@ -609,8 +611,13 @@ function renderSelectPayerOptions() {
 }
 
 btnAddExpense.addEventListener("click", () => {
-    renderSelectPayerOptions();
-    formAddExpense.classList.toggle("hidden");
+	if(groupsArr[selectedGroupIndex].membersArr.length > 1) {
+		renderSelectPayerOptions();
+    	formAddExpense.classList.toggle("hidden");
+	} else {
+		alert("Add at least 2 members to your group first")
+	}
+    
 });
 
 formAddExpense.addEventListener("submit", (e) => {
