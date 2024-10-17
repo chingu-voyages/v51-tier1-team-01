@@ -231,6 +231,10 @@ h2 {
     background-color: #f4f4f4;
 }
 
+html {
+	overflow-y: scroll; 
+  }
+
 /* list */
 
 ul {
@@ -676,19 +680,6 @@ section.main-group-add-expense {
 	width: 70%;
 }
 
-@media (max-width: 532px) {
-	.section-main-group-info-nav-container {
-		padding: .5rem;
-	}
-	.section-main-group-info-nav {
-		width: 55%;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.3rem;
-	}
-
-}
-
 .section-main-group-info-nav>li {
 	position: relative;
 }
@@ -716,12 +707,36 @@ section.main-group-add-expense {
 	transition: all 200ms ease-in-out;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 768px) {
+	.section-main-group-info-nav-container {
+		padding-right: 0;
+	}
+
+}
+
+@media (max-width: 520px) {
+	.section-main-group-info-nav-container {
+		flex-wrap: wrap;	
+		justify-content: end;
+	}
+
+	.section-main-group-info-nav {
+		width: 100%;
+		order:2;
+		justify-content: end;
+	}
+
+	.section-main-group-info-nav li:nth-child(2) {
+		margin: 0 auto;
+	}
+
+	#download-btn {
+		margin-bottom: 1rem;
+		order: 1;
+	}
+
 	.section-main-group-info-nav>li:before {
 		left: -20px;
-	}
-	#download-btn {
-		padding: 5px 10px 5px 30px;
 	}
 }
 
@@ -1098,4 +1113,51 @@ footer {
     padding-right: 10px;
 }
 
+/*open/close friends list*/
 
+.section-aside-friends .list,
+.section-aside-groups .list{
+	position: relative;
+	display: inline-block;
+}
+
+
+.section-aside-friends .list::after,
+.section-aside-groups .list::after {
+	content: "";
+	position: absolute;
+	display: block;
+	right:-25%;
+	top:20%;
+	
+	border-top: 7px solid transparent;
+	border-bottom: 7px solid transparent;
+	border-left: 10px solid #d3d3d3;
+}
+
+.section-aside-friends .list:hover::after,
+.section-aside-groups .list:hover::after {
+	cursor: pointer;
+	border-left: 10px solid #8d8d8d;
+}
+
+.section-aside-friends .list.open::after,
+.section-aside-groups .list.open::after {
+	transform:skewX(-180deg);
+	transform-origin: bottom right;
+	border-top: 10px solid #d3d3d3;
+	border-right: 7px solid transparent;
+	border-left: 7px solid transparent;
+}
+
+.section-aside-friends .list.open:hover::after,
+.section-aside-groups .list.open:hover::after {
+	cursor: pointer;
+	border-top: 10px solid #8d8d8d;
+}
+
+#add-btn,
+#sidebar-add-group {
+	display: block;
+	margin-top: .5rem;
+}
