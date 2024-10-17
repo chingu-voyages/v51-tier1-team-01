@@ -15,12 +15,18 @@ const groupsArr = JSON.parse(localStorage.getItem('groups')) || [];
 const friendsListStored = JSON.parse(localStorage.getItem('friends')) || [];
 let groupList = document.getElementById('group-list');
 let friendsList = document.getElementById('friends-list');
+const openFriends = document.getElementById("open-friends");
+const openGroups = document.getElementById("open-groups");
 let memberInputs = document.getElementById('member-inputs');
 const summary = document.getElementById("summary")
 
 const btnAddExpense = document.getElementById("btn-add-expense");
 const formAddExpense = document.getElementById("form-add-expense");
 const listExpenses = document.getElementById("list-expenses");
+
+const showAddFriendForm = document.getElementById("add-btn");
+const formAddFriend = document.getElementById("form-add-friend");
+const inputFriendName = document.getElementById('friend-first-name');
 
 const suggestionsList = document.querySelector(".suggestions")
 const suggestionsContainer = document.querySelector(".suggestions-container")
@@ -538,9 +544,6 @@ function handleGroupCreation(e) {
 // overall friends management
 
 // friends management
-const showAddFriendForm = document.getElementById("add-btn");
-const formAddFriend = document.getElementById("form-add-friend");
-const inputFriendName = document.getElementById('friend-first-name');
 
 showAddFriendForm.addEventListener("click", () => { 
     formAddFriend.classList.toggle("form-add-visible");
@@ -1106,4 +1109,22 @@ function addMembersToGroup(index) {
     });
     friendCheckBoxes = [...document.querySelectorAll(".add-friend-to-group")];
     addMembersToGroupDialog.showModal();
+}
+
+//open/close friends list
+
+openFriends.addEventListener("click", ToggleList)
+openGroups.addEventListener("click", ToggleList)
+
+function ToggleList(e) {
+	console.log(e.target.id)
+	e.preventDefault()
+	const targetId = e.target.id
+	if(targetId === "open-groups") {
+		openGroups.classList.toggle("open")
+		openGroups.classList.contains("open") ? groupList.style.display = "grid" : groupList.style.display = "none"
+	} else if(targetId === "open-friends"){
+		openFriends.classList.toggle("open")
+		openFriends.classList.contains("open") ? friendsList.style.display = "grid" : friendsList.style.display = "none"
+	}
 }
