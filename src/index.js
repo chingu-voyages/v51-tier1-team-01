@@ -50,7 +50,10 @@ renderGroups();
 //form events
 groupForm.addEventListener('submit', handleGroupCreation);
 closeGroupForm.addEventListener("click", hideForm)
-sidebarAddGroup.addEventListener('click', showForm);
+sidebarAddGroup.addEventListener('click', (e) => {
+	e.preventDefault()
+	groupForm.style.display === "block" ? hideForm() : showForm()
+});
 groupCreateBtn.addEventListener('click', handleGroupCreation);
 addAnotherMember.addEventListener('click', addMemberInputField);
 // for not overwriting groups present in local storage
@@ -275,12 +278,12 @@ function titleCase(text) {
 
 }
 
-function addImg(avatar) {
-    const groupImg = document.createElement("img")
-    groupImg.setAttribute("src", avatar)
-    groupImg.classList.add("group-icon")
-    return groupImg;
-}
+// function addImg(avatar) {
+//     const groupImg = document.createElement("img")
+//     groupImg.setAttribute("src", avatar)
+//     groupImg.classList.add("group-icon")
+//     return groupImg;
+// }
 
 //manage group form
 

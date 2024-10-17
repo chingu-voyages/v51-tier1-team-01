@@ -1128,8 +1128,8 @@ footer {
 	position: absolute;
 	display: block;
 	right:-25%;
-	top:20%;
-	
+	top:50%;
+	transform: translateY(-50%);
 	border-top: 7px solid transparent;
 	border-bottom: 7px solid transparent;
 	border-left: 10px solid #d3d3d3;
