@@ -1128,8 +1128,8 @@ footer {
 	position: absolute;
 	display: block;
 	right:-25%;
-	top:50%;
-	transform: translateY(-50%);
+	bottom: 50%;
+	transform: translateY(50%);
 	border-top: 7px solid transparent;
 	border-bottom: 7px solid transparent;
 	border-left: 10px solid #d3d3d3;
@@ -1143,8 +1143,6 @@ footer {
 
 .section-aside-friends .list.open::after,
 .section-aside-groups .list.open::after {
-	transform:skewX(-180deg);
-	transform-origin: bottom right;
 	border-top: 10px solid #d3d3d3;
 	border-right: 7px solid transparent;
 	border-left: 7px solid transparent;
