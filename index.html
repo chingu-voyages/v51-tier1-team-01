@@ -39,7 +39,7 @@
             <button id="add-btn" class="add-btn"><span>+</span>Add friend</button>
             <form id="form-add-friend" action="" class="form-add">
                 <div class="form-control">
-                    <input id="friend-first-name" type="text" placeholder="Friend's Name" required>
+                    <input id="friend-first-name" type="text" placeholder="Friend's Name" maxlength="30" required>
                 </div>
                 <button>Submit</button>
             </form>
@@ -54,10 +54,10 @@
                         aria-label="Close group creation form">&times;</button>
                 </div>
                 <div id="from-user">
-                    <input id="group-name" type="text" placeholder="Group Name">
+                    <input id="group-name" type="text" placeholder="Group Name" maxlength="30">
                     <div id="member-inputs">
-                        <input type="text" id="member-one" class="default group-member" placeholder="Member 1">
-                        <input type="text" id="member-two" class="default group-member" placeholder="Member 2">
+                        <input type="text" id="member-one" class="default group-member" placeholder="Member 1" maxlength="30">
+                        <input type="text" id="member-two" class="default group-member" placeholder="Member 2" maxlength="30">
 						<div class="suggestions-container">
 							<ul class="suggestions">
 							</ul>
@@ -98,7 +98,7 @@
                     <ul id="other-friends-container">
                     </ul>
                     <button id="add-someother-person">Add someone else</button>
-                    <input type="text" id="new-member-input" placeholder="Enter new friend's name" style="display: none;">
+                    <input type="text" id="new-member-input" placeholder="Enter new friend's name" maxlength="30" style="display: none;">
                     <button id="add-member-btn-inside-dialog" style="display: none;">Add member</button>
                     <button id="close-add-members-to-group">Save</button>
                 </form>
@@ -109,8 +109,8 @@
 				<div class="add-expense-form-wrapper">
 					<button id="btn-add-expense" class="add-btn"><span>+</span>Add new expense</button>
 					<form action="" id="form-add-expense" class="hidden">
-                	<input type="text" id="input-expense" placeholder="Name of expense" required>
-                	<input type="number" min='1' id="input-amount" placeholder="Amount" required>
+                	<input type="text" id="input-expense" placeholder="Name of expense" maxlength="30" required>
+                	<input type="number" min="1" id="input-amount" placeholder="Amount" required>
                 	<label for="select-payer">Select payer: </label>
                 	<select name="payer" id="select-payer"></select>
                 	<button>Submit expense</button>
@@ -135,7 +135,7 @@
         <dialog id="edit-expense">
                 <div class="dialog-body">
                     <form id="form-edit">
-                        <label for="edit-name" class="form-control">Name: <input type="text" id="edit-name"></label>
+                        <label for="edit-name" class="form-control">Name: <input type="text" id="edit-name" maxlength="30"></label>
                         <label for="edit-cost" class="form-control">Amount: <input type="number" id="edit-cost"></label>
                         <div>
                             <button class="btn-cancel-dialog">Cancel</button>
