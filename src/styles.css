@@ -877,7 +877,7 @@ margin-bottom: 5px;
     margin-bottom: 7px;
 }
 
-.balances-members-header, 
+/* .balances-members-header,  */
 .balances-expenses-header {
     display: flex;
     justify-content: flex-end;
@@ -898,8 +898,8 @@ margin-bottom: 5px;
 	
 }
 
-.balances-expenses-header .expense-name {
-	margin-right: auto;
+.balances-expenses-header .date {
+	margin-left: auto;
 }
 
 .balances-expenses-header .delete {
@@ -965,6 +965,8 @@ margin-bottom: 5px;
 
 .balances-card-member .editable input {
 	outline: none;
+	width: 100%;
+	padding: 0 5px;
 }
 
 .pen {
@@ -1115,6 +1117,10 @@ footer {
 
 /*open/close friends list*/
 
+#friends-list {
+	display: none;
+}
+
 .section-aside-friends .list,
 .section-aside-groups .list{
 	position: relative;
@@ -1132,18 +1138,19 @@ footer {
 	transform: translateY(50%);
 	border-top: 7px solid transparent;
 	border-bottom: 7px solid transparent;
-	border-left: 10px solid #d3d3d3;
+	border-left: 7px solid #d3d3d3;
+	transition: border 50ms ease-in-out;
 }
 
 .section-aside-friends .list:hover::after,
 .section-aside-groups .list:hover::after {
 	cursor: pointer;
-	border-left: 10px solid #8d8d8d;
+	border-left: 8px solid #8d8d8d;
 }
 
 .section-aside-friends .list.open::after,
 .section-aside-groups .list.open::after {
-	border-top: 10px solid #d3d3d3;
+	border-top: 7px solid #d3d3d3;
 	border-right: 7px solid transparent;
 	border-left: 7px solid transparent;
 }
@@ -1151,7 +1158,7 @@ footer {
 .section-aside-friends .list.open:hover::after,
 .section-aside-groups .list.open:hover::after {
 	cursor: pointer;
-	border-top: 10px solid #8d8d8d;
+	border-top: 8px solid #8d8d8d;
 }
 
 #add-btn,
