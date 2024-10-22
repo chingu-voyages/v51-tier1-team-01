@@ -97,6 +97,7 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 			const expense = groupsArr[selectedGroupIndex].expenses.find( expense => expense.date === Number(expenseId))
 			const member = expense.members.find(member => Number(member.id) === Number(event.target.id))
 			toggleMemberStatus(expense, member)	
+			document.querySelector(".group-balances").classList.add("active")
 			listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
 
         } else if (event.target.matches(".group-members")) {
@@ -111,7 +112,6 @@ document.querySelector("body")?.addEventListener("click", (event) => {
     }
 
     if (event.target.matches("#show-expenses-members")) {
-        {
             event.stopPropagation()
 			const expenseId = Number(event.target.parentNode.id)
 			if(!selectedExpensesArr.includes(expenseId)) {
@@ -121,7 +121,6 @@ document.querySelector("body")?.addEventListener("click", (event) => {
 				selectedExpensesArr.splice(index, 1)
 			}
 			listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
-        }
     } else {
         event.stopPropagation()
     }
@@ -689,7 +688,7 @@ function getExpensesHTML(group) {
         return `
 							<li class= "expense-item" id=${expense.date.toString()}>
 								<div class="balances-expenses-header ${showExpenseClass}" id="show-expenses-members">
-									<span class="expense-name">${titleCase(expense.name)}</span>
+									${titleCase(expense.name)}
 									<span class="date">${new Date(expense.date).toLocaleDateString()}</span>
 									<span class="delete">&times</span>
 								</div>
