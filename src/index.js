@@ -197,10 +197,10 @@ function getGroupMembers(selectedGroup) {
 							<div>
 								<div>
 								    <p class="balances-card-member-name editable" id=${member.id}>
-								    ${member.name}
+								    ${titleCase(member.name)}
 								    </p>
                                     <span class="pen"></span>
-                                    <span class="delete">×</span>
+                                    <span class="delete">&times;</span>
 								</div>
 								<p class="badge badge-${memberTotal(member.name, selectedGroup) == 0 ? "paid" : "unpaid"}">$${memberTotal(member.name, selectedGroup)}</p>
 							</div>
@@ -701,7 +701,7 @@ function getExpensesHTML(group) {
 																			<div>
 																				<div>
 																				    <p class="balances-card-member-name editable" id=${member.id}>
-																				    ${member.name}
+																				    ${titleCase(member.name)}
 																				    </p>
            							     					                    <span class="pen"></span>
 																				<!--doesn't function correctly for now-->
@@ -803,6 +803,8 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
 // name editing
 selectedGroup.addEventListener('click', function (event) {
     if (event.target && event.target.classList.contains('pen')) {
+		event.target.classList.remove('pen')
+		event.target.innerHTML = `<span class="check">✔️</span>`
         const editElement = event.target.closest('div').querySelector('.editable');
         const superDuperParentElement = editElement.parentNode.parentNode.parentNode.parentNode.parentNode;
         const elementType = editElement.tagName.toLowerCase();
@@ -814,71 +816,77 @@ selectedGroup.addEventListener('click', function (event) {
         editElement.innerHTML = ""
         editElement.appendChild(input);
         input.focus();
-        input.addEventListener('keydown', function (e) {
+
+		input.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
-                const updatedName = input.value.trim();
-                if (updatedName) {
-                    if (elementType == 'h2') {
-                        const groupId = parseInt(editElement.getAttribute('id'));
-                        const groupIndex = groupsArr.findIndex(group => group.id === groupId);
-                        if (groupIndex !== -1) {
-                            groupsArr[groupIndex].groupName = updatedName;
-                            localStorage.setItem('groups', JSON.stringify(groupsArr));
-
-                            editElement.innerHTML = `${titleCase(updatedName)}`;
-                            renderSelectedGroupInfo(groupsArr[groupIndex]);
-
-                            listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
-                        }
-                    }
-                    else if (elementType == 'p') {
-                        const memberId = parseInt(editElement.getAttribute('id'));
-                        const groupId = parseInt(editElement.closest('.section-main-group').querySelector('.section-main-group-title').getAttribute('id'));
-                        const groupIndex = groupsArr.findIndex(group => group.id === groupId);
-                        if (groupIndex != -1) {
-                            const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member => member.id === memberId);
-                            const friendIndex = friendsListStored.findIndex(friend => friend.id === memberId);
-                            if (memberIndex != -1 && friendIndex != -1) {
-                                groupsArr[groupIndex].expenses.forEach(expense => {
-                                    if (parseInt(expense.payer.id) === memberId) {
-                                        expense.payer.name = updatedName;
-                                    }
-
-                                    expense.members.forEach(member => {
-                                        if (member.id === memberId) {
-                                            member.name = updatedName;
-                                        }
-                                    });
-                                });
-                                groupsArr[groupIndex].membersArr[memberIndex].name = updatedName;
-                                friendsListStored[friendIndex].name = updatedName;
-                                localStorage.setItem('groups', JSON.stringify(groupsArr));
-                                localStorage.setItem('friends', JSON.stringify(friendsListStored));
-                                editElement.innerHTML = `${titleCase(updatedName)}`;
-                                renderFriends();
-                                renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
-                                if (superDuperParentElement.id == 'group-info-container') {
-                                    groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
-                                } else {
-                                    listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
-
-                                }
-                            } else {
-                                console.log("Either memberIndex or friendIndex does not exist");
-                            }
-                        }
-                        console.log(groupsArr[groupIndex])
-                    }
-
-                } else {
-                    editElement.innerHTML = `${titleCase(originalName)}`;
-                }
-            }
-
-            renderGroups();
-            renderFriends();
+				updateName()
+            } 
         });
-    }
+
+		event.target.querySelector('.check').addEventListener('click', updateName)
+
+		function updateName() {
+			const updatedName = input.value.trim();
+			if (updatedName) {
+				if (elementType == 'h2') {
+					const groupId = parseInt(editElement.getAttribute('id'));
+					const groupIndex = groupsArr.findIndex(group => group.id === groupId);
+					if (groupIndex !== -1) {
+						groupsArr[groupIndex].groupName = updatedName;
+						localStorage.setItem('groups', JSON.stringify(groupsArr));
+						renderSelectedGroupInfo(groupsArr[groupIndex]);
+
+						listExpenses.innerHTML = getExpensesHTML(groupsArr[groupIndex]);
+					}
+				}
+				else if (elementType == 'p') {
+					const memberId = parseInt(editElement.getAttribute('id'));
+					const groupId = parseInt(editElement.closest('.section-main-group').querySelector('.section-main-group-title').getAttribute('id'));
+					const groupIndex = groupsArr.findIndex(group => group.id === groupId);
+					if (groupIndex != -1) {
+						const memberIndex = groupsArr[groupIndex].membersArr.findIndex(member => member.id === memberId);
+						const friendIndex = friendsListStored.findIndex(friend => friend.id === memberId);
+						if (memberIndex != -1 && friendIndex != -1) {
+							groupsArr[groupIndex].expenses.forEach(expense => {
+								if (parseInt(expense.payer.id) === memberId) {
+									expense.payer.name = updatedName;
+								}
+
+								expense.members.forEach(member => {
+									if (member.id === memberId) {
+										member.name = updatedName;
+									}
+								});
+							});
+							groupsArr[groupIndex].membersArr[memberIndex].name = updatedName;
+							friendsListStored[friendIndex].name = updatedName;
+							localStorage.setItem('groups', JSON.stringify(groupsArr));
+							localStorage.setItem('friends', JSON.stringify(friendsListStored));
+							renderFriends();
+							renderSelectedGroupInfo(groupsArr[selectedGroupIndex]);
+							if (superDuperParentElement.id == 'group-info-container') {
+								groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex]);
+							} else {
+								listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex]);
+
+							}
+						} else {
+							console.log("Either memberIndex or friendIndex does not exist");
+						}
+					}
+				}
+
+			} else {
+				editElement.innerHTML = `${titleCase(originalName)}`;
+			}
+			renderGroups();
+            renderFriends();
+		}
+
+    } else {
+		document.querySelector(".group-members.active") ?
+		renderSelectedGroupInfo(groupsArr[selectedGroupIndex], groupContainer.innerHTML = getGroupMembers(groupsArr[selectedGroupIndex])) : renderSelectedGroupInfo(groupsArr[selectedGroupIndex]) 
+	}
 });
 
 // group deletion
