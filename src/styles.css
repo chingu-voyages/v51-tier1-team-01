@@ -158,9 +158,9 @@ h2 {
 }
 
 .text-small {
-	color: #8d8d8d;
+	color: #5f5f5f;
 	font-size: 0.85rem;
-
+	line-height: 2;
 }
 
 
@@ -588,7 +588,7 @@ dialog::backdrop {
 .section-main-group-title {
 	font-size: 1.5rem;
 	text-transform: none;
-	margin-bottom: 5px;
+	margin-bottom: 0;
 }
 
 section.main-group-add-expense {
@@ -693,13 +693,13 @@ section.main-group-add-expense {
 	width: 15px;
 	height: 15px;
 	border-radius: 50%;
-	background-color: #8d8d8d;
+	background-color: #5f5f5f;
 }
 
 #download-btn {
 	border-radius: 20px;
 	color:#fff;
-	background-color: #44b4fe;
+	background-color: #4c74be;
 	border:none;
 	padding: 5px 10px 5px 40px;
 	font-size: 0.85rem;
@@ -754,28 +754,28 @@ section.main-group-add-expense {
 
 #download-btn:hover, #download-btn:focus {
 	cursor:pointer;
-	color:#44b4fe;
+	color:#4c74be;
 	background-color: #fff;
 	box-shadow: 1px 1px 2px #8d8d8d;
 	outline: none;
 }
 
 #download-btn:hover::before {
-	background-color: #00A1C6;
+	background-color: #4c74be;
 }
 
 .section-main-group-info-nav>li:hover::before,
 .section-main-group-info-nav .active::before {
-	background-color: #00A1C6;
+	background-color: #006091;
 }
 
 .section-main-group-info-nav>li:hover {
 	cursor: pointer;
-	color:#00A1C6;
+	color:#006091;
 }
 
 .section-main-group-info-nav .active {
-	color:#00A1C6;
+	color: #036091;
 }
 
 /* group info container */
@@ -864,7 +864,6 @@ margin-bottom: 5px;
     background-repeat: no-repeat;
     width: 20px;
     height: 20px;
-    margin-bottom: 5px;
 }
 
 .balances-card-member > div > div > .pen {
@@ -874,7 +873,6 @@ margin-bottom: 5px;
     background-repeat: no-repeat;
     width: 20px;
     height: 20px;
-    margin-bottom: 7px;
 }
 
 /* .balances-members-header,  */
@@ -884,7 +882,7 @@ margin-bottom: 5px;
     padding: 0.5rem 1.5rem;
     border-radius: 50px;
 	cursor: pointer;
-	color:#5783db;
+	color:#006091;
 	background-color: #ffffff;
 	box-shadow: 2px 1px 3px #8d8d8d;
 	transition: all 200ms ease-in-out;
@@ -925,7 +923,6 @@ margin-bottom: 5px;
 
 .balances-card-member-name {
 	font-size: 1.25rem;
-	margin: 0 0 .5rem .5rem;
 }
 
 .balances-card-member-img {
@@ -961,17 +958,20 @@ margin-bottom: 5px;
 .balances-card-member div div {
     display: flex;
     align-items: center;
+	margin: 0 0 .5rem .5rem;
 }
 
-.balances-card-member .editable input {
+.balances-card-member-name.editable input,
+.section-main-group-title.editable input {
 	outline: none;
 	width: 100%;
 	padding: 0 5px;
 }
 
-.pen {
+.pen, .check {
     cursor: pointer;
-    margin-left: 8px;}
+    margin-left: 8px;
+}
 
  /* footer */
 
@@ -982,7 +982,8 @@ footer {
 }
 
 .footer-link {
-	color: #00A1C6;
+	color: #006091;
+	font-weight: bold;
 	text-decoration: underline;
 }
 
@@ -1133,9 +1134,9 @@ footer {
 	content: "";
 	position: absolute;
 	display: block;
-	right:-25%;
-	bottom: 50%;
-	transform: translateY(50%);
+	right:-20%;
+	top: 50%;
+	transform: translateY(-50%);
 	border-top: 7px solid transparent;
 	border-bottom: 7px solid transparent;
 	border-left: 7px solid #d3d3d3;
@@ -1166,3 +1167,5 @@ footer {
 	display: block;
 	margin-top: .5rem;
 }
+
+
