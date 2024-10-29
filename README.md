@@ -4,6 +4,19 @@ A single-page application (SPA) designed to simplify the process of managing and
 
 This is a [Chingu](https://www.chingu.io/) Tier 1 Team Project. Chingu connects learners of all skill levels and provides them with real world experience, helping accelerate learning through collaboration and project-building.
 
+## Table of contents
+
+- [Overview](#overview)
+- [Preview](#preview)
+- [Live Page](#live-page)
+- [Technologies used](#technologies-used)
+- [Design](#design)
+- [Features](#features)
+- [Usage](#usage)
+- [Credits](#credits)
+- [Our Team - TEAM 1](#our-team---team-1)
+
+
 ## Overview
 
 Splitzy enables users to split expenses among participants within an expense group. It includes features like adding, updating, and deleting expenses, and it automatically calculates balances for each participant. The application is built using vanilla frontend technologies and is entirely browser-based, leveraging local storage for data persistence.
@@ -54,7 +67,7 @@ See live page [HERE](https://chingu-voyages.github.io/v51-tier1-team-01/)
 
 ## Our Team - TEAM 1
 
-- Product Owner: Tushar Parihar 
+- Product Owner: Tushar Parihar [LinkedIn](https://www.linkedin.com/in/tushar-parihar-39702a1bb/)
 - Scrum Master: Julia Hosking [GitHub](https://github.com/CyberJulia-H) / [LinkedIn](hTTPS://www.linkedin.com/in/julia-hosking-1381ab226/)
 
 - Developer #1: Balaji Mahendra - [GitHub](https://github.com/NameRectified)
