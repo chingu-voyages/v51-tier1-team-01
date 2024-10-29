@@ -638,7 +638,8 @@ btnsCancelDialog.forEach(btn => {
 const dialogs = document.querySelectorAll("dialog");
 dialogs.forEach(dialog => {
     dialog.addEventListener("click", (e) => {
-        if (e.target.children[0].classList.contains("dialog-body")) {
+        console.log("This is e.target",e.target.children[0].className)
+        if (e.target.children[0].className=="dialog-body") {
         dialog.close();
         }
     })
@@ -1148,9 +1149,9 @@ btnCloseAddMembersToExpense.addEventListener("click", (e) => {
     })
     localStorage.setItem('groups', JSON.stringify(groupsArr));
     addMembersToExpenseDialog.close();
-    listExpenses.innerHTML = getExpensesHTML(group)
+    listExpenses.innerHTML = getExpensesHTML(groupsArr[selectedGroupIndex])
 	document.querySelector(".balances-expenses-container")?.classList.add("show")
-	renderSelectedGroupInfo(group, listExpenses)
+	renderSelectedGroupInfo(groupsArr[selectedGroupIndex], listExpenses)
 });
 
 // console.log(selectedGroupIndex);
